@@ -23,7 +23,7 @@
         "image": "shopify://shop_images/persona-sostiene-confianza-par-llaves-frente-edificio-acceder_359031-48721.webp",
         "layout": "image-right",
         "text_color": "light",
-        "section_height": 400,
+        "section_height": 300,
         "background_color": "#0d1b2a",
         "show_overlay": true,
         "button_text": "",
