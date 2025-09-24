@@ -13,9 +13,27 @@
       "type": "hello-world",
       "disabled": true,
       "settings": {}
+    },
+    "hero_one_aH9AEh": {
+      "type": "hero-one",
+      "name": "Hero Section",
+      "settings": {
+        "title": "Bienvenido a nuestra tienda",
+        "subtitle": "Descubre productos increíbles con la mejor calidad y precios únicos.",
+        "image": "shopify://shop_images/persona-sostiene-confianza-par-llaves-frente-edificio-acceder_359031-48721.webp",
+        "layout": "image-right",
+        "text_color": "light",
+        "section_height": 400,
+        "background_color": "#0d1b2a",
+        "show_overlay": true,
+        "button_text": "",
+        "button_url": "",
+        "button_style": "primary"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "hero_one_aH9AEh"
   ]
 }
