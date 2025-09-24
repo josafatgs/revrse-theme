@@ -9,7 +9,9 @@
 
 {% if variant.metafields.custom.bedrooms and variant.metafields.custom.bedrooms != blank and variant.metafields.custom.bedrooms != 0 %}
   <div class="spec-item" data-spec="bedrooms">
-    <span class="spec-icon">🛏️</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'bed' %}
+    </span>
     <span class="spec-label">Recámaras</span>
     <span class="spec-value">{{ variant.metafields.custom.bedrooms }}</span>
   </div>
@@ -17,7 +19,9 @@
 
 {% if variant.metafields.custom.bathrooms and variant.metafields.custom.bathrooms != blank and variant.metafields.custom.bathrooms != 0 %}
   <div class="spec-item" data-spec="bathrooms">
-    <span class="spec-icon">🚿</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'shower' %}
+    </span>
     <span class="spec-label">Baños</span>
     <span class="spec-value">{{ variant.metafields.custom.bathrooms }}</span>
   </div>
@@ -25,7 +29,9 @@
 
 {% if variant.metafields.custom.parking_spaces and variant.metafields.custom.parking_spaces != blank and variant.metafields.custom.parking_spaces != 0 %}
   <div class="spec-item" data-spec="parking">
-    <span class="spec-icon">🚗</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'car' %}
+    </span>
     <span class="spec-label">Estacionamiento</span>
     <span class="spec-value">
       {{ variant.metafields.custom.parking_spaces }}
@@ -40,7 +46,9 @@
 
 {% if variant.metafields.custom.square_meters and variant.metafields.custom.square_meters != blank and variant.metafields.custom.square_meters != 0 %}
   <div class="spec-item" data-spec="area">
-    <span class="spec-icon">📐</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'ruler' %}
+    </span>
     <span class="spec-label">Área Total</span>
     <span class="spec-value">{{ variant.metafields.custom.square_meters }} m²</span>
   </div>
@@ -48,7 +56,9 @@
 
 {% if variant.metafields.custom.property_type and variant.metafields.custom.property_type != blank %}
   <div class="spec-item" data-spec="type">
-    <span class="spec-icon">🏠</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'home' %}
+    </span>
     <span class="spec-label">Tipo</span>
     <span class="spec-value">{{ variant.metafields.custom.property_type | capitalize }}</span>
   </div>
@@ -56,7 +66,9 @@
 
 {% if variant.metafields.custom.year_built and variant.metafields.custom.year_built != blank %}
   <div class="spec-item" data-spec="year">
-    <span class="spec-icon">📅</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'calendar' %}
+    </span>
     <span class="spec-label">Año de construcción</span>
     <span class="spec-value">{{ variant.metafields.custom.year_built }}</span>
   </div>
@@ -66,7 +78,9 @@
 
 {% if variant.metafields.custom.floors and variant.metafields.custom.floors != blank and variant.metafields.custom.floors != 0 %}
   <div class="spec-item" data-spec="floors">
-    <span class="spec-icon">🏢</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'building' %}
+    </span>
     <span class="spec-label">Pisos</span>
     <span class="spec-value">{{ variant.metafields.custom.floors }}</span>
   </div>
@@ -74,7 +88,9 @@
 
 {% if variant.metafields.custom.half_bathrooms and variant.metafields.custom.half_bathrooms != blank and variant.metafields.custom.half_bathrooms != 0 %}
   <div class="spec-item" data-spec="half-bathrooms">
-    <span class="spec-icon">🚽</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'toilet' %}
+    </span>
     <span class="spec-label">Medios Baños</span>
     <span class="spec-value">{{ variant.metafields.custom.half_bathrooms }}</span>
   </div>
@@ -82,7 +98,9 @@
 
 {% if variant.metafields.custom.lot_size and variant.metafields.custom.lot_size != blank and variant.metafields.custom.lot_size != 0 %}
   <div class="spec-item" data-spec="lot">
-    <span class="spec-icon">🌿</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'leaf' %}
+    </span>
     <span class="spec-label">Terreno</span>
     <span class="spec-value">{{ variant.metafields.custom.lot_size }} m²</span>
   </div>
@@ -90,7 +108,9 @@
 
 {% if variant.metafields.custom.garden and variant.metafields.custom.garden == true %}
   <div class="spec-item" data-spec="garden">
-    <span class="spec-icon">🌳</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'tree' %}
+    </span>
     <span class="spec-label">Jardín</span>
     <span class="spec-value">Sí</span>
   </div>
@@ -98,7 +118,9 @@
 
 {% if variant.metafields.custom.pool and variant.metafields.custom.pool == true %}
   <div class="spec-item" data-spec="pool">
-    <span class="spec-icon">🏊</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'swimming' %}
+    </span>
     <span class="spec-label">Alberca</span>
     <span class="spec-value">Sí</span>
   </div>
@@ -106,7 +128,9 @@
 
 {% if variant.metafields.custom.furnished and variant.metafields.custom.furnished != blank %}
   <div class="spec-item" data-spec="furnished">
-    <span class="spec-icon">🪑</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'chair' %}
+    </span>
     <span class="spec-label">Amueblado</span>
     <span class="spec-value">
       {% if variant.metafields.custom.furnished == true or variant.metafields.custom.furnished == 'true' %}
@@ -132,7 +156,9 @@
 
 {% unless has_specs %}
   <div class="spec-item spec-item--empty">
-    <span class="spec-icon">ℹ️</span>
+    <span class="spec-icon">
+      {% render 'svg', icon: 'info' %}
+    </span>
     <span class="spec-label">Información</span>
     <span class="spec-value">Especificaciones no disponibles</span>
   </div>

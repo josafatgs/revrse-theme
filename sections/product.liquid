@@ -81,10 +81,6 @@
           </div>
         </div>
         
-        <!-- Add to Cart / Contact Form -->
-        <div class="product-form">
-          {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
-        </div>
       </div>
     </div>
     
@@ -98,7 +94,24 @@
       </div>
     {% endif %}
     
+    <!-- Call to Action Button -->
+    <div class="cta-section">
+      <a href="#property-inquiry-form" class="cta-button">
+        <span>Quiero Más Información!</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7"></path>
+          <path d="M7 7h10v10"></path>
+        </svg>
+      </a>
+    </div>
+    
+    <!-- Contact Form -->
+    <div class="product-form" id="property-inquiry-form">
+      {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
+    </div>
+    
     <!-- Contact Actions -->
+    {%comment&}
     <div class="contact-actions">
       <h2>¿Te interesa esta propiedad?</h2>
       <p>Contáctanos para agendar una visita o resolver tus dudas</p>
@@ -122,6 +135,7 @@
         </a>
       </div>
     </div>
+    {%endcomment&}
     
   </div>
 </div>
@@ -147,7 +161,7 @@ class ProductGallery {
   }
   
   initGallery() {
-    // Check if we have multiple images before initializing thumbs
+    // Check if we have multiple images
     const galleryImages = document.querySelectorAll('.gallery-main-swiper .swiper-slide');
     const hasMultipleImages = galleryImages.length > 1;
     
@@ -168,9 +182,6 @@ class ProductGallery {
     }
 
     // Initialize main gallery swiper
-    const galleryImages = document.querySelectorAll('.gallery-main-swiper .swiper-slide');
-    const hasMultipleImages = galleryImages.length > 1;
-    
     this.mainSwiper = new Swiper('.gallery-main-swiper', {
       spaceBetween: 10,
       loop: hasMultipleImages,
