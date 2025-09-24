@@ -20,10 +20,18 @@
             "title": "Servicios",
             "menu": "servicios"
           }
+        },
+        "menu_column_dRmiWC": {
+          "type": "menu_column",
+          "settings": {
+            "title": "Propiedades",
+            "menu": "propiedades"
+          }
         }
       },
       "block_order": [
-        "menu_column_wU8Lbz"
+        "menu_column_wU8Lbz",
+        "menu_column_dRmiWC"
       ],
       "settings": {
         "footer_bg_color": "#0d1b2a",
