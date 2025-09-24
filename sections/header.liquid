@@ -1,0 +1,377 @@
+{{ 'header.css' | asset_url | stylesheet_tag }}
+
+<header class="header-section" style="
+  background-color: {{ section.settings.background_color }};
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+  margin-top: {{ section.settings.margin_top }}px;
+  margin-bottom: {{ section.settings.margin_bottom }}px;
+">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="header-logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="logo-link">
+          <img 
+            src="{{ section.settings.logo | img_url: '200x' }}" 
+            alt="{{ shop.name }}"
+            class="logo-image"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+          >
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="site-title" style="color: {{ section.settings.text_color }};">
+          {{ shop.name }}
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="header-nav header-nav--{{ section.settings.menu_position }}" style="--menu-gap: {{ section.settings.menu_spacing }}px;">
+      {% if section.settings.menu != blank %}
+        <ul class="nav-list" style="
+          font-size: {{ section.settings.menu_font_size }}px;
+          color: {{ section.settings.text_color }};
+        ">
+          {% for link in linklists[section.settings.menu].links %}
+            <li class="nav-item">
+              <a 
+                href="{{ link.url }}" 
+                class="nav-link"
+                style="color: {{ section.settings.text_color }};"
+                {% if link.links != blank %}aria-expanded="false"{% endif %}
+              >
+                {{ link.title }}
+                {% if link.links != blank %}
+                  {% render 'icon-chevron-down' %}
+                {% endif %}
+              </a>
+              
+              {% if link.links != blank %}
+                <ul class="nav-dropdown">
+                  {% for child_link in link.links %}
+                    <li class="nav-dropdown-item">
+                      <a 
+                        href="{{ child_link.url }}" 
+                        class="nav-dropdown-link"
+                        style="color: {{ section.settings.text_color }};"
+                      >
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </nav>
+
+    <!-- Call to Action Button -->
+    {% if section.settings.cta_text != blank %}
+      <div class="header-cta">
+        <a 
+          href="{{ section.settings.cta_url | default: '#' }}" 
+          class="cta-button"
+          style="
+            background-color: {{ section.settings.cta_bg_color }};
+            color: {{ section.settings.cta_text_color }};
+            font-size: {{ section.settings.cta_font_size }}px;
+          "
+        >
+          {{ section.settings.cta_text }}
+        </a>
+      </div>
+    {% endif %}
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" style="color: {{ section.settings.text_color }};">
+      {% render 'icon-hamburger' %}
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay">
+    <div class="mobile-menu" style="background-color: {{ section.settings.background_color }};">
+      <div class="mobile-menu-header">
+        <button class="mobile-menu-close" aria-label="Close mobile menu" style="color: {{ section.settings.text_color }};">
+          {% render 'icon-close' %}
+        </button>
+      </div>
+      
+      {% if section.settings.menu != blank %}
+        <ul class="mobile-nav-list" style="color: {{ section.settings.text_color }};">
+          {% for link in linklists[section.settings.menu].links %}
+            <li class="mobile-nav-item">
+              <a 
+                href="{{ link.url }}" 
+                class="mobile-nav-link"
+                style="
+                  color: {{ section.settings.text_color }};
+                  font-size: {{ section.settings.menu_font_size }}px;
+                "
+              >
+                {{ link.title }}
+              </a>
+              
+              {% if link.links != blank %}
+                <ul class="mobile-nav-dropdown">
+                  {% for child_link in link.links %}
+                    <li class="mobile-nav-dropdown-item">
+                      <a 
+                        href="{{ child_link.url }}" 
+                        class="mobile-nav-dropdown-link"
+                        style="color: {{ section.settings.text_color }};"
+                      >
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.settings.cta_text != blank %}
+        <div class="mobile-cta">
+          <a 
+            href="{{ section.settings.cta_url | default: '#' }}" 
+            class="cta-button"
+            style="
+              background-color: {{ section.settings.cta_bg_color }};
+              color: {{ section.settings.cta_text_color }};
+              font-size: {{ section.settings.cta_font_size }}px;
+            "
+          >
+            {{ section.settings.cta_text }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileClose = document.querySelector('.mobile-menu-close');
+    const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+    const body = document.body;
+
+    if (mobileToggle && mobileOverlay && mobileClose) {
+      mobileToggle.addEventListener('click', function() {
+        mobileOverlay.classList.add('active');
+        body.classList.add('mobile-menu-open');
+      });
+
+      mobileClose.addEventListener('click', function() {
+        mobileOverlay.classList.remove('active');
+        body.classList.remove('mobile-menu-open');
+      });
+
+      mobileOverlay.addEventListener('click', function(e) {
+        if (e.target === mobileOverlay) {
+          mobileOverlay.classList.remove('active');
+          body.classList.remove('mobile-menu-open');
+        }
+      });
+    }
+
+    // Handle dropdown menus on desktop
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      const link = item.querySelector('.nav-link');
+      const dropdown = item.querySelector('.nav-dropdown');
+      
+      if (dropdown) {
+        item.addEventListener('mouseenter', function() {
+          dropdown.style.display = 'block';
+          link.setAttribute('aria-expanded', 'true');
+        });
+        
+        item.addEventListener('mouseleave', function() {
+          dropdown.style.display = 'none';
+          link.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo Width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 150,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Settings"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_position",
+      "label": "Menu Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left (next to logo)"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right (next to CTA)"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "menu_font_size",
+      "label": "Menu Font Size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "menu_spacing",
+      "label": "Menu Items Spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "range",
+      "id": "cta_font_size",
+      "label": "CTA Font Size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Header Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "CTA Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top Margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom Margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    }
+  ]
+}
+{% endschema %}
