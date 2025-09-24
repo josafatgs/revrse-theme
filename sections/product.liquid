@@ -147,39 +147,48 @@ class ProductGallery {
   }
   
   initGallery() {
-    // Initialize thumbnail swiper first
-    this.thumbsSwiper = new Swiper('.gallery-thumbs-swiper', {
-      spaceBetween: 10,
-      slidesPerView: 'auto',
-      freeMode: true,
-      watchSlidesProgress: true,
-      breakpoints: {
-        320: { slidesPerView: 3, spaceBetween: 8 },
-        480: { slidesPerView: 4, spaceBetween: 10 },
-        768: { slidesPerView: 5, spaceBetween: 12 },
-        1024: { slidesPerView: 6, spaceBetween: 15 }
-      }
-    });
+    // Check if we have multiple images before initializing thumbs
+    const galleryImages = document.querySelectorAll('.gallery-main-swiper .swiper-slide');
+    const hasMultipleImages = galleryImages.length > 1;
+    
+    // Initialize thumbnail swiper only if we have multiple images
+    if (hasMultipleImages) {
+      this.thumbsSwiper = new Swiper('.gallery-thumbs-swiper', {
+        spaceBetween: 10,
+        slidesPerView: 'auto',
+        freeMode: true,
+        watchSlidesProgress: true,
+        breakpoints: {
+          320: { slidesPerView: 3, spaceBetween: 8 },
+          480: { slidesPerView: 4, spaceBetween: 10 },
+          768: { slidesPerView: 5, spaceBetween: 12 },
+          1024: { slidesPerView: 6, spaceBetween: 15 }
+        }
+      });
+    }
 
     // Initialize main gallery swiper
+    const galleryImages = document.querySelectorAll('.gallery-main-swiper .swiper-slide');
+    const hasMultipleImages = galleryImages.length > 1;
+    
     this.mainSwiper = new Swiper('.gallery-main-swiper', {
       spaceBetween: 10,
-      loop: true,
-      autoplay: {
+      loop: hasMultipleImages,
+      autoplay: hasMultipleImages ? {
         delay: 4000,
         disableOnInteraction: false,
-      },
-      navigation: {
+      } : false,
+      navigation: hasMultipleImages ? {
         nextEl: '.gallery-main .swiper-button-next',
         prevEl: '.gallery-main .swiper-button-prev',
-      },
-      pagination: {
+      } : false,
+      pagination: hasMultipleImages ? {
         el: '.gallery-main .swiper-pagination',
         clickable: true,
-      },
-      thumbs: {
+      } : false,
+      thumbs: this.thumbsSwiper ? {
         swiper: this.thumbsSwiper,
-      },
+      } : false,
       keyboard: { enabled: true },
       on: {
         slideChange: () => this.updateCounter()
