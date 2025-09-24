@@ -26,7 +26,7 @@
         "menu_column_wU8Lbz"
       ],
       "settings": {
-        "footer_bg_color": "#1a365d",
+        "footer_bg_color": "#0d1b2a",
         "text_color": "#ffffff",
         "primary_color": "#cd9d08",
         "link_color": "#ffffffcc",
@@ -40,6 +40,7 @@
         "padding_bottom": 0,
         "margin_top": 0,
         "margin_bottom": 0,
+        "footer_logo": "shopify://shop_images/DORADO-N.png",
         "logo_width": 160,
         "company_description": "Somos una empresa comprometida con brindar el mejor servicio a nuestros clientes.",
         "contact_title": "Contacto",
