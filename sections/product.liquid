@@ -1,7 +1,7 @@
 {{ 'product.css' | asset_url | stylesheet_tag }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-<div class="product-template" data-product-id="{{ product.id }}">
+<div class="product-template full-width" data-product-id="{{ product.id }}">
   <div class="product-container">
     
     <!-- Breadcrumb Navigation -->
@@ -326,7 +326,14 @@ class VariantSelector {
     if (data.bedrooms && data.bedrooms > 0) {
       specsHTML += `
         <div class="spec-item">
-          <span class="spec-icon">🛏️</span>
+          <span class="spec-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="icon icon-bed">
+              <path d="M2 4h20v16H2V4z"></path>
+              <path d="M2 8h20"></path>
+              <path d="M6 16h4"></path>
+              <path d="M14 16h4"></path>
+            </svg>
+          </span>
           <span class="spec-label">Recámaras</span>
           <span class="spec-value">${data.bedrooms}</span>
         </div>
@@ -336,7 +343,15 @@ class VariantSelector {
     if (data.bathrooms && data.bathrooms > 0) {
       specsHTML += `
         <div class="spec-item">
-          <span class="spec-icon">🚿</span>
+          <span class="spec-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="icon icon-shower">
+              <path d="M8 6h8"></path>
+              <path d="M8 6a4 4 0 0 0-4 4v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a4 4 0 0 0-4-4"></path>
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+          </span>
           <span class="spec-label">Baños</span>
           <span class="spec-value">${data.bathrooms}</span>
         </div>
@@ -346,7 +361,14 @@ class VariantSelector {
     if (data.parking && data.parking > 0) {
       specsHTML += `
         <div class="spec-item">
-          <span class="spec-icon">🚗</span>
+          <span class="spec-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="icon icon-car">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.7 8.4c-.3-.8-1-1.4-1.9-1.4H7.2c-.9 0-1.6.6-1.9 1.4L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"></path>
+              <circle cx="7" cy="17" r="2"></circle>
+              <circle cx="17" cy="17" r="2"></circle>
+              <path d="M7 17h10"></path>
+            </svg>
+          </span>
           <span class="spec-label">Estacionamiento</span>
           <span class="spec-value">${data.parking}</span>
         </div>
@@ -356,7 +378,23 @@ class VariantSelector {
     if (data.area && data.area > 0) {
       specsHTML += `
         <div class="spec-item">
-          <span class="spec-icon">📐</span>
+          <span class="spec-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="icon icon-ruler">
+              <path d="M21 3H3v18h18V3z"></path>
+              <path d="M7 7h2v2H7V7z"></path>
+              <path d="M11 7h2v2h-2V7z"></path>
+              <path d="M15 7h2v2h-2V7z"></path>
+              <path d="M19 7h2v2h-2V7z"></path>
+              <path d="M7 11h2v2H7v-2z"></path>
+              <path d="M11 11h2v2h-2v-2z"></path>
+              <path d="M15 11h2v2h-2v-2z"></path>
+              <path d="M19 11h2v2h-2v-2z"></path>
+              <path d="M7 15h2v2H7v-2z"></path>
+              <path d="M11 15h2v2h-2v-2z"></path>
+              <path d="M15 15h2v2h-2v-2z"></path>
+              <path d="M19 15h2v2h-2v-2z"></path>
+            </svg>
+          </span>
           <span class="spec-label">Área</span>
           <span class="spec-value">${data.area} m²</span>
         </div>

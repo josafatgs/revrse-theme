@@ -7,7 +7,7 @@
 {% assign show_overlay = section.settings.show_overlay %}
 
 <section 
-  class="hero-one {% if layout == 'image-left' %}hero-one--reverse{% endif %} {% if layout == 'text-only' %}hero-one--text-only{% endif %} {% if text_color == 'dark' %}hero-one--dark-text{% endif %} {% unless show_overlay %}hero-one--no-overlay{% endunless %}"
+  class="full-width hero-one {% if layout == 'image-left' %}hero-one--reverse{% endif %} {% if layout == 'text-only' %}hero-one--text-only{% endif %} {% if text_color == 'dark' %}hero-one--dark-text{% endif %} {% unless show_overlay %}hero-one--no-overlay{% endunless %}"
   style="
     {% if bg_image %}
       background-image: url('{{ bg_image | img_url: '1920x1080' }}');
