@@ -1,0 +1,35 @@
+{% comment %}
+    snippets/product-card.liquid
+    Muestra la imagen, título y precio de un producto.
+    Recibe: product
+{% endcomment %}
+
+{% liquid
+    assign featured_image = product.featured_media.preview_image
+%}
+
+<div class="product-card">
+    <a href="{{ product.url }}" class="product-card__link">
+        <div class="product-card__image-wrapper">
+            {% if featured_image != blank %}
+                <img
+                    src="{{ featured_image | img_url: '400x400', crop: 'center' }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                    class="product-card__image"
+                    width="400"
+                    height="400"
+                >
+            {% else %}
+                <div class="product-card__placeholder">
+                    
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="product-card__content">
+            <p class="product-card__title">{{ product.title | escape }}</p>
+            <p class="product-card__price">{{ product.price | money }}</p>
+        </div>
+    </a>
+</div>

@@ -1,0 +1,171 @@
+/*
+    assets/collections.css
+    Estilos para la vista de colección.
+*/
+
+/* ------------------------------------------- */
+/* Estilos Globales y Mobile-First             */
+/* ------------------------------------------- */
+.main-collection-section {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.collection-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em; /* Grande en móvil */
+}
+
+/* El contenido principal, por defecto en móvil es una sola columna */
+.collection-grid {
+    display: flex;
+    flex-direction: column; /* Filtros arriba, productos abajo en móvil */
+}
+
+/* ------------------------------------------- */
+/* Filtros y Ordenamiento (Mobile)             */
+/* ------------------------------------------- */
+.collection-filters {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.filter-group {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #ccc;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.filter-group__title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.filter-group__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filters-form__submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.collection-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.collection-sort select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* ------------------------------------------- */
+/* Tarjeta de Producto (Product Card)          */
+/* ------------------------------------------- */
+.product-card {
+    text-align: center;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.product-card__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.product-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Para imágenes cuadradas */
+    overflow: hidden;
+}
+
+.product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-card__content {
+    padding: 10px;
+}
+
+.product-card__title {
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    font-size: 1em;
+    color: #333;
+}
+
+.product-card__price {
+    font-weight: bold;
+    color: #007bff; /* Color de énfasis */
+    margin: 0;
+}
+
+/* ------------------------------------------- */
+/* Desktop View (Sobreescribimos para escritorio) */
+/* ------------------------------------------- */
+@media screen and (min-width: 750px) {
+    .collection-title {
+        text-align: left;
+        margin-bottom: 30px;
+    }
+
+    .collection-grid {
+        flex-direction: row; /* Sidebar a la izquierda, productos a la derecha */
+        gap: 30px;
+    }
+
+    .collection-filters {
+        flex-basis: 250px; /* Ancho fijo para el sidebar */
+        flex-shrink: 0;
+        padding: 0; /* Quitamos el padding del contenedor principal de filtros */
+        border: none;
+        background-color: transparent;
+    }
+
+    .filters-form__submit-button {
+        display: none; /* Ocultar el botón de envío en desktop, el filtro es interactivo */
+    }
+
+    .collection-products-wrapper {
+        flex-grow: 1;
+    }
+
+    .collection-toolbar {
+        /* Align with the grid content */
+        justify-content: space-between;
+    }
+}

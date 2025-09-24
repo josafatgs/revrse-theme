@@ -1,0 +1,33 @@
+{% comment %}
+    snippets/collection-filters.liquid
+    Genera los filtros de facetas basados en las configuraciones de la colección.
+    Recibe: collection
+{% endcomment %}
+
+<form class="filters-form">
+    {% for filter in collection.filters %}
+        <div class="filter-group">
+            <h3 class="filter-group__title">{{ filter.label }}</h3>
+            <ul class="filter-group__list">
+                {% for value in filter.values %}
+                    <li class="filter-group__item">
+                        <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            id="Filter-{{ filter.label | handleize }}-{{ forloop.index }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and not value.active %}disabled{% endif %}
+                            value="{{ value.value }}"
+                            form="filters-form"
+                        >
+                        <label for="Filter-{{ filter.label | handleize }}-{{ forloop.index }}">
+                            {{ value.label }} ({{ value.count }})
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="filters-form__submit-button">Aplicar Filtros</button>
+</form>

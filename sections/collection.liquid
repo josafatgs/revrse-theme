@@ -1,47 +1,107 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+    sections/main-collection.liquid
+    Plantilla principal para la vista de la colección con filtros y ordenamiento.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+{{ 'collections.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'collections.js' | asset_url | script_tag }}
 
-<div class="collection-products full-width">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+<section class="main-collection-section">
+    <div class="page-width">
+        <h1 class="collection-title">{{ collection.title }}</h1>
+
+        {% comment %} Contenedor principal de contenido y filtros {% endcomment %}
+        <div class="collection-grid">
+
+            {% comment %} 1. Filtros y Ordenamiento (Sidebar - Visible en móvil como dropdown) {% endcomment %}
+            <div class="collection-filters">
+                {% render 'collection-filters', collection: collection %}
+            </div>
+
+            {% comment %} 2. Productos y Paginación {% endcomment %}
+            <div class="collection-products-wrapper">
+                {% paginate collection.products by section.settings.products_per_page %}
+
+                    <div class="collection-toolbar">
+                        {% comment %} Menú de Ordenamiento (Sorting) {% endcomment %}
+                        {% render 'collection-sort-by', collection: collection %}
+                    </div>
+
+                    {% if collection.products.size > 0 %}
+                        <div class="collection-products">
+                            {% for product in collection.products %}
+                                {% render 'product-card', product: product %}
+                            {% endfor %}
+                        </div>
+
+                        {% comment %} Paginación {% endcomment %}
+                        <div class="collection-pagination">
+                            {{ paginate | default_pagination }}
+                        </div>
+
+                    {% else %}
+                        <p class="no-results-message">No se encontraron productos que coincidan con los filtros aplicados.</p>
+                    {% endif %}
+
+                {% endpaginate %}
+            </div>
+
         </div>
-      </div>
-    {% endfor %}
+    </div>
+</section>
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
+<style>
+    {% comment %} Inyectar el CSS de la grilla directamente para un mejor rendimiento {% endcomment %}
+    .collection-products {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat({{ section.settings.mobile_columns }}, 1fr); /* Mobile First */
+    }
 
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-{% endstylesheet %}
+    /* Desktop View */
+    @media screen and (min-width: 750px) {
+        .collection-products {
+            grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
+        }
+    }
+</style>
+
 
 {% schema %}
 {
-  "name": "t:general.collection",
-  "settings": []
+    "name": "Vista Principal de Colección",
+    "settings": [
+        {
+            "type": "range",
+            "id": "products_per_page",
+            "min": 4,
+            "max": 50,
+            "step": 2,
+            "default": 16,
+            "label": "Productos por página"
+        },
+        {
+            "type": "header",
+            "content": "Diseño de la Grilla"
+        },
+        {
+            "type": "range",
+            "id": "mobile_columns",
+            "min": 1,
+            "max": 2,
+            "step": 1,
+            "default": 2,
+            "label": "Columnas en móvil"
+        },
+        {
+            "type": "range",
+            "id": "desktop_columns",
+            "min": 3,
+            "max": 5,
+            "step": 1,
+            "default": 4,
+            "label": "Columnas en escritorio"
+        }
+    ]
 }
 {% endschema %}

@@ -1,0 +1,42 @@
+{% comment %}
+    snippets/collection-sort-by.liquid
+    Genera el selector de ordenamiento (sort by).
+    Recibe: collection
+{% endcomment %}
+
+<div class="collection-sort">
+    <label for="SortBy" class="sort-by__label">Ordenar por:</label>
+    <select name="sort_by" id="SortBy" form="main-collection-form">
+        {% for option in collection.sort_options %}
+            <option
+                value="{{ option.value }}"
+                {% if collection.sort_by == option.value %}selected="selected"{% endif %}
+            >
+                {{ option.name }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+{% comment %}
+    Este formulario se usa para que el cambio en el selector de ordenamiento recargue la página.
+    Debe tener el mismo ID que se usa en el atributo 'form' del select.
+{% endcomment %}
+<form id="main-collection-form" action="{{ collection.url }}" method="get" class="hidden-form">
+    {% for filter in collection.filters %}
+        {% for value in filter.active_values %}
+            <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+        {% endfor %}
+    {% endfor %}
+    <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+</form>
+
+<script>
+    // JS para enviar el formulario automáticamente al cambiar el valor
+    document.getElementById('SortBy').addEventListener('change', function() {
+        // Actualizar el valor del input hidden en el formulario fantasma
+        document.querySelector('#main-collection-form input[name="sort_by"]').value = this.value;
+        // Enviar el formulario para aplicar el ordenamiento
+        document.getElementById('main-collection-form').submit();
+    });
+</script>
