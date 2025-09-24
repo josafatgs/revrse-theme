@@ -1,0 +1,79 @@
+{% if block.type == 'menu_column' and block.settings.menu != blank %}
+  <h4 class="footer__column-title">{{ block.settings.title }}</h4>
+  <ul class="footer__menu-links">
+    {% for link in linklists[block.settings.menu].links %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ link.url }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ link.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% elsif block.type == 'custom_links' %}
+  <h4 class="footer__column-title">{{ block.settings.title }}</h4>
+  <ul class="footer__menu-links">
+    {% if block.settings.link1_text != blank %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ block.settings.link1_url | default: '#' }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ block.settings.link1_text }}
+        </a>
+      </li>
+    {% endif %}
+    
+    {% if block.settings.link2_text != blank %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ block.settings.link2_url | default: '#' }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ block.settings.link2_text }}
+        </a>
+      </li>
+    {% endif %}
+    
+    {% if block.settings.link3_text != blank %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ block.settings.link3_url | default: '#' }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ block.settings.link3_text }}
+        </a>
+      </li>
+    {% endif %}
+    
+    {% if block.settings.link4_text != blank %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ block.settings.link4_url | default: '#' }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ block.settings.link4_text }}
+        </a>
+      </li>
+    {% endif %}
+    
+    {% if block.settings.link5_text != blank %}
+      <li class="footer__menu-item">
+        <a 
+          href="{{ block.settings.link5_url | default: '#' }}" 
+          class="footer__menu-link"
+          style="color: {{ link_color }};"
+        >
+          {{ block.settings.link5_text }}
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+{% endif %}

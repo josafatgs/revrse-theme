@@ -1,56 +1,456 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+{{ 'footer.css' | asset_url | stylesheet_tag }}
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<footer 
+  class="footer" 
+  role="contentinfo"
+  style="
+    background-color: {{ section.settings.footer_bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+    color: {{ section.settings.text_color }};
+    --footer-primary-color: {{ section.settings.primary_color }};
+    --footer-text-size: {{ section.settings.text_size }}px;
+    --footer-heading-size: {{ section.settings.heading_size }}px;
+    --footer-text-weight: {{ section.settings.text_weight }};
+    --footer-heading-weight: {{ section.settings.heading_weight }};
+  "
+>
+  <div class="footer__container">
+    <!-- Main Footer Content -->
+    <div class="footer__main">
+      <!-- Company Info Column -->
+      <div class="footer__column footer__column--company">
+        {% render 'footer-company', 
+           section: section, 
+           shop: shop 
+        %}
+      </div>
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
+      <!-- Dynamic Menu Columns -->
+      {% assign menu_count = 0 %}
+      {% for block in section.blocks %}
+        {% if block.type == 'menu_column' %}
+          {% assign menu_count = menu_count | plus: 1 %}
+          {% if menu_count <= 3 %}
+            <div class="footer__column footer__column--menu" {{ block.shopify_attributes }}>
+              {% render 'footer-menu-column', 
+                 block: block,
+                 text_color: section.settings.text_color,
+                 link_color: section.settings.link_color,
+                 link_hover_color: section.settings.link_hover_color
+              %}
+            </div>
+          {% endif %}
+        {% endif %}
       {% endfor %}
-    {% endif %}
+
+      <!-- Contact Info Column -->
+      <div class="footer__column footer__column--contact">
+        {% render 'footer-contact', 
+           section: section 
+        %}
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer__bottom" style="border-color: {{ section.settings.border_color }};">
+      <div class="footer__bottom-content">
+        {% render 'footer-bottom', 
+           section: section, 
+           shop: shop 
+        %}
+      </div>
+    </div>
   </div>
 </footer>
 
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
-  "name": "t:general.footer",
+  "name": "Footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "Colores"
+    },
+    {
+      "type": "color",
+      "id": "footer_bg_color",
+      "label": "Color de fondo del footer",
+      "default": "#1a365d"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del texto principal",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Color primario (acentos)",
+      "default": "#cd9d08"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Color de los enlaces",
+      "default": "rgba(255, 255, 255, 0.8)"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Color de los enlaces al pasar el cursor",
+      "default": "#cd9d08"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Color de los bordes",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "header",
+      "content": "Tipografía"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Tamaño del texto",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Tamaño de los títulos",
+      "min": 16,
+      "max": 28,
+      "step": 1,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Peso del texto",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Peso de los títulos",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding superior",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding inferior",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Margin superior",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Margin inferior",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Información de la Empresa"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Logo del footer"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Ancho del logo",
+      "min": 80,
+      "max": 250,
+      "step": 10,
+      "default": 160,
+      "unit": "px"
+    },
+    {
+      "type": "textarea",
+      "id": "company_description",
+      "label": "Descripción de la empresa",
+      "default": "Somos una empresa comprometida con brindar el mejor servicio a nuestros clientes."
+    },
+    {
+      "type": "header",
+      "content": "Información de Contacto"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Título de la sección de contacto",
+      "default": "Contacto"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Dirección"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Número de teléfono"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Correo electrónico"
+    },
+    {
+      "type": "text",
+      "id": "business_hours",
+      "label": "Horarios de atención"
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Número de WhatsApp",
+      "info": "Solo números, ejemplo: 5212345678901"
+    },
+    {
+      "type": "textarea",
+      "id": "whatsapp_message",
+      "label": "Mensaje predeterminado",
+      "default": "Hola, me interesa obtener más información."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_button_text",
+      "label": "Texto del botón WhatsApp",
+      "default": "Contactar por WhatsApp"
+    },
+    {
+      "type": "header",
+      "content": "Redes Sociales"
     },
     {
       "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
+      "id": "show_social_links",
+      "label": "Mostrar redes sociales",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Título de redes sociales",
+      "default": "Síguenos"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "Twitter/X"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "LinkedIn"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok"
+    },
+    {
+      "type": "header",
+      "content": "Footer Inferior"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Texto de copyright",
+      "default": "Todos los derechos reservados."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_legal_links",
+      "label": "Mostrar enlaces legales",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "privacy_policy_url",
+      "label": "URL Política de Privacidad"
+    },
+    {
+      "type": "text",
+      "id": "privacy_policy_text",
+      "label": "Texto Política de Privacidad",
+      "default": "Política de Privacidad"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "URL Términos y Condiciones"
+    },
+    {
+      "type": "text",
+      "id": "terms_text",
+      "label": "Texto Términos y Condiciones",
+      "default": "Términos y Condiciones"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_column",
+      "name": "Columna de Menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título de la columna",
+          "default": "Enlaces"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menú",
+          "info": "Selecciona un menú desde Navegación > Menús"
+        }
+      ]
+    },
+    {
+      "type": "custom_links",
+      "name": "Enlaces Personalizados",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título de la columna",
+          "default": "Enlaces"
+        },
+        {
+          "type": "text",
+          "id": "link1_text",
+          "label": "Enlace 1 - Texto"
+        },
+        {
+          "type": "url",
+          "id": "link1_url",
+          "label": "Enlace 1 - URL"
+        },
+        {
+          "type": "text",
+          "id": "link2_text",
+          "label": "Enlace 2 - Texto"
+        },
+        {
+          "type": "url",
+          "id": "link2_url",
+          "label": "Enlace 2 - URL"
+        },
+        {
+          "type": "text",
+          "id": "link3_text",
+          "label": "Enlace 3 - Texto"
+        },
+        {
+          "type": "url",
+          "id": "link3_url",
+          "label": "Enlace 3 - URL"
+        },
+        {
+          "type": "text",
+          "id": "link4_text",
+          "label": "Enlace 4 - Texto"
+        },
+        {
+          "type": "url",
+          "id": "link4_url",
+          "label": "Enlace 4 - URL"
+        },
+        {
+          "type": "text",
+          "id": "link5_text",
+          "label": "Enlace 5 - Texto"
+        },
+        {
+          "type": "url",
+          "id": "link5_url",
+          "label": "Enlace 5 - URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer"
     }
   ]
 }
