@@ -1,0 +1,138 @@
+.hero-one {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .hero-one__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+  
+  .hero-one__container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .hero-one__content {
+    flex: 1;
+    color: white;
+  }
+  
+  .hero-one__title {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .hero-one__subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.9;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .hero-one__image {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .hero-one__image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Layout variants */
+  .hero-one--reverse .hero-one__container {
+    flex-direction: row-reverse;
+  }
+  
+  .hero-one--text-only .hero-one__image {
+    display: none;
+  }
+  
+  .hero-one--text-only .hero-one__content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Color variants */
+  .hero-one--dark-text .hero-one__content {
+    color: #333;
+  }
+  
+  .hero-one--dark-text .hero-one__title {
+    text-shadow: none;
+  }
+  
+  .hero-one--dark-text .hero-one__subtitle {
+    text-shadow: none;
+  }
+  
+  .hero-one--no-overlay .hero-one__overlay {
+    display: none;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .hero-one {
+      min-height: 300px;
+    }
+    
+    .hero-one__container {
+      flex-direction: column;
+      gap: 40px;
+      text-align: center;
+    }
+    
+    .hero-one--reverse .hero-one__container {
+      flex-direction: column;
+    }
+    
+    .hero-one__title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-one__subtitle {
+      font-size: 1.125rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-one__container {
+      padding: 0 15px;
+      gap: 30px;
+    }
+    
+    .hero-one__title {
+      font-size: 2rem;
+    }
+    
+    .hero-one__subtitle {
+      font-size: 1rem;
+    }
+  }

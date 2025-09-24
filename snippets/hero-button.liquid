@@ -1,0 +1,89 @@
+{% comment %}
+  Hero Button Component
+  
+  Parámetros:
+  - text: Texto del botón
+  - url: URL del botón
+  - style: Estilo del botón (primary, secondary, outline)
+{% endcomment %}
+
+{% assign btn_style = style | default: 'primary' %}
+
+<style>
+  .hero-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    line-height: 1.5;
+  }
+  
+  .hero-btn--primary {
+    background-color: #007cba;
+    color: white;
+    border-color: #007cba;
+  }
+  
+  .hero-btn--primary:hover {
+    background-color: #005a87;
+    border-color: #005a87;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 124, 186, 0.4);
+  }
+  
+  .hero-btn--secondary {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+  }
+  
+  .hero-btn--secondary:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+  }
+  
+  .hero-btn--outline {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+  }
+  
+  .hero-btn--outline:hover {
+    background-color: white;
+    color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Dark text variant */
+  .hero-one--dark-text .hero-btn--outline {
+    color: #333;
+    border-color: #333;
+  }
+  
+  .hero-one--dark-text .hero-btn--outline:hover {
+    background-color: #333;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-btn {
+      padding: 10px 25px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+{% if text != blank %}
+  <a href="{{ url | default: '#' }}" class="hero-btn hero-btn--{{ btn_style }}">
+    {{ text }}
+  </a>
+{% endif %}

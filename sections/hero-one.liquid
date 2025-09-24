@@ -1,0 +1,199 @@
+{{ 'hero-one.css' | asset_url | stylesheet_tag }}
+
+{% assign bg_color = section.settings.background_color | default: '#000000' %}
+{% assign bg_image = section.settings.background_image %}
+{% assign layout = section.settings.layout | default: 'image-right' %}
+{% assign text_color = section.settings.text_color | default: 'light' %}
+{% assign show_overlay = section.settings.show_overlay %}
+
+<section 
+  class="hero-one {% if layout == 'image-left' %}hero-one--reverse{% endif %} {% if layout == 'text-only' %}hero-one--text-only{% endif %} {% if text_color == 'dark' %}hero-one--dark-text{% endif %} {% unless show_overlay %}hero-one--no-overlay{% endunless %}"
+  style="
+    {% if bg_image %}
+      background-image: url('{{ bg_image | img_url: '1920x1080' }}');
+    {% else %}
+      background-color: {{ bg_color }};
+    {% endif %}
+    {% if section.settings.section_height %}
+      min-height: {{ section.settings.section_height }}px;
+    {% endif %}
+  "
+>
+  {% if show_overlay and bg_image %}
+    <div class="hero-one__overlay"></div>
+  {% endif %}
+  
+  <div class="hero-one__container">
+    <div class="hero-one__content">
+      {% if section.settings.title != blank %}
+        <h1 class="hero-one__title">{{ section.settings.title }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subtitle != blank %}
+        <p class="hero-one__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank %}
+        <div style="margin-top: 30px;">
+          {% render 'hero-button',
+            text: section.settings.button_text,
+            url: section.settings.button_url,
+            style: section.settings.button_style
+          %}
+        </div>
+      {% endif %}
+    </div>
+    
+    {% if layout != 'text-only' and section.settings.image %}
+      <div class="hero-one__image">
+        <img src="{{ section.settings.image | img_url: '600x600' }}" 
+             alt="{{ section.settings.image.alt | default: section.settings.title }}"
+             loading="lazy">
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Bienvenido a nuestra tienda"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Descubre productos increíbles con la mejor calidad y precios únicos."
+    },
+    {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen del hero"
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Diseño",
+      "options": [
+        {
+          "value": "image-right",
+          "label": "Imagen a la derecha"
+        },
+        {
+          "value": "image-left",
+          "label": "Imagen a la izquierda"
+        },
+        {
+          "value": "text-only",
+          "label": "Solo texto"
+        }
+      ],
+      "default": "image-right"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Color del texto",
+      "options": [
+        {
+          "value": "light",
+          "label": "Claro"
+        },
+        {
+          "value": "dark",
+          "label": "Oscuro"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Altura mínima (px)",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Mostrar overlay oscuro sobre imagen de fondo",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Botón (Opcional)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "URL del botón"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Estilo del botón",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primario"
+        },
+        {
+          "value": "secondary",
+          "label": "Secundario"
+        },
+        {
+          "value": "outline",
+          "label": "Contorno"
+        }
+      ],
+      "default": "primary"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section"
+    }
+  ]
+}
+{% endschema %}
