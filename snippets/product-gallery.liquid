@@ -1,0 +1,121 @@
+{% comment %}
+  Product Gallery Component
+  
+  Usage: {% render 'product-gallery', product: product, current_variant: variant %}
+  
+  Parameters:
+  - product: Shopify product object
+  - current_variant: Current selected variant (optional)
+{% endcomment %}
+
+{% assign current_variant = current_variant | default: product.selected_or_first_available_variant %}
+{% assign gallery_images = product.images %}
+
+<!-- If variant has specific images, use those instead -->
+{% if current_variant.featured_image %}
+  {% assign variant_images = product.images | where: 'id', current_variant.featured_image.id %}
+  {% if variant_images.size > 0 %}
+    {% comment %} You can customize this logic to show variant-specific images {% endcomment %}
+    {% assign gallery_images = product.images %}
+  {% endif %}
+{% endif %}
+
+<div class="product-gallery-container">
+  
+  {% if gallery_images.size > 0 %}
+    
+    <!-- Main Gallery -->
+    <div class="gallery-main">
+      <div class="swiper gallery-main-swiper">
+        <div class="swiper-wrapper">
+          {% for image in gallery_images %}
+            <div class="swiper-slide">
+              <img 
+                src="{{ image | img_url: '800x600' }}" 
+                srcset="{{ image | img_url: '400x300' }} 400w,
+                        {{ image | img_url: '600x450' }} 600w,
+                        {{ image | img_url: '800x600' }} 800w,
+                        {{ image | img_url: '1200x900' }} 1200w"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Imagen {{ forloop.index }}{% endif %}"
+                class="gallery-main-image"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                width="800"
+                height="600"
+              >
+              
+              <!-- Fullscreen Button -->
+              <button 
+                class="gallery-fullscreen-btn" 
+                onclick="openLightbox({{ forloop.index0 }})"
+                aria-label="Ver imagen en pantalla completa"
+                type="button"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Navigation -->
+        {% if gallery_images.size > 1 %}
+          <div class="swiper-button-next" aria-label="Siguiente imagen"></div>
+          <div class="swiper-button-prev" aria-label="Imagen anterior"></div>
+          <div class="swiper-pagination"></div>
+        {% endif %}
+      </div>
+      
+      <!-- Image Counter -->
+      <div class="gallery-counter">
+        <span class="counter-current">1</span>
+        <span class="counter-separator">/</span>
+        <span class="counter-total">{{ gallery_images.size }}</span>
+      </div>
+    </div>
+    
+    <!-- Thumbnail Gallery -->
+    {% if gallery_images.size > 1 %}
+      <div class="gallery-thumbs">
+        <div class="swiper gallery-thumbs-swiper">
+          <div class="swiper-wrapper">
+            {% for image in gallery_images %}
+              <div class="swiper-slide">
+                <img 
+                  src="{{ image | img_url: '150x100' }}" 
+                  alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Miniatura {{ forloop.index }}{% endif %}"
+                  class="gallery-thumb-image"
+                  loading="lazy"
+                  width="150"
+                  height="100"
+                >
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+  {% else %}
+    
+    <!-- No Images Placeholder -->
+    <div class="no-image">
+      <div class="no-image-content">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21,15 16,10 5,21"/>
+        </svg>
+        <p>Sin imágenes disponibles</p>
+      </div>
+    </div>
+    
+  {% endif %}
+  
+</div>
+
+<!-- Lightbox Modal -->
+{% if gallery_images.size > 0 %}
+  {% render 'product-lightbox', images: gallery_images, product: product %}
+{% endif %}

@@ -1,0 +1,89 @@
+{% comment %}
+  Breadcrumb Component
+  
+  Usage: {% render 'breadcrumb', product: product %}
+  
+  Parameters:
+  - product: Shopify product object (optional)
+  - collection: Shopify collection object (optional)
+  - page: Shopify page object (optional)
+{% endcomment %}
+
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+  
+  <!-- Home Link -->
+  <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+    <a href="{{ routes.root_url }}" itemprop="item">
+      <span itemprop="name">Inicio</span>
+    </a>
+    <meta itemprop="position" content="1" />
+  </div>
+  
+  <span class="breadcrumb-separator">/</span>
+  
+  {% if product %}
+    <!-- Product Breadcrumb -->
+    
+    <!-- Collections Link -->
+    {% if product.collections.size > 0 %}
+      {% assign main_collection = product.collections.first %}
+      <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="{{ main_collection.url }}" itemprop="item">
+          <span itemprop="name">{{ main_collection.title }}</span>
+        </a>
+        <meta itemprop="position" content="2" />
+      </div>
+      <span class="breadcrumb-separator">/</span>
+      
+      <!-- Current Product -->
+      <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span class="breadcrumb-current" itemprop="name">{{ product.title }}</span>
+        <meta itemprop="position" content="3" />
+      </div>
+    {% else %}
+      <!-- No collection, direct to product -->
+      <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/collections/all">
+          <span itemprop="name">Propiedades</span>
+        </a>
+        <meta itemprop="position" content="2" />
+      </div>
+      <span class="breadcrumb-separator">/</span>
+      
+      <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span class="breadcrumb-current" itemprop="name">{{ product.title }}</span>
+        <meta itemprop="position" content="3" />
+      </div>
+    {% endif %}
+    
+  {% elsif collection %}
+    <!-- Collection Breadcrumb -->
+    <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span class="breadcrumb-current" itemprop="name">{{ collection.title }}</span>
+      <meta itemprop="position" content="2" />
+    </div>
+    
+  {% elsif page %}
+    <!-- Page Breadcrumb -->
+    <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span class="breadcrumb-current" itemprop="name">{{ page.title }}</span>
+      <meta itemprop="position" content="2" />
+    </div>
+    
+  {% elsif request.page_type == 'search' %}
+    <!-- Search Results -->
+    <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span class="breadcrumb-current" itemprop="name">Resultados de búsqueda</span>
+      <meta itemprop="position" content="2" />
+    </div>
+    
+  {% else %}
+    <!-- Default fallback -->
+    <div class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span class="breadcrumb-current" itemprop="name">Página actual</span>
+      <meta itemprop="position" content="2" />
+    </div>
+    
+  {% endif %}
+  
+</div>

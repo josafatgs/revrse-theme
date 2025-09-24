@@ -1,52 +1,446 @@
-{% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+{{ 'product.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
-{% endcomment %}
-
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
-
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
+<div class="product-template" data-product-id="{{ product.id }}">
+  <div class="product-container">
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="product-breadcrumb" aria-label="Breadcrumb">
+      {% render 'breadcrumb', product: product %}
+    </nav>
+    
+    <!-- Product Main Section -->
+    <div class="product-main">
+      <!-- Product Gallery -->
+      <div class="product-gallery">
+        {% render 'product-gallery', product: product, current_variant: product.selected_or_first_available_variant %}
+      </div>
+      
+      <!-- Product Information -->
+      <div class="product-info">
+        <h1 class="product-title">{{ product.title }}</h1>
+        
+        <!-- Current Variant Location -->
+        <div id="variant-location" class="product-location">
+          <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span id="location-text">
+            {% if product.selected_or_first_available_variant.metafields.custom.location %}
+              {{ product.selected_or_first_available_variant.metafields.custom.location }}
+            {% else %}
+              Ubicación por definir
+            {% endif %}
+          </span>
+        </div>
+        
+        <!-- Product Price -->
+        <div class="product-price">
+          <span class="price-label">Precio:</span>
+          <span id="variant-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+        </div>
+        
+        <!-- Variant Selector -->
+        {% if product.variants.size > 1 %}
+          <div class="variant-selector">
+            <h3>Selecciona una opción:</h3>
+            <div class="variant-options">
+              {% for variant in product.variants %}
+                <button 
+                  class="variant-option {% if variant.id == product.selected_or_first_available_variant.id %}active{% endif %}"
+                  data-variant-id="{{ variant.id }}"
+                  data-variant-price="{{ variant.price | money }}"
+                  data-variant-location="{{ variant.metafields.custom.location | default: 'Ubicación por definir' }}"
+                  data-variant-bedrooms="{{ variant.metafields.custom.bedrooms | default: 0 }}"
+                  data-variant-bathrooms="{{ variant.metafields.custom.bathrooms | default: 0 }}"
+                  data-variant-parking="{{ variant.metafields.custom.parking_spaces | default: 0 }}"
+                  data-variant-area="{{ variant.metafields.custom.square_meters | default: 0 }}"
+                  data-variant-type="{{ variant.metafields.custom.property_type | default: '' }}"
+                  data-variant-year="{{ variant.metafields.custom.year_built | default: '' }}"
+                  {% if variant.featured_image %}
+                    data-variant-image="{{ variant.featured_image | img_url: '800x600' }}"
+                  {% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }}
+                  {% unless variant.available %}
+                    <span style="opacity: 0.5;">(No disponible)</span>
+                  {% endunless %}
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+        
+        <!-- Product Specifications -->
+        <div class="product-specs">
+          <h3>Especificaciones</h3>
+          <div class="specs-grid" id="variant-specs">
+            {% render 'product-specs', variant: product.selected_or_first_available_variant %}
+          </div>
+        </div>
+        
+        <!-- Add to Cart / Contact Form -->
+        <div class="product-form">
+          {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Product Description -->
+    {% if product.description != blank %}
+      <div class="product-description">
+        <h2>Descripción de la Propiedad</h2>
+        <div class="description-content">
+          {{ product.description }}
+        </div>
+      </div>
+    {% endif %}
+    
+    <!-- Contact Actions -->
+    <div class="contact-actions">
+      <h2>¿Te interesa esta propiedad?</h2>
+      <p>Contáctanos para agendar una visita o resolver tus dudas</p>
+      <div class="contact-buttons">
+        <a 
+          href="#"
+          id="whatsapp-link"
+          target="_blank"
+          class="contact-btn contact-btn--whatsapp"
+          data-base-url="https://wa.me/{{ settings.whatsapp_number | default: '521234567890' }}?text="
+          data-product-title="{{ product.title | url_encode }}"
+          data-product-url="{{ shop.url }}{{ product.url }}"
         >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
-
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+          <span>💬</span>
+          Contactar por WhatsApp
+        </a>
+        
+        <a href="tel:{{ settings.phone_number | default: '+52 123 456 7890' }}" class="contact-btn contact-btn--phone">
+          <span>📞</span>
+          Llamar Ahora
+        </a>
+      </div>
+    </div>
+    
+  </div>
 </div>
+
+<!-- Include Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Product JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Gallery
+  window.productGallery = new ProductGallery();
+  
+  // Initialize Variant Selector
+  window.variantSelector = new VariantSelector();
+});
+
+// Product Gallery Class
+class ProductGallery {
+  constructor() {
+    this.initGallery();
+    this.initLightbox();
+  }
+  
+  initGallery() {
+    // Initialize thumbnail swiper first
+    this.thumbsSwiper = new Swiper('.gallery-thumbs-swiper', {
+      spaceBetween: 10,
+      slidesPerView: 'auto',
+      freeMode: true,
+      watchSlidesProgress: true,
+      breakpoints: {
+        320: { slidesPerView: 3, spaceBetween: 8 },
+        480: { slidesPerView: 4, spaceBetween: 10 },
+        768: { slidesPerView: 5, spaceBetween: 12 },
+        1024: { slidesPerView: 6, spaceBetween: 15 }
+      }
+    });
+
+    // Initialize main gallery swiper
+    this.mainSwiper = new Swiper('.gallery-main-swiper', {
+      spaceBetween: 10,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      navigation: {
+        nextEl: '.gallery-main .swiper-button-next',
+        prevEl: '.gallery-main .swiper-button-prev',
+      },
+      pagination: {
+        el: '.gallery-main .swiper-pagination',
+        clickable: true,
+      },
+      thumbs: {
+        swiper: this.thumbsSwiper,
+      },
+      keyboard: { enabled: true },
+      on: {
+        slideChange: () => this.updateCounter()
+      }
+    });
+
+    // Pause autoplay on hover
+    const galleryContainer = document.querySelector('.gallery-main');
+    if (galleryContainer && this.mainSwiper) {
+      galleryContainer.addEventListener('mouseenter', () => {
+        this.mainSwiper.autoplay.stop();
+      });
+      galleryContainer.addEventListener('mouseleave', () => {
+        this.mainSwiper.autoplay.start();
+      });
+    }
+  }
+  
+  initLightbox() {
+    // Lightbox functionality will be handled by the lightbox snippet
+    window.openLightbox = (index = 0) => {
+      // This will be implemented in the lightbox snippet
+      const event = new CustomEvent('openLightbox', { detail: { index } });
+      document.dispatchEvent(event);
+    };
+  }
+  
+  updateCounter() {
+    if (this.mainSwiper) {
+      const current = this.mainSwiper.realIndex + 1;
+      const total = this.mainSwiper.slides.length;
+      const counter = document.querySelector('.gallery-counter .counter-current');
+      if (counter) {
+        counter.textContent = current;
+      }
+    }
+  }
+  
+  updateGalleryImages(images) {
+    // Update gallery when variant changes
+    if (this.mainSwiper && images && images.length > 0) {
+      // This would require rebuilding the swiper with new images
+      // Implementation depends on your specific needs
+      console.log('Updating gallery images:', images);
+    }
+  }
+}
+
+// Variant Selector Class
+class VariantSelector {
+  constructor() {
+    this.initVariantSelector();
+    this.updateWhatsAppLink();
+  }
+  
+  initVariantSelector() {
+    const variantButtons = document.querySelectorAll('.variant-option');
+    variantButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!button.disabled) {
+          this.selectVariant(button);
+        }
+      });
+    });
+  }
+  
+  selectVariant(button) {
+    // Remove active class from all buttons
+    document.querySelectorAll('.variant-option').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // Add active class to selected button
+    button.classList.add('active');
+    
+    // Update product information
+    this.updateVariantInfo(button);
+    
+    // Update WhatsApp link
+    this.updateWhatsAppLink(button);
+  }
+  
+  updateVariantInfo(button) {
+    const variantData = {
+      price: button.dataset.variantPrice,
+      location: button.dataset.variantLocation,
+      bedrooms: button.dataset.variantBedrooms,
+      bathrooms: button.dataset.variantBathrooms,
+      parking: button.dataset.variantParking,
+      area: button.dataset.variantArea,
+      type: button.dataset.variantType,
+      year: button.dataset.variantYear,
+      image: button.dataset.variantImage
+    };
+    
+    // Update price
+    const priceElement = document.getElementById('variant-price');
+    if (priceElement) {
+      priceElement.textContent = variantData.price;
+    }
+    
+    // Update location
+    const locationElement = document.getElementById('location-text');
+    if (locationElement) {
+      locationElement.textContent = variantData.location;
+    }
+    
+    // Update specifications
+    this.updateSpecs(variantData);
+    
+    // Update gallery if variant has specific image
+    if (variantData.image && window.productGallery) {
+      // Implementation for updating gallery images
+    }
+  }
+  
+  updateSpecs(data) {
+    const specsContainer = document.getElementById('variant-specs');
+    if (!specsContainer) return;
+    
+    let specsHTML = '';
+    
+    if (data.bedrooms && data.bedrooms > 0) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">🛏️</span>
+          <span class="spec-label">Recámaras</span>
+          <span class="spec-value">${data.bedrooms}</span>
+        </div>
+      `;
+    }
+    
+    if (data.bathrooms && data.bathrooms > 0) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">🚿</span>
+          <span class="spec-label">Baños</span>
+          <span class="spec-value">${data.bathrooms}</span>
+        </div>
+      `;
+    }
+    
+    if (data.parking && data.parking > 0) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">🚗</span>
+          <span class="spec-label">Estacionamiento</span>
+          <span class="spec-value">${data.parking}</span>
+        </div>
+      `;
+    }
+    
+    if (data.area && data.area > 0) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">📐</span>
+          <span class="spec-label">Área</span>
+          <span class="spec-value">${data.area} m²</span>
+        </div>
+      `;
+    }
+    
+    if (data.type) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">🏠</span>
+          <span class="spec-label">Tipo</span>
+          <span class="spec-value">${data.type}</span>
+        </div>
+      `;
+    }
+    
+    if (data.year) {
+      specsHTML += `
+        <div class="spec-item">
+          <span class="spec-icon">📅</span>
+          <span class="spec-label">Año</span>
+          <span class="spec-value">${data.year}</span>
+        </div>
+      `;
+    }
+    
+    specsContainer.innerHTML = specsHTML;
+  }
+  
+  updateWhatsAppLink(button = null) {
+    const whatsappLink = document.getElementById('whatsapp-link');
+    if (!whatsappLink) return;
+    
+    const baseUrl = whatsappLink.dataset.baseUrl;
+    const productTitle = whatsappLink.dataset.productTitle;
+    const productUrl = whatsappLink.dataset.productUrl;
+    
+    let variantText = '';
+    if (button) {
+      variantText = ` - Variante: ${button.textContent.trim()}`;
+    }
+    
+    const message = `Hola, me interesa la propiedad: ${decodeURIComponent(productTitle)}${variantText} - ${productUrl}`;
+    whatsappLink.href = baseUrl + encodeURIComponent(message);
+  }
+}
+
+// Update browser URL when variant changes (optional)
+function updateURL(variantId) {
+  if (history.replaceState) {
+    const newUrl = window.location.pathname + '?variant=' + variantId;
+    history.replaceState(null, null, newUrl);
+  }
+}
+</script>
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+  "name": "Product Template",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuración de Contacto"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Número de WhatsApp (con código de país)",
+      "default": "521234567890",
+      "info": "Ejemplo: 521234567890 (sin espacios ni símbolos)"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Número de teléfono",
+      "default": "+52 123 456 7890"
+    },
+    {
+      "type": "header",
+      "content": "Configuración de Galería"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Activar reproducción automática de imágenes",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Velocidad de reproducción automática (segundos)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lightbox",
+      "label": "Activar lightbox para vista ampliada",
+      "default": true
+    }
+  ]
 }
 {% endschema %}

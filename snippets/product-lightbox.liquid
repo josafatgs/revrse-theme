@@ -1,0 +1,320 @@
+{% comment %}
+  Product Lightbox Component
+  
+  Usage: {% render 'product-lightbox', images: product.images, product: product %}
+  
+  Parameters:
+  - images: Array of Shopify image objects
+  - product: Shopify product object
+{% endcomment %}
+
+<div class="lightbox-modal" id="lightboxModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Galería de imágenes">
+  <div class="lightbox-overlay" onclick="closeLightbox()" aria-label="Cerrar galería"></div>
+  
+  <div class="lightbox-content">
+    <!-- Close Button -->
+    <button 
+      class="lightbox-close" 
+      onclick="closeLightbox()"
+      aria-label="Cerrar galería de imágenes"
+      type="button"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    
+    <!-- Lightbox Swiper -->
+    <div class="swiper lightbox-swiper">
+      <div class="swiper-wrapper">
+        {% for image in images %}
+          <div class="swiper-slide">
+            <div class="lightbox-slide-content">
+              <img 
+                src="{{ image | img_url: '1400x1050' }}" 
+                alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Imagen {{ forloop.index }}{% endif %}"
+                class="lightbox-image"
+                loading="lazy"
+              >
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <!-- Navigation -->
+      {% if images.size > 1 %}
+        <div class="swiper-button-next" aria-label="Siguiente imagen"></div>
+        <div class="swiper-button-prev" aria-label="Imagen anterior"></div>
+      {% endif %}
+    </div>
+    
+    <!-- Image Counter -->
+    <div class="lightbox-counter">
+      <span class="lightbox-current">1</span>
+      <span class="lightbox-separator">/</span>
+      <span class="lightbox-total">{{ images.size }}</span>
+    </div>
+    
+    <!-- Image Info (Optional) -->
+    <div class="lightbox-info" id="lightboxInfo">
+      <h3 id="lightboxTitle">{{ product.title }}</h3>
+      <p id="lightboxDescription">Imagen <span class="lightbox-current-info">1</span> de {{ images.size }}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Additional Lightbox Styles */
+.lightbox-slide-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-info {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 90%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-modal.active .lightbox-info {
+  opacity: 1;
+}
+
+.lightbox-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+}
+
+.lightbox-info p {
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lightbox-content {
+    padding: 40px 10px;
+  }
+  
+  .lightbox-close {
+    top: 10px;
+    right: 10px;
+    padding: 12px;
+  }
+  
+  .lightbox-counter {
+    bottom: 20px;
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+  
+  .lightbox-info {
+    bottom: 60px;
+    padding: 12px 20px;
+  }
+  
+  .lightbox-info h3 {
+    font-size: 16px;
+  }
+  
+  .lightbox-info p {
+    font-size: 12px;
+  }
+}
+
+/* Zoom functionality */
+.swiper-zoom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading state */
+.lightbox-image {
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-image.loading {
+  opacity: 0.5;
+}
+</style>
+
+<script>
+// Lightbox functionality
+document.addEventListener('DOMContentLoaded', function() {
+  let lightboxSwiper = null;
+  const lightboxModal = document.getElementById('lightboxModal');
+  
+  // Initialize lightbox swiper
+  function initLightboxSwiper() {
+    if (lightboxSwiper) {
+      lightboxSwiper.destroy(true, true);
+    }
+    
+    lightboxSwiper = new Swiper('.lightbox-swiper', {
+      spaceBetween: 10,
+      centeredSlides: true,
+      navigation: {
+        nextEl: '.lightbox-content .swiper-button-next',
+        prevEl: '.lightbox-content .swiper-button-prev',
+      },
+      keyboard: {
+        enabled: true,
+        onlyInViewport: false
+      },
+      zoom: {
+        maxRatio: 3,
+        minRatio: 1,
+        toggle: true
+      },
+      grabCursor: true,
+      loop: false,
+      on: {
+        slideChange: function() {
+          updateLightboxCounter(this.activeIndex + 1, this.slides.length);
+          updateLightboxInfo(this.activeIndex + 1);
+        },
+        init: function() {
+          updateLightboxCounter(1, this.slides.length);
+          updateLightboxInfo(1);
+        }
+      }
+    });
+  }
+  
+  // Open lightbox function
+  window.openLightbox = function(index = 0) {
+    if (!lightboxModal) return;
+    
+    lightboxModal.classList.add('active');
+    lightboxModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+    
+    // Initialize swiper if not already done
+    if (!lightboxSwiper) {
+      initLightboxSwiper();
+    }
+    
+    // Go to specific slide
+    if (lightboxSwiper) {
+      lightboxSwiper.slideTo(index, 0);
+      updateLightboxCounter(index + 1, lightboxSwiper.slides.length);
+      updateLightboxInfo(index + 1);
+    }
+    
+    // Focus management for accessibility
+    setTimeout(() => {
+      const closeButton = lightboxModal.querySelector('.lightbox-close');
+      if (closeButton) closeButton.focus();
+    }, 100);
+  };
+  
+  // Close lightbox function
+  window.closeLightbox = function() {
+    if (!lightboxModal) return;
+    
+    lightboxModal.classList.remove('active');
+    lightboxModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+    
+    // Return focus to the button that opened the lightbox
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement.classList.contains('gallery-fullscreen-btn')) {
+      activeElement.blur();
+    }
+  };
+  
+  // Update lightbox counter
+  function updateLightboxCounter(current, total) {
+    const currentElement = document.querySelector('.lightbox-current');
+    const currentInfoElement = document.querySelector('.lightbox-current-info');
+    
+    if (currentElement) {
+      currentElement.textContent = current;
+    }
+    if (currentInfoElement) {
+      currentInfoElement.textContent = current;
+    }
+  }
+  
+  // Update lightbox info
+  function updateLightboxInfo(current) {
+    const infoElement = document.getElementById('lightboxInfo');
+    if (infoElement) {
+      // You can customize this to show different info per image
+      // For now, just update the counter
+    }
+  }
+  
+  // Close with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
+      closeLightbox();
+    }
+  });
+  
+  // Touch/swipe gestures for mobile
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+  
+  lightboxModal?.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  });
+  
+  lightboxModal?.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleLightboxSwipe();
+  });
+  
+  function handleLightboxSwipe() {
+    const swipeThreshold = 50;
+    const diffX = touchStartX - touchEndX;
+    const diffY = Math.abs(touchStartY - touchEndY);
+    
+    // Only handle horizontal swipes
+    if (Math.abs(diffX) > swipeThreshold && diffY < 100) {
+      if (diffX > 0 && lightboxSwiper) {
+        // Swipe left - next slide
+        lightboxSwiper.slideNext();
+      } else if (diffX < 0 && lightboxSwiper) {
+        // Swipe right - previous slide
+        lightboxSwiper.slidePrev();
+      }
+    }
+  }
+  
+  // Listen for custom events
+  document.addEventListener('openLightbox', function(e) {
+    openLightbox(e.detail.index);
+  });
+});
+</script>
