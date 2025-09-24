@@ -1,0 +1,27 @@
+{% comment %}
+    Snippet para mostrar una tarjeta de servicio individual.
+    Recibe: service_title, service_text, service_image
+{% endcomment %}
+
+<div class="service-card">
+    {% if service_image != blank %}
+        <div class="service-card__image-wrapper">
+            <img
+                src="{{ service_image | img_url: '400x' }}"
+                alt="{{ service_title | escape }}"
+                loading="lazy"
+                class="service-card__image"
+            >
+        </div>
+    {% else %}
+        <div class="service-card__placeholder">
+             <span class="icon-placeholder">🖼️</span>
+             <p>Añade una imagen</p>
+        </div>
+    {% endif %}
+
+    <div class="service-card__content">
+        <h3 class="service-card__title">{{ service_title }}</h3>
+        <p class="service-card__text">{{ service_text }}</p>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+{% comment %}
+    Configuracion de la seccion y bucle para mostrar servicios.
+{% endcomment %}
+
+{{ 'our-services.css' | asset_url | stylesheet_tag }}
+
+<section class="our-services-section full-width" data-section-id="{{ section.id }}" style="background-color: {{ section.settings.background_color }};">
+
+    {% comment %} Si hay una imagen de fondo, la mostramos. {% endcomment %}
+    {% if section.settings.background_image != blank %}
+        <div class="our-services-background-image" style="background-image: url('{{ section.settings.background_image | img_url: '2000x' }}');"></div>
+    {% endif %}
+
+    <div class="page-width">
+        <h2 class="our-services-title">{{ section.settings.title }}</h2>
+
+        <div class="our-services-grid">
+            {% comment %} Bucle sobre los bloques definidos por el usuario {% endcomment %}
+            {% for block in section.blocks %}
+                {% liquid
+                    assign service_title = block.settings.service_title
+                    assign service_text = block.settings.service_text
+                    assign service_image = block.settings.service_image
+                %}
+
+                {% comment %} Renderizamos el snippet con los datos del bloque {% endcomment %}
+                {% render 'service-card',
+                    service_title: service_title,
+                    service_text: service_text,
+                    service_image: service_image
+                %}
+            {% endfor %}
+        </div>
+
+        {% if section.blocks.size == 0 %}
+            <div class="placeholder-content">
+                <p>¡Añade tus servicios haciendo click en "Agregar servicio"!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% schema %}
+{
+    "name": "Nuestros Servicios",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Título de la Sección",
+            "default": "Nuestros Servicios Destacados"
+        },
+        {
+            "type": "header",
+            "content": "Fondo de la Sección"
+        },
+        {
+            "type": "color",
+            "id": "background_color",
+            "label": "Color de Fondo Plano",
+            "default": "#f8f8f8"
+        },
+        {
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagen de Fondo (Opcional)"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "service",
+            "name": "Servicio",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "service_title",
+                    "label": "Título del Servicio",
+                    "default": "Nombre del Servicio"
+                },
+                {
+                    "type": "textarea",
+                    "id": "service_text",
+                    "label": "Descripción del Servicio",
+                    "default": "Describe brevemente este servicio, sus beneficios o lo que incluye."
+                },
+                {
+                    "type": "image_picker",
+                    "id": "service_image",
+                    "label": "Imagen del Servicio"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Nuestros Servicios",
+            "category": "Texto y Contenido"
+        }
+    ]
+}
+{% endschema %}

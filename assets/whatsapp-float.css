@@ -1,0 +1,93 @@
+/*
+    Estilos para el botón flotante de WhatsApp
+*/
+
+/* 1. Contenedor principal para posicionamiento fijo */
+.whatsapp-float {
+    /* Fija el botón en la ventana */
+    position: fixed;
+    /* Posición: Esquina inferior derecha */
+    bottom: 20px;
+    right: 20px;
+    /* Asegura que esté por encima de casi todos los demás elementos */
+    z-index: 1000;
+}
+
+/* Ajuste para pantallas pequeñas si es necesario (Mobile-First) */
+@media screen and (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* 2. Estilos del botón flotante */
+.whatsapp-btn {
+    /* Usamos Flexbox para centrar el icono si fuera necesario añadir texto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Dimensiones del botón (grande para ser visible en móvil) */
+    width: 60px;
+    height: 60px;
+    
+    /* Color de marca de WhatsApp */
+    background-color: #25D366; 
+    color: white; /* Color del icono */
+    
+    /* Forma circular */
+    border-radius: 50%;
+    
+    /* Sombra para que "flote" */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+    /* Eliminamos el subrayado */
+    text-decoration: none;
+    
+    /* Transición suave para los efectos hover */
+    transition: all 0.3s ease;
+}
+
+/* 3. Estilos del Icono SVG */
+.whatsapp-icon {
+    /* Ajusta el tamaño del icono dentro del botón */
+    width: 32px;
+    height: 32px;
+}
+
+/* 4. Efectos al pasar el ratón (Hover/Focus) */
+.whatsapp-btn:hover,
+.whatsapp-btn:focus {
+    /* Un ligero escalado para dar feedback visual */
+    transform: scale(1.08);
+    /* Sombra más intensa */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* 5. Animación de "pulsación" para llamar la atención */
+/* Define la animación */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Aplica la animación al botón */
+.whatsapp-btn {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+
+/* 6. Clase de accesibilidad (para ocultar texto visualmente) */
+.visually-hidden {
+    /* Estilos estándar para ocultar texto de forma accesible */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
