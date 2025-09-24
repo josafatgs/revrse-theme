@@ -1,0 +1,92 @@
+<!-- Company Logo and Info -->
+<div class="footer__logo">
+  {% if section.settings.footer_logo != blank %}
+    <a href="{{ routes.root_url }}" class="footer__logo-link">
+      <img 
+        src="{{ section.settings.footer_logo | image_url: width: section.settings.logo_width }}" 
+        alt="{{ shop.name }}"
+        class="footer__logo-img"
+        width="{{ section.settings.logo_width }}"
+        height="auto"
+        loading="lazy"
+      >
+    </a>
+  {% else %}
+    <a href="{{ routes.root_url }}" class="footer__logo-text">
+      {{ shop.name }}
+    </a>
+  {% endif %}
+</div>
+
+<!-- Company Description -->
+{% if section.settings.company_description != blank %}
+  <p class="footer__description">{{ section.settings.company_description }}</p>
+{% endif %}
+
+<!-- Social Links -->
+{% if section.settings.show_social_links %}
+  <div class="footer__social">
+    <h4 class="footer__social-title">{{ section.settings.social_title }}</h4>
+    <div class="footer__social-links">
+      {% if section.settings.facebook_url != blank %}
+        <a href="{{ section.settings.facebook_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en Facebook">
+          {% render 'svg', icon: 'facebook' %}
+        </a>
+      {% endif %}
+      
+      {% if section.settings.instagram_url != blank %}
+        <a href="{{ section.settings.instagram_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en Instagram">
+          {% render 'svg', icon: 'instagram' %}
+        </a>
+      {% endif %}
+      
+      {% if section.settings.youtube_url != blank %}
+        <a href="{{ section.settings.youtube_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en YouTube">
+          {% render 'svg', icon: 'youtube' %}
+        </a>
+      {% endif %}
+
+      {% if section.settings.twitter_url != blank %}
+        <a href="{{ section.settings.twitter_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en Twitter">
+          {% render 'svg', icon: 'twitter' %}
+        </a>
+      {% endif %}
+
+      {% if section.settings.linkedin_url != blank %}
+        <a href="{{ section.settings.linkedin_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en LinkedIn">
+          {% render 'svg', icon: 'linkedin' %}
+        </a>
+      {% endif %}
+
+      {% if section.settings.tiktok_url != blank %}
+        <a href="{{ section.settings.tiktok_url }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="footer__social-link"
+           aria-label="Síguenos en TikTok">
+          {% render 'svg', icon: 'tiktok' %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
