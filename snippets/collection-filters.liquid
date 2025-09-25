@@ -16,7 +16,7 @@
                             name="{{ value.param_name }}"
                             id="Filter-{{ filter.label | handleize }}-{{ forloop.index }}"
                             {% if value.active %}checked{% endif %}
-                            {% if value.count == 0 and not value.active %}disabled="disabled"{% endif %}
+                            {% if value.count == 0 and not value.active %} disabled="disabled" {% endif %}
                             value="{{ value.value }}"
                             form="filters-form"
                         >
