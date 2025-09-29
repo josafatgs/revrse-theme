@@ -9,11 +9,6 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "disabled": true,
-      "settings": {}
-    },
     "hero_one_aH9AEh": {
       "type": "hero-one",
       "name": "Hero Section",
@@ -24,7 +19,7 @@
         "layout": "image-right",
         "text_color": "light",
         "section_height": 300,
-        "background_color": "#0d1b2a",
+        "background_color": "#2a3d81",
         "show_overlay": true,
         "button_text": "",
         "button_url": "",
@@ -33,7 +28,6 @@
     }
   },
   "order": [
-    "main",
     "hero_one_aH9AEh"
   ]
 }
