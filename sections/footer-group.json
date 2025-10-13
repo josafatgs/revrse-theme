@@ -34,10 +34,10 @@
         "menu_column_dRmiWC"
       ],
       "settings": {
-        "footer_bg_color": "#2a3d81",
-        "text_color": "#ffffff",
+        "footer_bg_color": "#ffffff",
+        "text_color": "#cd9d08",
         "primary_color": "#cd9d08",
-        "link_color": "#ffffffcc",
+        "link_color": "#cd9d08",
         "link_hover_color": "#cd9d08",
         "border_color": "#ffffff1a",
         "text_size": 14,

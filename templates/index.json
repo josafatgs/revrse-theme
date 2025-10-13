@@ -17,7 +17,7 @@
         "subtitle": "Compra, vende o invierte con total confianza y asesoría personalizada",
         "image": "shopify://shop_images/persona-sostiene-confianza-par-llaves-frente-edificio-acceder_359031-48721.webp",
         "layout": "image-right",
-        "text_color": "light",
+        "text_color": "dark",
         "section_height": 300,
         "background_color": "#ffffff",
         "show_overlay": true,
