@@ -30,31 +30,31 @@
         <div class="swiper-wrapper">
           {% for image in gallery_images %}
             <div class="swiper-slide">
-              <img 
-                src="{{ image | img_url: '800x600' }}" 
-                srcset="{{ image | img_url: '400x300' }} 400w,
-                        {{ image | img_url: '600x450' }} 600w,
-                        {{ image | img_url: '800x600' }} 800w,
-                        {{ image | img_url: '1200x900' }} 1200w"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Imagen {{ forloop.index }}{% endif %}"
-                class="gallery-main-image"
-                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                width="800"
-                height="600"
-              >
-              
-              <!-- Fullscreen Button -->
-              <button 
-                class="gallery-fullscreen-btn" 
-                data-lightbox-trigger="{{ forloop.index0 }}"
-                aria-label="Ver imagen en pantalla completa"
-                type="button"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                </svg>
-              </button>
+              <div class="slide-inner">
+                <img 
+                  src="{{ image | img_url: '800x800' }}" 
+                  srcset="{{ image | img_url: '400x400' }} 400w,
+                          {{ image | img_url: '600x600' }} 600w,
+                          {{ image | img_url: '800x800' }} 800w,
+                          {{ image | img_url: '1200x1200' }} 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Imagen {{ forloop.index }}{% endif %}"
+                  class="gallery-main-image"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                >
+                
+                <!-- Fullscreen Button -->
+                <button 
+                  class="gallery-fullscreen-btn" 
+                  data-lightbox-trigger="{{ forloop.index0 }}"
+                  aria-label="Ver imagen en pantalla completa"
+                  type="button"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           {% endfor %}
         </div>
@@ -83,12 +83,10 @@
             {% for image in gallery_images %}
               <div class="swiper-slide">
                 <img 
-                  src="{{ image | img_url: '150x100' }}" 
+                  src="{{ image | img_url: '150x150' }}" 
                   alt="{% if image.alt != blank %}{{ image.alt }}{% else %}{{ product.title }} - Miniatura {{ forloop.index }}{% endif %}"
                   class="gallery-thumb-image"
                   loading="lazy"
-                  width="150"
-                  height="100"
                 >
               </div>
             {% endfor %}
@@ -144,12 +142,15 @@ document.addEventListener('DOMContentLoaded', function() {
       breakpoints: {
         640: {
           slidesPerView: 5,
+          spaceBetween: 12,
         },
         768: {
           slidesPerView: 6,
+          spaceBetween: 12,
         },
         1024: {
           slidesPerView: 4,
+          spaceBetween: 10,
         }
       }
     });
@@ -158,7 +159,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar Swiper principal
   if (mainSwiperEl) {
     mainSwiper = new Swiper(mainSwiperEl, {
-      spaceBetween: 10,
+      spaceBetween: 0,
+      slidesPerView: 1,
+      loop: false,
+      grabCursor: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -210,12 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (mainSwiper && typeof Shopify !== 'undefined') {
     document.addEventListener('variant:changed', function(e) {
       if (e.detail && e.detail.variant) {
-        // Aquí puedes agregar lógica para filtrar imágenes por variante
-        // Por ejemplo, ir a la imagen destacada de la variante
         const variantImageId = e.detail.variant.featured_image?.id;
         
         if (variantImageId && mainSwiper) {
-          // Encontrar el índice de la imagen de la variante
           const slides = mainSwiper.slides;
           for (let i = 0; i < slides.length; i++) {
             const img = slides[i].querySelector('img');
@@ -229,39 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Soporte para gestos táctiles en lightbox
-  let touchStartX = 0;
-  let touchEndX = 0;
-  
-  mainSwiperEl.addEventListener('touchstart', function(e) {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-  
-  mainSwiperEl.addEventListener('touchend', function(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    handleGesture();
-  }, { passive: true });
-  
-  function handleGesture() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0 && mainSwiper) {
-        mainSwiper.slideNext();
-      } else if (mainSwiper) {
-        mainSwiper.slidePrev();
-      }
-    }
-  }
-  
   // Precarga de imágenes adyacentes
   if (mainSwiper) {
     mainSwiper.on('slideChange', function() {
       const current = this.activeIndex;
       const slides = this.slides;
       
-      // Precargar siguiente y anterior
       [current - 1, current + 1].forEach(idx => {
         if (idx >= 0 && idx < slides.length) {
           const img = slides[idx].querySelector('img[loading="lazy"]');
@@ -278,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!mainSwiper) return;
     
     const lightboxOpen = document.querySelector('.product-lightbox.active');
-    if (lightboxOpen) return; // No interferir con el lightbox
+    if (lightboxOpen) return;
     
     if (e.key === 'ArrowLeft') {
       mainSwiper.slidePrev();
@@ -293,28 +267,48 @@ document.addEventListener('DOMContentLoaded', function() {
 .product-gallery-container {
   width: 100%;
   max-width: 100%;
+  position: relative;
 }
 
 .gallery-main {
   position: relative;
   margin-bottom: 1rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .gallery-main-swiper {
   border-radius: 8px;
   overflow: hidden;
+  width: 100%;
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: stretch;
 }
 
 .swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
   position: relative;
   background: #f5f5f5;
-  max-height: 600px;
+}
+
+.slide-inner {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* Square aspect ratio */
+  overflow: hidden;
 }
 
 .gallery-main-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  max-height: 600px;
+  height: 100%;
   object-fit: contain;
   display: block;
 }
@@ -332,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
@@ -351,11 +345,17 @@ document.addEventListener('DOMContentLoaded', function() {
   padding: 0.5rem 0.75rem;
   border-radius: 20px;
   font-size: 0.875rem;
-  z-index: 10;
+  z-index: 20;
+  pointer-events: none;
 }
 
 .gallery-thumbs {
   margin-top: 1rem;
+  width: 100%;
+}
+
+.gallery-thumbs-swiper {
+  overflow: hidden;
 }
 
 .gallery-thumbs-swiper .swiper-slide {
@@ -364,17 +364,21 @@ document.addEventListener('DOMContentLoaded', function() {
   transition: opacity 0.3s;
   border-radius: 6px;
   overflow: hidden;
+  height: 80px;
+  width: auto;
 }
 
 .gallery-thumbs-swiper .swiper-slide-thumb-active {
   opacity: 1;
   outline: 2px solid #000;
+  outline-offset: -2px;
 }
 
 .gallery-thumb-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .swiper-button-next,
@@ -398,6 +402,10 @@ document.addEventListener('DOMContentLoaded', function() {
   transform: scale(1.05);
 }
 
+.swiper-pagination {
+  bottom: 1rem !important;
+}
+
 .swiper-pagination-bullet {
   background: #fff;
   opacity: 0.7;
@@ -409,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .no-image {
-  aspect-ratio: 4/3;
+  aspect-ratio: 1/1;
   background: #f5f5f5;
   border-radius: 8px;
   display: flex;
@@ -428,6 +436,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .slide-inner {
+    padding-bottom: 100%;
+  }
+  
+  .gallery-thumbs-swiper .swiper-slide {
+    height: 60px;
+  }
+  
   .gallery-fullscreen-btn {
     width: 36px;
     height: 36px;
@@ -442,6 +458,12 @@ document.addEventListener('DOMContentLoaded', function() {
   .gallery-counter {
     font-size: 0.75rem;
     padding: 0.375rem 0.625rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .slide-inner {
+    padding-bottom: 75%; /* 4:3 aspect ratio on desktop */
   }
 }
 </style>
