@@ -1,0 +1,252 @@
+/* Hero Overlay Section - Estilos únicos con prefijo para evitar conflictos */
+
+.hero-overlay {
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay oscuro sobre la imagen */
+.hero-overlay__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000000;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Wrapper del contenido */
+.hero-overlay__wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 60px 20px;
+}
+
+/* Contenedor del contenido */
+.hero-overlay__content {
+  margin: 0 auto;
+  animation: heroFadeIn 0.8s ease-out;
+}
+
+/* Anchos del contenido */
+.hero-overlay__content--small {
+  max-width: 600px;
+}
+
+.hero-overlay__content--medium {
+  max-width: 800px;
+}
+
+.hero-overlay__content--large {
+  max-width: 1000px;
+}
+
+.hero-overlay__content--full {
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+/* Alineaciones de texto */
+.hero-overlay__content--left {
+  text-align: left;
+}
+
+.hero-overlay__content--center {
+  text-align: center;
+}
+
+.hero-overlay__content--right {
+  text-align: right;
+}
+
+.hero-overlay__content--justify {
+  text-align: justify;
+}
+
+/* Eyebrow text */
+.hero-overlay__eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  opacity: 0.9;
+}
+
+/* Título */
+.hero-overlay__title {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+/* Subtítulo */
+.hero-overlay__subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0 0 20px;
+  opacity: 0.95;
+}
+
+/* Descripción */
+.hero-overlay__description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 30px;
+  opacity: 0.9;
+}
+
+.hero-overlay__description p {
+  margin: 0 0 15px;
+}
+
+.hero-overlay__description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Botones */
+.hero-overlay__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.hero-overlay__content--center .hero-overlay__buttons {
+  justify-content: center;
+}
+
+.hero-overlay__content--right .hero-overlay__buttons {
+  justify-content: flex-end;
+}
+
+.hero-overlay__content--left .hero-overlay__buttons {
+  justify-content: flex-start;
+}
+
+.hero-overlay__button {
+  display: inline-block;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  border: 2px solid transparent;
+}
+
+.hero-overlay__button--primary {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-overlay__button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero-overlay__button--secondary {
+  background-color: transparent;
+  border: 2px solid currentColor;
+}
+
+.hero-overlay__button--secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Animación de entrada */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .hero-overlay__title {
+    font-size: 48px;
+  }
+  
+  .hero-overlay__subtitle {
+    font-size: 20px;
+  }
+  
+  .hero-overlay__description {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-overlay__wrapper {
+    padding: 40px 20px;
+  }
+  
+  .hero-overlay__content--full {
+    padding: 0 20px;
+  }
+  
+  .hero-overlay__title {
+    font-size: 36px;
+  }
+  
+  .hero-overlay__subtitle {
+    font-size: 18px;
+  }
+  
+  .hero-overlay__description {
+    font-size: 15px;
+  }
+  
+  .hero-overlay__eyebrow {
+    font-size: 12px;
+  }
+  
+  .hero-overlay__buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .hero-overlay__button {
+    width: 100%;
+    padding: 14px 30px;
+  }
+  
+  /* En móvil, los botones siempre se centran si el texto está justificado */
+  .hero-overlay__content--justify .hero-overlay__buttons {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-overlay__title {
+    font-size: 28px;
+  }
+  
+  .hero-overlay__subtitle {
+    font-size: 16px;
+  }
+  
+  .hero-overlay__wrapper {
+    padding: 30px 15px;
+  }
+}
