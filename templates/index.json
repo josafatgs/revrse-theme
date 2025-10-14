@@ -9,25 +9,31 @@
  */
 {
   "sections": {
-    "hero_one_aH9AEh": {
-      "type": "hero-one",
-      "name": "Hero Section",
+    "hero_overlay_wQH9dN": {
+      "type": "hero-overlay",
+      "name": "Hero con Overlay",
       "settings": {
+        "eyebrow": "",
         "title": "Haz crecer tu patrimonio con las mejores oportunidades inmobiliarias",
         "subtitle": "Compra, vende o invierte con total confianza y asesoría personalizada",
-        "image": "shopify://shop_images/persona-sostiene-confianza-par-llaves-frente-edificio-acceder_359031-48721.webp",
-        "layout": "image-right",
-        "text_color": "dark",
-        "section_height": 300,
-        "background_color": "#ffffff",
-        "show_overlay": true,
+        "description": "",
+        "background_image": "shopify://shop_images/Portada.jpg",
+        "fallback_color": "#333333",
+        "overlay_opacity": 0,
+        "text_align": "left",
+        "content_width": "full",
+        "text_color": "#ffffff",
+        "section_height": 700,
         "button_text": "",
         "button_url": "",
-        "button_style": "primary"
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#000000",
+        "button_text_secondary": "",
+        "button_url_secondary": ""
       }
     }
   },
   "order": [
-    "hero_one_aH9AEh"
+    "hero_overlay_wQH9dN"
   ]
 }
