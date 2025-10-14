@@ -649,6 +649,7 @@
     padding: 10px 20px;
     border-radius: 25px;
     font-weight: 600;
+    height: fit-content;
   }
   
   /* Body class when lightbox is open */
