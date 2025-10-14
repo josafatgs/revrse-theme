@@ -11,6 +11,14 @@
 {% assign current_variant = current_variant | default: product.selected_or_first_available_variant %}
 {% assign gallery_images = product.images %}
 
+<!-- If variant has specific images, use those instead -->
+{% if current_variant.featured_image %}
+  {% assign variant_images = product.images | where: 'id', current_variant.featured_image.id %}
+  {% if variant_images.size > 0 %}
+    {% comment %} You can customize this logic to show variant-specific images {% endcomment %}
+    {% assign gallery_images = product.images %}
+  {% endif %}
+{% endif %}
 
 <div class="product-gallery-container" data-product-gallery>
   
@@ -155,6 +163,9 @@ document.addEventListener('DOMContentLoaded', function() {
       slidesPerView: 1,
       loop: false,
       grabCursor: true,
+      allowTouchMove: true,
+      resistance: true,
+      resistanceRatio: 0,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -168,6 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
         swiper: thumbsSwiper
       } : undefined,
       on: {
+        init: function() {
+          // Forzar ancho correcto al inicializar
+          this.el.style.maxWidth = '100%';
+          this.wrapperEl.style.maxWidth = '100%';
+        },
         slideChange: function() {
           // Actualizar contador
           if (counterCurrent) {
@@ -273,16 +289,20 @@ document.addEventListener('DOMContentLoaded', function() {
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
+  max-width: 100%;
 }
 
-.swiper-wrapper {
+.gallery-main-swiper .swiper-wrapper {
   display: flex;
   align-items: stretch;
+  width: 100%;
+  max-width: 100%;
 }
 
-.swiper-slide {
+.gallery-main-swiper .swiper-slide {
   flex-shrink: 0;
   width: 100%;
+  max-width: 100%;
   height: auto;
   position: relative;
   background: #f5f5f5;
@@ -291,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .slide-inner {
   position: relative;
   width: 100%;
+  max-width: 100%;
   padding-bottom: 100%; /* Square aspect ratio */
   overflow: hidden;
 }
