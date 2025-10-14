@@ -615,7 +615,7 @@
     }
   }
   
-  .cta-button {
+  /* .cta-button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -631,7 +631,7 @@
     border: 2px solid transparent;
     width: 100%;
     justify-content: center;
-  }
+  } */
   
   @media (min-width: 768px) {
     .cta-button {
