@@ -11,14 +11,6 @@
 {% assign current_variant = current_variant | default: product.selected_or_first_available_variant %}
 {% assign gallery_images = product.images %}
 
-<!-- If variant has specific images, use those instead -->
-{% if current_variant.featured_image %}
-  {% assign variant_images = product.images | where: 'id', current_variant.featured_image.id %}
-  {% if variant_images.size > 0 %}
-    {% comment %} You can customize this logic to show variant-specific images {% endcomment %}
-    {% assign gallery_images = product.images %}
-  {% endif %}
-{% endif %}
 
 <div class="product-gallery-container" data-product-gallery>
   
