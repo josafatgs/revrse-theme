@@ -11,7 +11,13 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {}
+      "settings": {
+        "whatsapp_number": "522221333810‬",
+        "phone_number": "+522221333810‬",
+        "enable_autoplay": true,
+        "autoplay_delay": 4,
+        "enable_lightbox": true
+      }
     }
   },
   "order": [
