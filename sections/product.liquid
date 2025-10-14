@@ -41,12 +41,12 @@
           <span id="variant-price">{{ product.selected_or_first_available_variant.price | money }} MXN</span>
         </div>
 
-        <a href="https://wa.me/{{ section.settings.whatsapp_number }}?text={{ section.settings.whatsapp_message | url_encode }}" 
+        <a href="https://wa.me/{{ section.settings.whatsapp_number }}?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}%20-%20{{ shop.url }}" 
           target="_blank" 
           rel="noopener noreferrer"
           class="footer__whatsapp-btn">
           {% render 'svg', icon: 'whatsapp' %}
-          <span>{{ section.settings.whatsapp_button_text }}</span>
+          <span>Más información</span>
         </a>
         
         <!-- Variant Selector -->
@@ -332,24 +332,6 @@ function updateURL(variantId) {
       "id": "enable_lightbox",
       "label": "Activar lightbox para vista ampliada",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_number",
-      "label": "Número de WhatsApp",
-      "info": "Solo números, ejemplo: 5212345678901"
-    },
-    {
-      "type": "textarea",
-      "id": "whatsapp_message",
-      "label": "Mensaje predeterminado",
-      "default": "Hola, me interesa obtener más información."
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_button_text",
-      "label": "Texto del botón WhatsApp",
-      "default": "Contactar por WhatsApp"
     }
   ]
 }
