@@ -364,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
   transition: opacity 0.3s;
   border-radius: 6px;
   overflow: hidden;
-  height: 80px;
 }
 
 .gallery-thumbs-swiper .swiper-slide-thumb-active {
@@ -374,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .gallery-thumb-image {
   width: 100%;
-  height: 80px;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -429,22 +428,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .swiper-slide {
-    max-height: 400px;
-  }
-  
-  .gallery-main-image {
-    max-height: 400px;
-  }
-  
-  .gallery-thumbs-swiper .swiper-slide {
-    height: 60px;
-  }
-  
-  .gallery-thumb-image {
-    height: 60px;
-  }
-  
   .gallery-fullscreen-btn {
     width: 36px;
     height: 36px;
