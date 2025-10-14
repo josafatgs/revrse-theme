@@ -387,7 +387,7 @@
   }
   
   .spec-item {
-    background: #f8f9fa;
+    background: #D4AF37;
     border-radius: 8px;
     padding: 12px;
     text-align: center;
@@ -433,7 +433,7 @@
   
   .spec-label {
     font-size: 12px;
-    color: #666;
+    color: black;
     font-weight: 500;
     display: block;
     margin-bottom: 5px;
