@@ -11,6 +11,14 @@
 {% assign current_variant = current_variant | default: product.selected_or_first_available_variant %}
 {% assign gallery_images = product.images %}
 
+<!-- If variant has specific images, use those instead -->
+{% if current_variant.featured_image %}
+  {% assign variant_images = product.images | where: 'id', current_variant.featured_image.id %}
+  {% if variant_images.size > 0 %}
+    {% comment %} You can customize this logic to show variant-specific images {% endcomment %}
+    {% assign gallery_images = product.images %}
+  {% endif %}
+{% endif %}
 
 <div class="product-gallery-container" data-product-gallery>
   
@@ -299,14 +307,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .swiper-slide {
   position: relative;
-  aspect-ratio: 4/3;
   background: #f5f5f5;
+  max-height: 600px;
 }
 
 .gallery-main-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
 }
 
 .gallery-fullscreen-btn {
@@ -354,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
   transition: opacity 0.3s;
   border-radius: 6px;
   overflow: hidden;
+  height: 80px;
 }
 
 .gallery-thumbs-swiper .swiper-slide-thumb-active {
@@ -363,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .gallery-thumb-image {
   width: 100%;
-  height: 100%;
+  height: 80px;
   object-fit: cover;
 }
 
@@ -418,6 +429,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .swiper-slide {
+    max-height: 400px;
+  }
+  
+  .gallery-main-image {
+    max-height: 400px;
+  }
+  
+  .gallery-thumbs-swiper .swiper-slide {
+    height: 60px;
+  }
+  
+  .gallery-thumb-image {
+    height: 60px;
+  }
+  
   .gallery-fullscreen-btn {
     width: 36px;
     height: 36px;
