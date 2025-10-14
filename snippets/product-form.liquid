@@ -130,21 +130,21 @@
       </button>
       
       <a 
-        href="tel:{{ settings.phone_number | default: '+52 123 456 7890' }}" 
+        href="tel:{{ settings.phone_number | default: '+52 2221333810' }}" 
         class="quick-action-btn quick-action-btn--phone"
       >
         <span class="quick-action-icon">📞</span>
         <span class="quick-action-text">Llamar</span>
       </a>
       
-      <button 
+      {% comment %} <button 
         type="button" 
         class="quick-action-btn quick-action-btn--email"
         onclick="openEmailClient()"
       >
         <span class="quick-action-icon">✉️</span>
         <span class="quick-action-text">Email</span>
-      </button>
+      </button> {% endcomment %}
     </div>
   </div>
   
