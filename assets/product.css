@@ -633,30 +633,30 @@
     justify-content: center;
   } */
   
-  @media (min-width: 768px) {
+  /* @media (min-width: 768px) {
     .cta-button {
       gap: 12px;
       padding: 16px 32px;
       font-size: 18px;
       width: auto;
     }
-  }
+  } */
   
-  .cta-button:hover {
+  /* .cta-button:hover {
     background: linear-gradient(135deg, #005a87 0%, #004066 100%);
     transform: translateY(-3px);
     box-shadow: 0 6px 25px rgba(0, 124, 186, 0.4);
     color: white;
     text-decoration: none;
-  }
+  } */
   
-  .cta-button svg {
+  /* .cta-button svg {
     transition: transform 0.3s ease;
   }
   
   .cta-button:hover svg {
     transform: rotate(45deg);
-  }
+  } */
 
   /* Contact Actions */
   .contact-actions {

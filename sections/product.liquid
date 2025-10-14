@@ -98,31 +98,6 @@
       </div>
     {% endif %}
     
-    <!-- Contact Actions -->
-    <div class="contact-actions">
-      <h2>¿Te interesa esta propiedad?</h2>
-      <p>Contáctanos para agendar una visita o resolver tus dudas</p>
-      <div class="contact-buttons">
-        <a 
-          href="#"
-          id="whatsapp-link"
-          target="_blank"
-          class="contact-btn contact-btn--whatsapp"
-          data-base-url="https://wa.me/{{ settings.whatsapp_number | default: '521234567890' }}?text="
-          data-product-title="{{ product.title | url_encode }}"
-          data-product-url="{{ shop.url }}{{ product.url }}"
-        >
-          <span>💬</span>
-          Contactar por WhatsApp
-        </a>
-        
-        <a href="tel:{{ settings.phone_number | default: '+52 123 456 7890' }}" class="contact-btn contact-btn--phone">
-          <span>📞</span>
-          Llamar Ahora
-        </a>
-      </div>
-    </div>
-    
   </div>
 </div>
 
