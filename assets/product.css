@@ -10,7 +10,6 @@
 /* Product Template Styles */
   .product-template {
     padding: 15px 0;
-    background: #f8f9fa;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
@@ -48,13 +47,13 @@
   }
   
   .breadcrumb a {
-    color: #007cba;
+    color: black;
     text-decoration: none;
     transition: color 0.3s ease;
   }
   
   .breadcrumb a:hover {
-    color: #005a87;
+    color: black;
   }
   
   .breadcrumb-separator {
@@ -157,7 +156,7 @@
   
   .gallery-thumbs .swiper-slide-thumb-active {
     opacity: 1;
-    border-color: #007cba;
+    border-color: black;
   }
   
   .gallery-thumb-image {
@@ -286,13 +285,13 @@
   
   .location-icon {
     flex-shrink: 0;
-    color: #007cba;
+    color: black;
   }
   
   .product-price {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #007cba;
+    color: black;
     margin-bottom: 20px;
   }
   
@@ -350,13 +349,13 @@
   }
   
   .variant-option:hover {
-    border-color: #007cba;
-    color: #007cba;
+    border-color: black;
+    color: black;
   }
   
   .variant-option.active {
-    background: #007cba;
-    border-color: #007cba;
+    background: black;
+    border-color: black;
     color: white;
   }
   
@@ -417,7 +416,7 @@
     height: 20px;
     margin-bottom: 6px;
     display: block;
-    color: #007cba;
+    color: black;
   }
   
   @media (min-width: 768px) {
@@ -546,7 +545,7 @@
   .form-textarea:focus,
   .form-select:focus {
     outline: none;
-    border-color: #007cba;
+    border-color: black;
   }
   
   .form-textarea {
@@ -582,7 +581,7 @@
   .form-submit {
     width: 100%;
     padding: 16px 24px;
-    background: linear-gradient(135deg, #007cba 0%, #005a87 100%);
+    background: linear-gradient(135deg, black 0%, #005a87 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -624,7 +623,7 @@
     align-items: center;
     gap: 8px;
     padding: 14px 24px;
-    background: linear-gradient(135deg, #007cba 0%, #005a87 100%);
+    background: linear-gradient(135deg, black 0%, #005a87 100%);
     color: white;
     text-decoration: none;
     border-radius: 50px;
@@ -713,9 +712,9 @@
   }
   
   .contact-btn--phone {
-    background: #007cba;
+    background: black;
     color: white;
-    border-color: #007cba;
+    border-color: black;
   }
   
   .contact-btn--phone:hover {
