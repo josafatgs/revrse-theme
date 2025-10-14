@@ -74,7 +74,6 @@
     background: white;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
   
   /* Tablet and up */
@@ -257,7 +256,7 @@
   .product-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #333;
+    color: #A85D30;
     margin: 0 0 20px 0;
     line-height: 1.2;
   }
@@ -455,7 +454,6 @@
     border-radius: 12px;
     padding: 40px;
     margin-bottom: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
   
   .product-description h2 {
@@ -488,7 +486,6 @@
     background: white;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     margin-bottom: 40px;
   }
   
