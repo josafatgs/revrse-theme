@@ -27,8 +27,8 @@
             <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
           </svg>
           <span id="location-text">
-            {% if product.selected_or_first_available_variant.metafields.custom.location %}
-              {{ product.selected_or_first_available_variant.metafields.custom.location }}
+            {% if product.metafields.custom.location %}
+              {{ product.metafields.custom.location }}
             {% else %}
               Ubicación por definir
             {% endif %}
