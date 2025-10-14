@@ -1,0 +1,247 @@
+{{ 'hero-overlay.css' | asset_url | stylesheet_tag }}
+
+{% assign bg_image = section.settings.background_image %}
+{% assign text_color = section.settings.text_color | default: '#ffffff' %}
+{% assign text_align = section.settings.text_align | default: 'center' %}
+{% assign overlay_opacity = section.settings.overlay_opacity | default: 50 %}
+{% assign content_width = section.settings.content_width | default: 'medium' %}
+
+<section 
+  class="hero-overlay hero-overlay--{{ section.id }}"
+  style="
+    {% if bg_image %}
+      background-image: url('{{ bg_image | img_url: '2000x' }}');
+    {% else %}
+      background-color: {{ section.settings.fallback_color | default: '#333333' }};
+    {% endif %}
+    {% if section.settings.section_height %}
+      min-height: {{ section.settings.section_height }}px;
+    {% endif %}
+  "
+>
+  <div class="hero-overlay__backdrop" style="opacity: {{ overlay_opacity | divided_by: 100.0 }};"></div>
+  
+  <div class="hero-overlay__wrapper">
+    <div class="hero-overlay__content hero-overlay__content--{{ text_align }} hero-overlay__content--{{ content_width }}" style="color: {{ text_color }};">
+      {% if section.settings.eyebrow != blank %}
+        <p class="hero-overlay__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      
+      {% if section.settings.title != blank %}
+        <h1 class="hero-overlay__title">{{ section.settings.title }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subtitle != blank %}
+        <p class="hero-overlay__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+        <div class="hero-overlay__description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank or section.settings.button_text_secondary != blank %}
+        <div class="hero-overlay__buttons">
+          {% if section.settings.button_text != blank %}
+            <a href="{{ section.settings.button_url | default: '#' }}" 
+               class="hero-overlay__button hero-overlay__button--primary"
+               style="
+                 background-color: {{ section.settings.button_bg_color | default: '#ffffff' }};
+                 color: {{ section.settings.button_text_color | default: '#000000' }};
+               ">
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
+          
+          {% if section.settings.button_text_secondary != blank %}
+            <a href="{{ section.settings.button_url_secondary | default: '#' }}" 
+               class="hero-overlay__button hero-overlay__button--secondary"
+               style="
+                 border-color: {{ text_color }};
+                 color: {{ text_color }};
+               ">
+              {{ section.settings.button_text_secondary }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero con Overlay",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto pequeño superior",
+      "info": "Opcional: texto breve sobre el título"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título principal",
+      "default": "Tu mensaje impactante aquí"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Una descripción breve y poderosa que capture la atención"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descripción adicional",
+      "info": "Opcional: texto más detallado"
+    },
+    {
+      "type": "header",
+      "content": "Imagen de fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo",
+      "info": "Recomendado: 2000px de ancho mínimo"
+    },
+    {
+      "type": "color",
+      "id": "fallback_color",
+      "label": "Color de respaldo (sin imagen)",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacidad del overlay oscuro (%)",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "default": 50,
+      "info": "Oscurece la imagen para mejorar legibilidad"
+    },
+    {
+      "type": "header",
+      "content": "Diseño del texto"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación del texto",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        },
+        {
+          "value": "justify",
+          "label": "Justificado"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Ancho del contenido",
+      "options": [
+        {
+          "value": "small",
+          "label": "Pequeño (600px)"
+        },
+        {
+          "value": "medium",
+          "label": "Mediano (800px)"
+        },
+        {
+          "value": "large",
+          "label": "Grande (1000px)"
+        },
+        {
+          "value": "full",
+          "label": "Ancho completo"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del texto",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Altura mínima (px)",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Botón principal"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "URL del botón"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Color de fondo del botón",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Color del texto del botón",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Botón secundario (opcional)"
+    },
+    {
+      "type": "text",
+      "id": "button_text_secondary",
+      "label": "Texto del botón secundario"
+    },
+    {
+      "type": "url",
+      "id": "button_url_secondary",
+      "label": "URL del botón secundario"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero con Overlay"
+    }
+  ]
+}
+{% endschema %}
