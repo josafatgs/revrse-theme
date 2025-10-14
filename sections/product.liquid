@@ -81,10 +81,6 @@
           </div>
         </div>
         
-        <!-- Add to Cart / Contact Form -->
-        <div class="product-form">
-          {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
-        </div>
       </div>
     </div>
     
@@ -97,6 +93,10 @@
         </div>
       </div>
     {% endif %}
+
+    <div class="product-form">
+      {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
+    </div>
     
   </div>
 </div>
@@ -107,7 +107,7 @@
 <!-- Product JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  
+
   // Initialize Variant Selector
   window.variantSelector = new VariantSelector();
 });
