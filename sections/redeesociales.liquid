@@ -1,0 +1,197 @@
+{% comment %}
+  Barra lateral de redes sociales editable desde el editor de temas
+{% endcomment %}
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+  .social-icon-bar-{{ section.id }} {
+    position: fixed;
+    top: {{ section.settings.top_position }}%;
+    left: {{ section.settings.left_offset }}px;
+    transform: translateY(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .social-icon-bar-{{ section.id }} a {
+    display: block;
+    text-align: center;
+    padding: {{ section.settings.button_padding }}px;
+    color: {{ section.settings.icon_color }};
+    font-size: {{ section.settings.icon_size }}px;
+    transition: all 0.3s ease;
+  }
+
+  .social-icon-bar-{{ section.id }} .social-facebook  { background: {{ section.settings.facebook_bg }}; }
+  .social-icon-bar-{{ section.id }} .social-instagram { background: {{ section.settings.instagram_bg }}; }
+  .social-icon-bar-{{ section.id }} .social-whatsapp  { background: {{ section.settings.whatsapp_bg }}; }
+  .social-icon-bar-{{ section.id }} .social-phone     { background: {{ section.settings.phone_bg }}; }
+  .social-icon-bar-{{ section.id }} .social-email     { background: {{ section.settings.email_bg }}; }
+
+  .social-icon-bar-{{ section.id }} a:hover {
+    filter: brightness(0.9);
+  }
+</style>
+
+<div class="social-icon-bar-{{ section.id }}">
+  {% if section.settings.facebook_url != blank %}
+    <a href="{{ section.settings.facebook_url }}"
+       class="social-facebook"
+       aria-label="Facebook"
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="fa fa-facebook"></i>
+    </a>
+  {% endif %}
+
+  {% if section.settings.instagram_url != blank %}
+    <a href="{{ section.settings.instagram_url }}"
+       class="social-instagram"
+       aria-label="Instagram"
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="fa fa-instagram"></i>
+    </a>
+  {% endif %}
+
+  {% if section.settings.whatsapp_url != blank %}
+    <a href="{{ section.settings.whatsapp_url }}"
+       class="social-whatsapp"
+       aria-label="WhatsApp"
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="fa fa-whatsapp"></i>
+    </a>
+  {% endif %}
+
+  {% if section.settings.phone_number != blank %}
+    <a href="tel:{{ section.settings.phone_number | replace: ' ', '' }}"
+       class="social-phone"
+       aria-label="Teléfono">
+      <i class="fa fa-phone"></i>
+    </a>
+  {% endif %}
+
+  {% if section.settings.email_address != blank %}
+    <a href="mailto:{{ section.settings.email_address }}"
+       class="social-email"
+       aria-label="Email">
+      <i class="fa fa-envelope"></i>
+    </a>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Barra redes lateral",
+  "settings": [
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "URL Facebook"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "URL Instagram"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "URL WhatsApp (wa.me...)"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Teléfono",
+      "default": "+5210000000000"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email",
+      "default": "correo@tudominio.com"
+    },
+    {
+      "type": "color",
+      "id": "facebook_bg",
+      "label": "Color fondo Facebook",
+      "default": "#3b5998"
+    },
+    {
+      "type": "color",
+      "id": "instagram_bg",
+      "label": "Color fondo Instagram",
+      "default": "#e1306c"
+    },
+    {
+      "type": "color",
+      "id": "whatsapp_bg",
+      "label": "Color fondo WhatsApp",
+      "default": "#25d366"
+    },
+    {
+      "type": "color",
+      "id": "phone_bg",
+      "label": "Color fondo Teléfono",
+      "default": "#34495e"
+    },
+    {
+      "type": "color",
+      "id": "email_bg",
+      "label": "Color fondo Email",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Color de los íconos",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Tamaño de icono (px)",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_padding",
+      "label": "Padding interno (px)",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "top_position",
+      "label": "Altura vertical (%)",
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "left_offset",
+      "label": "Separación desde la izquierda (px)",
+      "min": -10,
+      "max": 60,
+      "step": 1,
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barra redes lateral"
+    }
+  ]
+}
+{% endschema %}
