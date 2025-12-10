@@ -52,10 +52,53 @@
         "top_position": 50,
         "left_offset": 0
       }
+    },
+    "banner_productos_hQj73J": {
+      "type": "banner-productos",
+      "blocks": {
+        "product_xwVTQD": {
+          "type": "product",
+          "settings": {
+            "product": "casa-en-parque-aguscalientes"
+          }
+        },
+        "product_i4aCKW": {
+          "type": "product",
+          "settings": {
+            "product": "casa-san-felipe-del-agua-oaxaca"
+          }
+        },
+        "product_cWtHfK": {
+          "type": "product",
+          "settings": {
+            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo"
+          }
+        },
+        "product_UTjeB8": {
+          "type": "product",
+          "settings": {
+            "product": "casa-en-fraccionamiento-lomas-del-valle"
+          }
+        }
+      },
+      "block_order": [
+        "product_xwVTQD",
+        "product_i4aCKW",
+        "product_cWtHfK",
+        "product_UTjeB8"
+      ],
+      "name": "Banner + productos deslizables",
+      "settings": {
+        "banner_image": "shopify://shop_images/Portada.jpg",
+        "banner_heading": "",
+        "banner_text": "",
+        "banner_link": ""
+      }
     }
   },
   "order": [
     "hero_overlay_wQH9dN",
-    "redeesociales_QXjaCk"
+    "redeesociales_QXjaCk",
+    "banner_productos_hQj73J"
   ]
 }
