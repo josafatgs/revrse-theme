@@ -31,9 +31,31 @@
         "button_text_secondary": "",
         "button_url_secondary": ""
       }
+    },
+    "redeesociales_QXjaCk": {
+      "type": "redeesociales",
+      "name": "Barra redes lateral",
+      "settings": {
+        "facebook_url": "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria",
+        "instagram_url": "https://www.instagram.com/alianza__inmobiliaria/",
+        "whatsapp_url": "",
+        "phone_number": "",
+        "email_address": "corporativoalianzain@gmail.com",
+        "facebook_bg": "#3b5998",
+        "instagram_bg": "#e1306c",
+        "whatsapp_bg": "#25d366",
+        "phone_bg": "#34495e",
+        "email_bg": "#2c3e50",
+        "icon_color": "#ffffff",
+        "icon_size": 20,
+        "button_padding": 12,
+        "top_position": 50,
+        "left_offset": 0
+      }
     }
   },
   "order": [
-    "hero_overlay_wQH9dN"
+    "hero_overlay_wQH9dN",
+    "redeesociales_QXjaCk"
   ]
 }
