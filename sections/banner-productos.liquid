@@ -1,5 +1,5 @@
 {% comment %}
-  Sección: Banner izquierda + slider productos derecha
+  Sección: Banner izquierda + slider productos derecha (3 productos visibles)
 {% endcomment %}
 
 <section class="banner-products-wrapper-{{ section.id }}">
@@ -10,7 +10,7 @@
         <a href="{{ section.settings.banner_link }}">
       {% endif %}
         {% if section.settings.banner_image != blank %}
-          <img src="{{ section.settings.banner_image | image_url: width: 1600 }}"
+          <img src="{{ section.settings.banner_image | image_url: width: 2000 }}"
                alt="{{ section.settings.banner_heading | escape }}"
                class="bp-banner-img">
         {% endif %}
@@ -45,7 +45,7 @@
                   </a>
 
                   <div class="bp-card-footer">
-                    <!-- Botón título: longitud y tamaño configurables -->
+                    <!-- Botón título -->
                     <a href="{{ prod.url }}" class="bp-card-button bp-card-button-main">
                       <span class="bp-card-title">
                         {{ prod.title | truncate: section.settings.title_characters }}
@@ -79,12 +79,12 @@
 
 <style>
   .banner-products-wrapper-{{ section.id }} {
-    padding: 60px 0;
+    padding: 70px 0;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-container {
     display: grid;
-    grid-template-columns: 1.4fr 1.6fr;
+    grid-template-columns: 1.7fr 1.3fr; /* banner más grande */
     gap: 32px;
     align-items: stretch;
   }
@@ -99,7 +99,7 @@
   .banner-products-wrapper-{{ section.id }} .bp-banner-img {
     width: 100%;
     height: 100%;
-    min-height: 380px;
+    min-height: 420px; /* banner más alto */
     object-fit: cover;
     display: block;
   }
@@ -110,14 +110,14 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 32px;
+    padding: 36px;
     color: #ffffff;
     background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
-    margin: 0 0 10px;
-    font-size: 32px;
+    margin: 0 0 12px;
+    font-size: 34px;
   }
 
   /* SLIDER PRODUCTOS */
@@ -132,12 +132,12 @@
 
   .banner-products-wrapper-{{ section.id }} .bp-track {
     display: flex;
-    align-items: stretch; /* todas las tarjetas misma altura */
+    align-items: stretch;
     transition: transform 0.4s ease;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-item {
-    flex: 0 0 25%; /* 4 visibles desktop */
+    flex: 0 0 33.333%; /* 3 productos visibles */
     padding: 0 8px;
     box-sizing: border-box;
   }
@@ -146,14 +146,13 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 360px; /* fuerza altura uniforme */
+    min-height: 360px;
     background: #ffffff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   }
 
-  /* Imágenes mismo tamaño */
   .banner-products-wrapper-{{ section.id }} .bp-item-image {
     width: 100%;
     height: 220px;
@@ -173,7 +172,6 @@
     flex-direction: column;
   }
 
-  /* Botones apilados, mismo ancho y sin márgenes extra */
   .banner-products-wrapper-{{ section.id }} .bp-card-button,
   .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
     width: 100%;
@@ -206,7 +204,7 @@
     background: {{ section.settings.price_button_bg }};
     color: {{ section.settings.price_button_text_color }};
     font-weight: 600;
-    font-size: 15px;
+    font-size: {{ section.settings.price_font_size }}px;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-button-price:hover {
@@ -246,16 +244,16 @@
       gap: 24px;
     }
     .banner-products-wrapper-{{ section.id }} .bp-banner-img {
-      min-height: 260px;
+      min-height: 280px;
     }
     .banner-products-wrapper-{{ section.id }} .bp-item {
-      flex: 0 0 50%;
+      flex: 0 0 50%; /* 2 productos en tablet */
     }
   }
 
   @media (max-width: 600px) {
     .banner-products-wrapper-{{ section.id }} .bp-item {
-      flex: 0 0 100%;
+      flex: 0 0 100%; /* 1 producto en móvil */
     }
     .banner-products-wrapper-{{ section.id }} .bp-item-image {
       height: 200px;
@@ -282,7 +280,7 @@
     if (items.length === 0) return;
 
     var currentIndex = 0;
-    var visible = 4;
+    var visible = 3; /* 3 productos desktop */
 
     function updateVisible() {
       if (window.innerWidth <= 600) {
@@ -290,7 +288,7 @@
       } else if (window.innerWidth <= 989) {
         visible = 2;
       } else {
-        visible = 4;
+        visible = 3;
       }
     }
 
@@ -384,6 +382,15 @@
       "id": "price_button_text_color",
       "label": "Color texto botón precio",
       "default": "#1f3a93"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Tamaño del precio (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16
     },
     {
       "type": "color",
