@@ -14,8 +14,8 @@
     "header": {
       "type": "header",
       "settings": {
-        "logo": "shopify://shop_images/DORADO-N.png",
-        "logo_width": 150,
+        "logo": "shopify://shop_images/logo_blanco_inmobilaria.png",
+        "logo_width": 160,
         "menu": "home",
         "menu_position": "center",
         "menu_font_size": 16,
@@ -23,9 +23,9 @@
         "cta_text": "Agendar Cita",
         "cta_url": "",
         "cta_font_size": 16,
-        "background_color": "#303030",
+        "background_color": "#e6c560",
         "text_color": "#ffffff",
-        "cta_bg_color": "#cd9d08",
+        "cta_bg_color": "#303030",
         "cta_text_color": "#ffffff",
         "padding_top": 20,
         "padding_bottom": 20,
