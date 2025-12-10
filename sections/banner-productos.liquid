@@ -43,11 +43,22 @@
                         alt="{{ prod.title | escape }}">
                     </div>
                   </a>
+
                   <div class="bp-card-footer">
-                    <a href="{{ prod.url }}" class="bp-card-button">
-                      <span class="bp-card-title">{{ prod.title }}</span>
+                    <!-- Botón principal: título (30 chars) + precio -->
+                    <a href="{{ prod.url }}" class="bp-card-button bp-card-button-main">
+                      <span class="bp-card-title">
+                        {{ prod.title | truncate: 30 }}
+                      </span>
                       <span class="bp-card-price">{{ prod.price | money }}</span>
                     </a>
+
+                    <!-- Botón estado -->
+                    {% if section.settings.state_label != blank %}
+                      <span class="bp-card-button bp-card-button-state">
+                        {{ section.settings.state_label }}
+                      </span>
+                    {% endif %}
                   </div>
                 </div>
               </article>
@@ -137,46 +148,66 @@
   /* Misma altura para todas las imágenes */
   .banner-products-wrapper-{{ section.id }} .bp-item-image {
     width: 100%;
-    height: 220px; /* ajusta a lo que te funcione mejor */
+    height: 220px; /* ajustable */
     overflow: hidden;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-item-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* recorta para que todas llenen el mismo cuadro */
+    object-fit: cover;
     display: block;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-footer {
     margin-top: auto;
-  }
-
-  .banner-products-wrapper-{{ section.id }} .bp-card-button {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 10px 12px;
-    background: {{ section.settings.button_bg }};
-    color: {{ section.settings.button_text_color }};
-    text-decoration: none;
-    text-align: left;
-    border: none;
-    width: 100%;
   }
 
-  .banner-products-wrapper-{{ section.id }} .bp-card-button:hover {
+  /* Botones mismo tamaño (llenan el ancho de la tarjeta) */
+  .banner-products-wrapper-{{ section.id }} .bp-card-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    text-decoration: none;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main {
+    flex-direction: row;
+    gap: 8px;
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
+    border: none;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main:hover {
     filter: brightness(0.9);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
+    margin-top: 4px;
+    justify-content: center;
+    background: {{ section.settings.state_button_bg }};
+    color: {{ section.settings.state_button_text_color }};
+    font-size: 13px;
+    border-radius: 0 0 8px 8px;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-title {
     font-size: 14px;
     line-height: 1.3;
+    flex: 1;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-price {
     font-size: 15px;
     font-weight: 600;
+    margin-left: 8px;
+    white-space: nowrap;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-prev,
@@ -293,14 +324,32 @@
     {
       "type": "color",
       "id": "button_bg",
-      "label": "Color de fondo del botón",
+      "label": "Color de fondo del botón principal",
       "default": "#1f3a93"
     },
     {
       "type": "color",
       "id": "button_text_color",
-      "label": "Color de texto del botón",
+      "label": "Color de texto del botón principal",
       "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "state_label",
+      "label": "Texto del estado (ej. \"Querétaro\")",
+      "default": "Querétaro"
+    },
+    {
+      "type": "color",
+      "id": "state_button_bg",
+      "label": "Color de fondo del botón estado",
+      "default": "#f1c40f"
+    },
+    {
+      "type": "color",
+      "id": "state_button_text_color",
+      "label": "Color de texto del botón estado",
+      "default": "#333333"
     }
   ],
   "blocks": [
