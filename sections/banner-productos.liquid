@@ -80,3 +80,176 @@
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+    color: #ffffff;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+    margin: 0 0 8px;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-products {
+    position: relative;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-slider {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-track {
+    display: flex;
+    transition: transform 0.4s ease;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item {
+    flex: 0 0 25%; /* 4 productos visibles */
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item-image img {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item-title {
+    font-size: 14px;
+    margin: 8px 0 4px;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item-price {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-prev,
+  .banner-products-wrapper-{{ section.id }} .bp-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-prev { left: 4px; }
+  .banner-products-wrapper-{{ section.id }} .bp-next { right: 4px; }
+
+  @media (max-width: 989px) {
+    .banner-products-wrapper-{{ section.id }} .bp-container {
+      grid-template-columns: 1fr;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 50%; /* 2 visibles en móvil */
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var slider = document.getElementById('bp-slider-{{ section.id }}');
+    if (!slider) return;
+
+    var track = slider.querySelector('.bp-track');
+    var items = slider.querySelectorAll('.bp-item');
+    var prev  = slider.querySelector('.bp-prev');
+    var next  = slider.querySelector('.bp-next');
+
+    if (items.length === 0) return;
+
+    var currentIndex = 0;
+    var visible = 4;
+
+    function updateVisible() {
+      if (window.innerWidth <= 989) {
+        visible = 2;
+      } else {
+        visible = 4;
+      }
+    }
+
+    function updateSlider() {
+      updateVisible();
+      var maxIndex = Math.max(0, items.length - visible);
+      if (currentIndex > maxIndex) currentIndex = maxIndex;
+      var translateX = -(100 / visible) * currentIndex;
+      track.style.transform = 'translateX(' + translateX + '%)';
+    }
+
+    prev.addEventListener('click', function() {
+      currentIndex = Math.max(0, currentIndex - 1);
+      updateSlider();
+    });
+
+    next.addEventListener('click', function() {
+      currentIndex = Math.min(items.length - 1, currentIndex + 1);
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+    updateSlider();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Banner + slider productos",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Imagen de banner"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Título del banner",
+      "default": "Título del banner"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_text",
+      "label": "Texto del banner",
+      "default": "Descripción del banner."
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Enlace del banner"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Producto",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Selecciona un producto"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Banner + productos deslizables",
+      "category": "Productos"
+    }
+  ]
+}
+{% endschema %}
+
