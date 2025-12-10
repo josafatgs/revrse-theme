@@ -39,7 +39,7 @@
                   <a href="{{ prod.url }}">
                     <div class="bp-item-image">
                       <img
-                        src="{{ prod.featured_image | image_url: width: 500 }}"
+                        src="{{ prod.featured_image | image_url: width: 800 }}"
                         alt="{{ prod.title | escape }}">
                     </div>
                   </a>
@@ -134,10 +134,18 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   }
 
+  /* Misma altura para todas las imágenes */
+  .banner-products-wrapper-{{ section.id }} .bp-item-image {
+    width: 100%;
+    height: 220px; /* ajusta a lo que te funcione mejor */
+    overflow: hidden;
+  }
+
   .banner-products-wrapper-{{ section.id }} .bp-item-image img {
     width: 100%;
+    height: 100%;
+    object-fit: cover; /* recorta para que todas llenen el mismo cuadro */
     display: block;
-    object-fit: cover;
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-footer {
@@ -149,8 +157,8 @@
     flex-direction: column;
     gap: 4px;
     padding: 10px 12px;
-    background: #1f3a93; /* ajusta a tu color */
-    color: #ffffff;
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
     text-decoration: none;
     text-align: left;
     border: none;
@@ -158,7 +166,7 @@
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-button:hover {
-    background: #172a66;
+    filter: brightness(0.9);
   }
 
   .banner-products-wrapper-{{ section.id }} .bp-card-title {
@@ -201,6 +209,9 @@
   @media (max-width: 600px) {
     .banner-products-wrapper-{{ section.id }} .bp-item {
       flex: 0 0 100%; /* 1 visible móvil chico */
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item-image {
+      height: 200px;
     }
   }
 </style>
@@ -278,6 +289,18 @@
       "type": "url",
       "id": "banner_link",
       "label": "Enlace del banner"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Color de fondo del botón",
+      "default": "#1f3a93"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Color de texto del botón",
+      "default": "#ffffff"
     }
   ],
   "blocks": [
@@ -302,5 +325,3 @@
   ]
 }
 {% endschema %}
-
-
