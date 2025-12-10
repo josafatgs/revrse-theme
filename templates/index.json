@@ -59,25 +59,29 @@
         "product_xwVTQD": {
           "type": "product",
           "settings": {
-            "product": "casa-en-parque-aguscalientes"
+            "product": "casa-en-parque-aguscalientes",
+            "state_label": "Aguascalientes"
           }
         },
         "product_i4aCKW": {
           "type": "product",
           "settings": {
-            "product": "casa-san-felipe-del-agua-oaxaca"
+            "product": "casa-san-felipe-del-agua-oaxaca",
+            "state_label": "Oaxaca"
           }
         },
         "product_cWtHfK": {
           "type": "product",
           "settings": {
-            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo"
+            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
+            "state_label": "Xilotzingo"
           }
         },
         "product_UTjeB8": {
           "type": "product",
           "settings": {
-            "product": "casa-en-fraccionamiento-lomas-del-valle"
+            "product": "casa-en-fraccionamiento-lomas-del-valle",
+            "state_label": "Lomas del valle"
           }
         }
       },
@@ -92,7 +96,13 @@
         "banner_image": "shopify://shop_images/Portada.jpg",
         "banner_heading": "",
         "banner_text": "",
-        "banner_link": ""
+        "banner_link": "",
+        "button_bg": "#1f3a93",
+        "button_text_color": "#ffffff",
+        "price_button_bg": "#ffffff",
+        "price_button_text_color": "#1f3a93",
+        "state_button_bg": "#f1c40f",
+        "state_button_text_color": "#333333"
       }
     }
   },
