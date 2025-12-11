@@ -9,6 +9,42 @@
  */
 {
   "sections": {
+    "banner_propiedades_iYknL7": {
+      "type": "banner-propiedades",
+      "name": "Hero propiedades",
+      "settings": {
+        "background_image": "shopify://shop_images/GeoVillas.jpg",
+        "altura_desktop": 40,
+        "altura_mobile": 40,
+        "overlay_intensity": 0.7,
+        "heading": "Busca tu propiedad ideal",
+        "subheading": "Encuentra casas, departamentos y terrenos en las mejores ubicaciones.",
+        "heading_size": 32,
+        "subheading_size": 16,
+        "heading_size_mobile": 24,
+        "subheading_size_mobile": 14,
+        "form_action": "/search",
+        "param_venta": "venta",
+        "label_venta_default": "Venta",
+        "option_venta_1_label": "Venta",
+        "option_venta_1_value": "venta",
+        "option_venta_2_label": "Renta",
+        "option_venta_2_value": "renta",
+        "param_tipo": "tipo",
+        "label_tipo_default": "Tipo de inmueble",
+        "option_tipo_1_label": "Casa",
+        "option_tipo_1_value": "casa",
+        "option_tipo_2_label": "Departamento",
+        "option_tipo_2_value": "departamento",
+        "option_tipo_3_label": "Terreno",
+        "option_tipo_3_value": "terreno",
+        "param_busqueda": "q",
+        "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
+        "boton_texto": "BUSCAR",
+        "button_color": "#3c7a4a",
+        "button_text_color": "#ffffff"
+      }
+    },
     "banner_productos_hQj73J": {
       "type": "banner-productos",
       "blocks": {
@@ -96,48 +132,12 @@
         "button_link": "://wa.me/2221333810",
         "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
       }
-    },
-    "banner_propiedades_iYknL7": {
-      "type": "banner-propiedades",
-      "name": "Hero propiedades",
-      "settings": {
-        "background_image": "shopify://shop_images/GeoVillas.jpg",
-        "altura_desktop": 70,
-        "altura_mobile": 60,
-        "overlay_intensity": 0.5,
-        "heading": "Busca tu propiedad ideal",
-        "subheading": "Encuentra casas, departamentos y terrenos en las mejores ubicaciones.",
-        "heading_size": 32,
-        "subheading_size": 16,
-        "heading_size_mobile": 24,
-        "subheading_size_mobile": 14,
-        "form_action": "/search",
-        "param_venta": "venta",
-        "label_venta_default": "Venta",
-        "option_venta_1_label": "Venta",
-        "option_venta_1_value": "venta",
-        "option_venta_2_label": "Renta",
-        "option_venta_2_value": "renta",
-        "param_tipo": "tipo",
-        "label_tipo_default": "Tipo de inmueble",
-        "option_tipo_1_label": "Casa",
-        "option_tipo_1_value": "casa",
-        "option_tipo_2_label": "Departamento",
-        "option_tipo_2_value": "departamento",
-        "option_tipo_3_label": "Terreno",
-        "option_tipo_3_value": "terreno",
-        "param_busqueda": "q",
-        "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
-        "boton_texto": "BUSCAR",
-        "button_color": "#3c7a4a",
-        "button_text_color": "#ffffff"
-      }
     }
   },
   "order": [
+    "banner_propiedades_iYknL7",
     "banner_productos_hQj73J",
     "redeesociales_QXjaCk",
-    "mapa_inmobilaria_b3qUFQ",
-    "banner_propiedades_iYknL7"
+    "mapa_inmobilaria_b3qUFQ"
   ]
 }
