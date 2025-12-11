@@ -30,39 +30,39 @@
       action="{{ section.settings.form_action | default: '/search' }}"
       method="get"
     >
-      {% if section.settings.param_venta != blank %}
-        <select name="{{ section.settings.param_venta }}">
-          <option value="">{{ section.settings.label_venta_default }}</option>
-          {% if section.settings.option_venta_1_label != blank %}
-            <option value="{{ section.settings.option_venta_1_value }}">{{ section.settings.option_venta_1_label }}</option>
-          {% endif %}
-          {% if section.settings.option_venta_2_label != blank %}
-            <option value="{{ section.settings.option_venta_2_value }}">{{ section.settings.option_venta_2_label }}</option>
-          {% endif %}
-        </select>
-      {% endif %}
+      <!-- Select Venta / Renta -->
+      <select name="{{ section.settings.param_venta | default: 'venta' }}">
+        <option value="">{{ section.settings.label_venta_default }}</option>
+        {% if section.settings.option_venta_1_label != blank %}
+          <option value="{{ section.settings.option_venta_1_value }}">{{ section.settings.option_venta_1_label }}</option>
+        {% endif %}
+        {% if section.settings.option_venta_2_label != blank %}
+          <option value="{{ section.settings.option_venta_2_value }}">{{ section.settings.option_venta_2_label }}</option>
+        {% endif %}
+      </select>
 
-      {% if section.settings.param_tipo != blank %}
-        <select name="{{ section.settings.param_tipo }}">
-          <option value="">{{ section.settings.label_tipo_default }}</option>
-          {% if section.settings.option_tipo_1_label != blank %}
-            <option value="{{ section.settings.option_tipo_1_value }}">{{ section.settings.option_tipo_1_label }}</option>
-          {% endif %}
-          {% if section.settings.option_tipo_2_label != blank %}
-            <option value="{{ section.settings.option_tipo_2_value }}">{{ section.settings.option_tipo_2_label }}</option>
-          {% endif %}
-          {% if section.settings.option_tipo_3_label != blank %}
-            <option value="{{ section.settings.option_tipo_3_value }}">{{ section.settings.option_tipo_3_label }}</option>
-          {% endif %}
-        </select>
-      {% endif %}
+      <!-- Select Tipo de inmueble -->
+      <select name="{{ section.settings.param_tipo | default: 'tipo' }}">
+        <option value="">{{ section.settings.label_tipo_default }}</option>
+        {% if section.settings.option_tipo_1_label != blank %}
+          <option value="{{ section.settings.option_tipo_1_value }}">{{ section.settings.option_tipo_1_label }}</option>
+        {% endif %}
+        {% if section.settings.option_tipo_2_label != blank %}
+          <option value="{{ section.settings.option_tipo_2_value }}">{{ section.settings.option_tipo_2_label }}</option>
+        {% endif %}
+        {% if section.settings.option_tipo_3_label != blank %}
+          <option value="{{ section.settings.option_tipo_3_value }}">{{ section.settings.option_tipo_3_label }}</option>
+        {% endif %}
+      </select>
 
+      <!-- Campo texto -->
       <input
         type="search"
         name="{{ section.settings.param_busqueda | default: 'q' }}"
         placeholder="{{ section.settings.placeholder_busqueda }}"
       >
 
+      <!-- Botón -->
       <button type="submit" class="hero-search-button">
         {{ section.settings.boton_texto }}
       </button>
