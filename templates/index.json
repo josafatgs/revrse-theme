@@ -24,10 +24,10 @@
         "heading_size_mobile": 24,
         "subheading_size_mobile": 14,
         "form_action": "/search",
-        "param_venta": "venta",
+        "param_venta": "Venta",
         "label_venta_default": "Venta",
         "option_venta_1_label": "Venta",
-        "option_venta_1_value": "venta",
+        "option_venta_1_value": "Venta",
         "option_venta_2_label": "Renta",
         "option_venta_2_value": "renta",
         "param_tipo": "tipo",
@@ -41,7 +41,7 @@
         "param_busqueda": "q",
         "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
         "boton_texto": "BUSCAR",
-        "button_color": "#3c7a4a",
+        "button_color": "#34495e",
         "button_text_color": "#ffffff"
       }
     },
