@@ -1,0 +1,471 @@
+{% comment %}
+  Sección: Slider de propiedades tipo banner
+{% endcomment %}
+
+<section class="hero-propiedades-wrapper-{{ section.id }}">
+  <div class="hero-propiedades" id="hero-propiedades-{{ section.id }}">
+    {% for block in section.blocks %}
+      {% if block.type == 'propiedad' %}
+        <div class="hero-slide" {{ block.shopify_attributes }}>
+          {% if block.settings.imagen_fondo != blank %}
+            <div class="hero-slide__bg">
+              <img
+                src="{{ block.settings.imagen_fondo | image_url: width: 2000 }}"
+                alt="{{ block.settings.titulo | escape }}">
+            </div>
+          {% endif %}
+
+          <div class="hero-slide__overlay"></div>
+
+          <div class="hero-slide__content hero-slide__content--{{ section.settings.text_align }}">
+            {% if block.settings.etiqueta != blank %}
+              <div class="hero-badge">
+                {{ block.settings.etiqueta }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.subtitulo != blank %}
+              <p class="hero-subtitle">
+                {{ block.settings.subtitulo }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.titulo != blank %}
+              <h2 class="hero-title">
+                {{ block.settings.titulo }}
+              </h2>
+            {% endif %}
+
+            {% if block.settings.precio != blank %}
+              <p class="hero-price">
+                {{ block.settings.precio }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.descripcion != blank %}
+              <p class="hero-description">
+                {{ block.settings.descripcion }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.boton_texto != blank and block.settings.boton_url != blank %}
+              <a href="{{ block.settings.boton_url }}"
+                 class="hero-button"
+                 {% if section.settings.boton_nueva_pestana %}
+                   target="_blank" rel="noopener noreferrer"
+                 {% endif %}>
+                {{ block.settings.boton_texto }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Flechas -->
+    <button class="hero-arrow hero-arrow--prev" aria-label="Anterior">‹</button>
+    <button class="hero-arrow hero-arrow--next" aria-label="Siguiente">›</button>
+
+    <!-- Puntos -->
+    <div class="hero-dots"></div>
+  </div>
+</section>
+
+<style>
+  .hero-propiedades-wrapper-{{ section.id }} {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-propiedades {
+    position: relative;
+  }
+
+  .hero-propiedades .hero-slide {
+    position: relative;
+    min-height: {{ section.settings.altura_desktop }}vh;
+    display: none;
+  }
+
+  .hero-propiedades .hero-slide--active {
+    display: block;
+  }
+
+  .hero-slide__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-slide__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-slide__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.55),
+      rgba(0,0,0,0.55)
+    );
+  }
+
+  .hero-slide__content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 16px;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .hero-slide__content--left {
+    text-align: left;
+    margin-left: 5%;
+  }
+
+  .hero-slide__content--right {
+    text-align: right;
+    margin-right: 5%;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: {{ section.settings.color_primario }};
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .hero-subtitle {
+    margin: 0 0 8px;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    margin: 0 0 8px;
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .hero-price {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 700;
+    color: {{ section.settings.color_precio }};
+  }
+
+  .hero-description {
+    margin: 0 0 14px;
+    font-size: 14px;
+  }
+
+  .hero-button {
+    display: inline-block;
+    padding: 10px 26px;
+    border-radius: 999px;
+    background: {{ section.settings.color_boton }};
+    color: {{ section.settings.color_boton_texto }};
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .hero-button:hover {
+    filter: brightness(0.9);
+  }
+
+  .hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .hero-arrow--prev { left: 10px; }
+  .hero-arrow--next { right: 10px; }
+
+  .hero-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+  }
+
+  .hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+  }
+
+  .hero-dot--active {
+    background: {{ section.settings.color_primario }};
+  }
+
+  @media (max-width: 768px) {
+    .hero-propiedades .hero-slide {
+      min-height: {{ section.settings.altura_mobile }}vh;
+    }
+    .hero-slide__content {
+      padding: 60px 16px 40px;
+      text-align: center !important;
+      margin: 0 auto;
+    }
+    .hero-title {
+      font-size: 24px;
+    }
+    .hero-price {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var slider = document.getElementById('hero-propiedades-{{ section.id }}');
+    if (!slider) return;
+
+    var slides = slider.querySelectorAll('.hero-slide');
+    if (slides.length === 0) return;
+
+    var prev = slider.querySelector('.hero-arrow--prev');
+    var next = slider.querySelector('.hero-arrow--next');
+    var dotsContainer = slider.querySelector('.hero-dots');
+    var current = 0;
+    var autoInterval = {{ section.settings.autoplay_interval | times: 1000 }};
+    var autoplay = {{ section.settings.autoplay | json }};
+    var intervalId;
+
+    // Crear dots
+    slides.forEach(function(_, index) {
+      var dot = document.createElement('button');
+      dot.className = 'hero-dot';
+      dot.setAttribute('type', 'button');
+      dot.addEventListener('click', function() {
+        goToSlide(index);
+      });
+      dotsContainer.appendChild(dot);
+    });
+
+    var dots = dotsContainer.querySelectorAll('.hero-dot');
+
+    function updateSlides() {
+      slides.forEach(function(slide, index) {
+        slide.classList.toggle('hero-slide--active', index === current);
+      });
+      dots.forEach(function(dot, index) {
+        dot.classList.toggle('hero-dot--active', index === current);
+      });
+    }
+
+    function goToSlide(index) {
+      current = (index + slides.length) % slides.length;
+      updateSlides();
+    }
+
+    function nextSlide() {
+      goToSlide(current + 1);
+    }
+
+    function prevSlideFn() {
+      goToSlide(current - 1);
+    }
+
+    prev.addEventListener('click', function() {
+      prevSlideFn();
+      resetAutoplay();
+    });
+
+    next.addEventListener('click', function() {
+      nextSlide();
+      resetAutoplay();
+    });
+
+    function startAutoplay() {
+      if (!autoplay || autoInterval <= 0) return;
+      intervalId = setInterval(nextSlide, autoInterval);
+    }
+
+    function resetAutoplay() {
+      if (!autoplay) return;
+      clearInterval(intervalId);
+      startAutoplay();
+    }
+
+    // Inicializar
+    updateSlides();
+    startAutoplay();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Hero propiedades",
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación del contenido",
+      "options": [
+        { "value": "center", "label": "Centrado" },
+        { "value": "left", "label": "Izquierda" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "altura_desktop",
+      "label": "Altura en desktop (vh)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "altura_mobile",
+      "label": "Altura en móvil (vh)",
+      "min": 40,
+      "max": 90,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Colores"
+    },
+    {
+      "type": "color",
+      "id": "color_primario",
+      "label": "Color primario (badge/punto activo)",
+      "default": "#00b140"
+    },
+    {
+      "type": "color",
+      "id": "color_precio",
+      "label": "Color del precio",
+      "default": "#00ff6a"
+    },
+    {
+      "type": "color",
+      "id": "color_boton",
+      "label": "Color del botón",
+      "default": "#00b140"
+    },
+    {
+      "type": "color",
+      "id": "color_boton_texto",
+      "label": "Color del texto del botón",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Cambiar automáticamente de propiedad",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Tiempo entre slides (segundos)",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "boton_nueva_pestana",
+      "label": "Abrir botón en nueva pestaña",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "propiedad",
+      "name": "Propiedad",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "imagen_fondo",
+          "label": "Imagen de la propiedad"
+        },
+        {
+          "type": "text",
+          "id": "etiqueta",
+          "label": "Etiqueta (ej. ADQUIÉRELO, NUEVO)",
+          "default": "ADQUIÉRELO"
+        },
+        {
+          "type": "text",
+          "id": "subtitulo",
+          "label": "Subtítulo (dirección / zona)",
+          "default": "Zona norte de la ciudad"
+        },
+        {
+          "type": "text",
+          "id": "titulo",
+          "label": "Título de la propiedad",
+          "default": "Nombre del desarrollo"
+        },
+        {
+          "type": "text",
+          "id": "precio",
+          "label": "Precio / desde",
+          "default": "DESDE $000,000*"
+        },
+        {
+          "type": "text",
+          "id": "descripcion",
+          "label": "Descripción corta",
+          "default": "Estrena tu nuevo hogar con entrega inmediata."
+        },
+        {
+          "type": "text",
+          "id": "boton_texto",
+          "label": "Texto del botón",
+          "default": "Ver detalles"
+        },
+        {
+          "type": "url",
+          "id": "boton_url",
+          "label": "Enlace del botón"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Hero propiedades",
+      "category": "Banners"
+    }
+  ]
+}
+{% endschema %}
