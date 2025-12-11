@@ -20,12 +20,13 @@
         "heading": "Busca tu propiedad ideal",
         "subheading": "Encuentra casas, departamentos y terrenos en las mejores ubicaciones.",
         "heading_size": 32,
+        "heading_color": "#ffffff",
         "subheading_size": 16,
         "heading_size_mobile": 24,
         "subheading_size_mobile": 14,
         "form_action": "/search",
         "param_venta": "Venta",
-        "label_venta_default": "Venta",
+        "label_venta_default": "Venta / Renta",
         "option_venta_1_label": "Venta",
         "option_venta_1_value": "Venta",
         "option_venta_2_label": "Renta",
@@ -42,7 +43,9 @@
         "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
         "boton_texto": "BUSCAR",
         "button_color": "#34495e",
-        "button_text_color": "#ffffff"
+        "button_text_color": "#ffffff",
+        "search_text_color": "#333333",
+        "search_placeholder_color": "#777777"
       }
     },
     "banner_productos_hQj73J": {

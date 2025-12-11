@@ -14,13 +14,6 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu_column_wU8Lbz": {
-          "type": "menu_column",
-          "settings": {
-            "title": "Servicios",
-            "menu": "servicios"
-          }
-        },
         "menu_column_dRmiWC": {
           "type": "menu_column",
           "settings": {
@@ -30,7 +23,6 @@
         }
       },
       "block_order": [
-        "menu_column_wU8Lbz",
         "menu_column_dRmiWC"
       ],
       "settings": {
