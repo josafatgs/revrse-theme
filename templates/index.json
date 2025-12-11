@@ -99,61 +99,38 @@
     },
     "banner_propiedades_iYknL7": {
       "type": "banner-propiedades",
-      "blocks": {
-        "propiedad_qfzX8M": {
-          "type": "propiedad",
-          "settings": {
-            "etiqueta": "ADQUIÉRELO",
-            "subtitulo": "Zona norte de la ciudad",
-            "titulo": "Nombre del desarrollo",
-            "precio": "DESDE $000,000*",
-            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
-            "boton_texto": "Ver detalles",
-            "boton_url": ""
-          }
-        },
-        "propiedad_BCW8An": {
-          "type": "propiedad",
-          "settings": {
-            "etiqueta": "ADQUIÉRELO",
-            "subtitulo": "Zona norte de la ciudad",
-            "titulo": "Nombre del desarrollo",
-            "precio": "DESDE $000,000*",
-            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
-            "boton_texto": "Ver detalles",
-            "boton_url": ""
-          }
-        },
-        "propiedad_PTDDiJ": {
-          "type": "propiedad",
-          "settings": {
-            "etiqueta": "ADQUIÉRELO",
-            "subtitulo": "Zona norte de la ciudad",
-            "titulo": "Nombre del desarrollo",
-            "precio": "DESDE $000,000*",
-            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
-            "boton_texto": "Ver detalles",
-            "boton_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "propiedad_qfzX8M",
-        "propiedad_BCW8An",
-        "propiedad_PTDDiJ"
-      ],
       "name": "Hero propiedades",
       "settings": {
-        "text_align": "center",
+        "background_image": "shopify://shop_images/GeoVillas.jpg",
         "altura_desktop": 70,
         "altura_mobile": 60,
-        "color_primario": "#34495e",
-        "color_precio": "#34495e",
-        "color_boton": "#00b140",
-        "color_boton_texto": "#ffffff",
-        "autoplay": true,
-        "autoplay_interval": 5,
-        "boton_nueva_pestana": false
+        "overlay_intensity": 0.5,
+        "heading": "Busca tu propiedad ideal",
+        "subheading": "Encuentra casas, departamentos y terrenos en las mejores ubicaciones.",
+        "heading_size": 32,
+        "subheading_size": 16,
+        "heading_size_mobile": 24,
+        "subheading_size_mobile": 14,
+        "form_action": "/search",
+        "param_venta": "venta",
+        "label_venta_default": "Venta",
+        "option_venta_1_label": "Venta",
+        "option_venta_1_value": "venta",
+        "option_venta_2_label": "Renta",
+        "option_venta_2_value": "renta",
+        "param_tipo": "tipo",
+        "label_tipo_default": "Tipo de inmueble",
+        "option_tipo_1_label": "Casa",
+        "option_tipo_1_value": "casa",
+        "option_tipo_2_label": "Departamento",
+        "option_tipo_2_value": "departamento",
+        "option_tipo_3_label": "Terreno",
+        "option_tipo_3_value": "terreno",
+        "param_busqueda": "q",
+        "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
+        "boton_texto": "BUSCAR",
+        "button_color": "#3c7a4a",
+        "button_text_color": "#ffffff"
       }
     }
   },
