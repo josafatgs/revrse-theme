@@ -9,50 +9,6 @@
  */
 {
   "sections": {
-    "hero_overlay_wQH9dN": {
-      "type": "hero-overlay",
-      "name": "Hero con Overlay",
-      "settings": {
-        "eyebrow": "",
-        "title": "Haz crecer tu patrimonio con las mejores oportunidades inmobiliarias",
-        "subtitle": "Compra, vende o invierte con total confianza y asesoría personalizada",
-        "description": "",
-        "background_image": "shopify://shop_images/Portada.jpg",
-        "fallback_color": "#333333",
-        "overlay_opacity": 0,
-        "text_align": "left",
-        "content_width": "full",
-        "text_color": "#ffffff",
-        "section_height": 700,
-        "button_text": "",
-        "button_url": "",
-        "button_bg_color": "#ffffff",
-        "button_text_color": "#000000",
-        "button_text_secondary": "",
-        "button_url_secondary": ""
-      }
-    },
-    "redeesociales_QXjaCk": {
-      "type": "redeesociales",
-      "name": "Barra redes lateral",
-      "settings": {
-        "facebook_url": "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria",
-        "instagram_url": "https://www.instagram.com/alianza__inmobiliaria/",
-        "whatsapp_url": "",
-        "phone_number": "",
-        "email_address": "corporativoalianzain@gmail.com",
-        "facebook_bg": "#3b5998",
-        "instagram_bg": "#e1306c",
-        "whatsapp_bg": "#25d366",
-        "phone_bg": "#34495e",
-        "email_bg": "#2c3e50",
-        "icon_color": "#ffffff",
-        "icon_size": 20,
-        "button_padding": 12,
-        "top_position": 50,
-        "left_offset": 0
-      }
-    },
     "banner_productos_hQj73J": {
       "type": "banner-productos",
       "blocks": {
@@ -94,8 +50,8 @@
       "name": "Banner + productos deslizables",
       "settings": {
         "banner_image": "shopify://shop_images/Portada.jpg",
-        "banner_heading": "",
-        "banner_text": "",
+        "banner_heading": "Impulsa tu futuro",
+        "banner_text": "Invierte donde tu patrimonio crece solo.",
         "banner_link": "",
         "button_bg": "#1f3a93",
         "button_text_color": "#ffffff",
@@ -103,14 +59,46 @@
         "title_characters": 26,
         "price_button_bg": "#ffffff",
         "price_button_text_color": "#1f3a93",
+        "price_font_size": 17,
         "state_button_bg": "#f1c40f",
         "state_button_text_color": "#333333"
+      }
+    },
+    "redeesociales_QXjaCk": {
+      "type": "redeesociales",
+      "name": "Barra redes lateral",
+      "settings": {
+        "facebook_url": "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria",
+        "instagram_url": "https://www.instagram.com/alianza__inmobiliaria/",
+        "whatsapp_url": "",
+        "phone_number": "",
+        "email_address": "corporativoalianzain@gmail.com",
+        "facebook_bg": "#3b5998",
+        "instagram_bg": "#e1306c",
+        "whatsapp_bg": "#25d366",
+        "phone_bg": "#34495e",
+        "email_bg": "#2c3e50",
+        "icon_color": "#ffffff",
+        "icon_size": 20,
+        "button_padding": 12,
+        "top_position": 50,
+        "left_offset": 0
+      }
+    },
+    "mapa_inmobilaria_b3qUFQ": {
+      "type": "mapa-inmobilaria",
+      "name": "Info + mapa Google",
+      "settings": {
+        "heading": "Ubicación",
+        "subheading": "Visita nuestra inmobiliaria",
+        "description": "<p>Una inmobiliaria joven, creada para quienes sueñan con un hogar que también sea una inversión inteligente. No solo vendemos casas: ayudamos a elegir el lugar donde vas a ver crecer a tu familia, tus recuerdos y tu patrimonio.<br/>Cuidamos cada proyecto pensando en tu tranquilidad: ubicaciones con futuro, procesos claros y acompañamiento cercano para que nunca te sientas solo al tomar la decisión. Aquí no eliges solo una propiedad, eliges el escenario de los mejores años de tu vida.</p>",
+        "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
       }
     }
   },
   "order": [
-    "hero_overlay_wQH9dN",
+    "banner_productos_hQj73J",
     "redeesociales_QXjaCk",
-    "banner_productos_hQj73J"
+    "mapa_inmobilaria_b3qUFQ"
   ]
 }
