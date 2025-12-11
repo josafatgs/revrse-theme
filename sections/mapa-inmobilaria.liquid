@@ -1,0 +1,152 @@
+{% comment %}
+  Sección: Info izquierda + mapa Google derecha (editable desde el maquetador)
+{% endcomment %}
+
+<section class="location-map-wrapper-{{ section.id }}">
+  <div class="lm-container">
+    <!-- TEXTO IZQUIERDO -->
+    <div class="lm-text">
+      {% if section.settings.heading != blank %}
+        <h2 class="lm-heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="lm-subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <div class="lm-description">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- MAPA DERECHA -->
+    <div class="lm-map">
+      {% if section.settings.map_iframe != blank %}
+        <div class="lm-map-inner">
+          {{ section.settings.map_iframe }}
+        </div>
+      {% else %}
+        <div class="lm-map-placeholder">
+          Agrega el código de Google Maps en la configuración de la sección.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .location-map-wrapper-{{ section.id }} {
+    padding: 60px 0;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-container {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr; /* mapa un poco más grande */
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-heading {
+    font-size: 32px;
+    margin: 0 0 12px;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-subheading {
+    font-size: 16px;
+    margin: 0 0 12px;
+    opacity: 0.8;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-description {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-map {
+    width: 100%;
+  }
+
+  /* Mapa responsive usando contenedor */
+  .location-map-wrapper-{{ section.id }} .lm-map-inner {
+    position: relative;
+    padding-bottom: 65%; /* relación de aspecto */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-map-inner iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-map-placeholder {
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    padding: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+  }
+
+  @media (max-width: 989px) {
+    .location-map-wrapper-{{ section.id }} {
+      padding: 40px 0;
+    }
+    .location-map-wrapper-{{ section.id }} .lm-container {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .location-map-wrapper-{{ section.id }} .lm-heading {
+      font-size: 26px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Info + mapa Google",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Nuestra ubicación"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Visita nuestra inmobiliaria"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descripción",
+      "default": "<p>Agrega aquí una breve descripción de la zona, horarios, teléfonos o cualquier info relevante.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "map_iframe",
+      "label": "Código iframe de Google Maps",
+      "info": "En Google Maps haz clic en \"Compartir\" → \"Insertar un mapa\" y copia el código iframe completo.",
+      "default": "<!-- pega aquí tu iframe de Google Maps -->"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Info + mapa Google",
+      "category": "Secciones personalizadas"
+    }
+  ]
+}
+{% endschema %}
+
