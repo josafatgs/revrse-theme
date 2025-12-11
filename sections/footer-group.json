@@ -34,7 +34,7 @@
         "menu_column_dRmiWC"
       ],
       "settings": {
-        "footer_bg_color": "#303030",
+        "footer_bg_color": "#34495e",
         "text_color": "#ffffff",
         "primary_color": "#ffffff",
         "link_color": "#ffffff",
@@ -48,7 +48,7 @@
         "padding_bottom": 0,
         "margin_top": 0,
         "margin_bottom": 0,
-        "footer_logo": "shopify://shop_images/DORADO-N.png",
+        "footer_logo": "shopify://shop_images/logo_blanco_inmobilaria.png",
         "logo_width": 160,
         "company_description": "Somos una empresa comprometida con brindar el mejor servicio a nuestros clientes.",
         "contact_title": "Contacto",
