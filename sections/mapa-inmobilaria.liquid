@@ -17,6 +17,17 @@
           {{ section.settings.description }}
         </div>
       {% endif %}
+
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <div class="lm-button-wrapper">
+          <a href="{{ section.settings.button_link }}"
+             class="lm-button"
+             target="_blank"
+             rel="noopener noreferrer">
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {% endif %}
     </div>
 
     <!-- MAPA DERECHA -->
@@ -60,6 +71,26 @@
   .location-map-wrapper-{{ section.id }} .lm-description {
     font-size: 15px;
     line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-button-wrapper {
+    margin-top: 4px;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: #1f3a93;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .location-map-wrapper-{{ section.id }} .lm-button:hover {
+    filter: brightness(0.9);
   }
 
   .location-map-wrapper-{{ section.id }} .lm-map {
@@ -134,6 +165,18 @@
       "default": "<p>Agrega aquí una breve descripción de la zona, horarios, teléfonos o cualquier info relevante.</p>"
     },
     {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón",
+      "default": "Contactar un asesor"
+    },
+    {
+      "type": "text",
+      "id": "button_link",
+      "label": "Enlace del botón (WhatsApp)",
+      "info": "Pega aquí tu enlace de WhatsApp, por ejemplo: https://wa.me/5210000000000"
+    },
+    {
       "type": "textarea",
       "id": "map_iframe",
       "label": "Código iframe de Google Maps",
@@ -149,4 +192,5 @@
   ]
 }
 {% endschema %}
+
 
