@@ -33,7 +33,7 @@
         "option_venta_2_value": "renta",
         "param_tipo": "tipo",
         "label_tipo_default": "Tipo de inmueble",
-        "option_tipo_1_label": "Casa",
+        "option_tipo_1_label": "property_type",
         "option_tipo_1_value": "casa",
         "option_tipo_2_label": "Departamento",
         "option_tipo_2_value": "departamento",
