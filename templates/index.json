@@ -92,6 +92,8 @@
         "heading": "Ubicación",
         "subheading": "Visita nuestra inmobiliaria",
         "description": "<p>Una inmobiliaria joven, creada para quienes <strong>sueñan con un hogar</strong> que también sea una inversión inteligente. No solo vendemos casas: ayudamos a elegir el lugar donde vas a <strong>ver crecer a tu familia, tus recuerdos y tu patrimonio.</strong><br/>Cuidamos cada proyecto pensando en tu <strong>tranquilidad</strong>: ubicaciones con futuro, procesos claros y acompañamiento cercano para que nunca te sientas solo al tomar la decisión. </p><p><strong>Aquí no eliges solo una propiedad, eliges el escenario de los mejores años de tu vida.</strong></p>",
+        "button_label": "Contactar un asesor",
+        "button_link": "://wa.me/2221333810",
         "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
       }
     }
