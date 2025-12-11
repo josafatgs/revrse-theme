@@ -96,11 +96,71 @@
         "button_link": "://wa.me/2221333810",
         "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
       }
+    },
+    "banner_propiedades_iYknL7": {
+      "type": "banner-propiedades",
+      "blocks": {
+        "propiedad_qfzX8M": {
+          "type": "propiedad",
+          "settings": {
+            "etiqueta": "ADQUIÉRELO",
+            "subtitulo": "Zona norte de la ciudad",
+            "titulo": "Nombre del desarrollo",
+            "precio": "DESDE $000,000*",
+            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
+            "boton_texto": "Ver detalles",
+            "boton_url": ""
+          }
+        },
+        "propiedad_BCW8An": {
+          "type": "propiedad",
+          "settings": {
+            "etiqueta": "ADQUIÉRELO",
+            "subtitulo": "Zona norte de la ciudad",
+            "titulo": "Nombre del desarrollo",
+            "precio": "DESDE $000,000*",
+            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
+            "boton_texto": "Ver detalles",
+            "boton_url": ""
+          }
+        },
+        "propiedad_PTDDiJ": {
+          "type": "propiedad",
+          "settings": {
+            "etiqueta": "ADQUIÉRELO",
+            "subtitulo": "Zona norte de la ciudad",
+            "titulo": "Nombre del desarrollo",
+            "precio": "DESDE $000,000*",
+            "descripcion": "Estrena tu nuevo hogar con entrega inmediata.",
+            "boton_texto": "Ver detalles",
+            "boton_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "propiedad_qfzX8M",
+        "propiedad_BCW8An",
+        "propiedad_PTDDiJ"
+      ],
+      "name": "Hero propiedades",
+      "settings": {
+        "text_align": "center",
+        "altura_desktop": 70,
+        "altura_mobile": 60,
+        "color_primario": "#00b140",
+        "color_precio": "#00ff6a",
+        "color_boton": "#00b140",
+        "color_boton_texto": "#ffffff",
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "boton_nueva_pestana": false
+      }
     }
   },
   "order": [
     "banner_productos_hQj73J",
     "redeesociales_QXjaCk",
-    "mapa_inmobilaria_b3qUFQ"
+    "mapa_inmobilaria_b3qUFQ",
+    "banner_propiedades_iYknL7"
   ]
 }
