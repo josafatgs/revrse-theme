@@ -136,6 +136,7 @@
     padding: 12px 14px;
     font-size: 14px;
     outline: none;
+    color: {{ section.settings.search_text_color }};
   }
 
   .hero-search-form select {
@@ -145,6 +146,10 @@
 
   .hero-search-form input {
     background: #ffffff;
+  }
+
+  .hero-search-form input::placeholder {
+    color: {{ section.settings.search_placeholder_color }};
   }
 
   .hero-search-button {
@@ -427,6 +432,18 @@
       "id": "button_text_color",
       "label": "Color del texto del botón",
       "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "search_text_color",
+      "label": "Color del texto de búsqueda",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "search_placeholder_color",
+      "label": "Color del placeholder",
+      "default": "#777777"
     }
   ],
   "presets": [
