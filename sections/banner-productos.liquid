@@ -37,7 +37,11 @@
               <article class="bp-item" {{ block.shopify_attributes }}>
                 <div class="bp-card">
                   <a href="{{ prod.url }}">
-                    <div class="bp-item-image">
+                    <div class="bp-item-image"
+                         data-images="
+                           {{ prod.featured_image | image_url: width: 800 }}
+                           {% if prod.images.size > 1 %}|{{ prod.images[1] | image_url: width: 800 }}{% endif %}
+                         ">
                       <img
                         src="{{ prod.featured_image | image_url: width: 800 }}"
                         alt="{{ prod.title | escape }}">
@@ -312,6 +316,24 @@
 
     window.addEventListener('resize', updateSlider);
     updateSlider();
+
+    /* Rotar imágenes de cada producto cada segundo */
+    var imageWrappers = slider.querySelectorAll('.bp-item-image');
+    imageWrappers.forEach(function(wrapper) {
+      var raw = wrapper.getAttribute('data-images');
+      if (!raw) return;
+
+      var urls = raw.split('|').map(function(u){ return u.trim(); }).filter(Boolean);
+      if (urls.length < 2) return;
+
+      var img = wrapper.querySelector('img');
+      var index = 0;
+
+      setInterval(function() {
+        index = (index + 1) % urls.length;
+        img.src = urls[index];
+      }, 1000); // 1 segundo
+    });
   })();
 </script>
 
