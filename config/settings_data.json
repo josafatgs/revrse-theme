@@ -10,6 +10,13 @@
 {
   "current": {
     "type_primary_font": "almarai_n4",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "9773218161911833823": {
+        "type": "shopify://apps/avada-seo-suite/blocks/avada-seo/15507c6e-1aa3-45d3-b698-7e175e033440",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   }
 }
