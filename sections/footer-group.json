@@ -42,7 +42,7 @@
         "margin_bottom": 0,
         "footer_logo": "shopify://shop_images/logo_blanco_inmobilaria.png",
         "logo_width": 190,
-        "company_description": "Somos una empresa comprometida con brindar el mejor servicio a nuestros clientes.",
+        "company_description": "w",
         "contact_title": "Contacto",
         "address": "Privada De La C. 25 Sur 909, La Paz, 72160 Heroica Puebla de Zaragoza, Pue., México",
         "phone_number": "+52 2221333810",
@@ -61,9 +61,9 @@
         "tiktok_url": "",
         "copyright_text": "Todos los derechos reservados.",
         "show_legal_links": true,
-        "privacy_policy_url": "",
+        "privacy_policy_url": "shopify://policies/privacy-policy",
         "privacy_policy_text": "Política de Privacidad",
-        "terms_url": "",
+        "terms_url": "shopify://policies/refund-policy",
         "terms_text": "Términos y Condiciones"
       }
     }
