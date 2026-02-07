@@ -173,9 +173,9 @@
       "name": "Productos (Grid/Carrusel)",
       "settings": {
         "heading": "Catálogo",
-        "subheading": "",
+        "subheading": "Todas las propiedades",
         "view_all_link": "https://cainmobiliaria.mx/collections/all",
-        "view_all_text": "Ver todo",
+        "view_all_text": "Click aquí",
         "mobile_layout": "carousel",
         "show_arrows": true,
         "max_width": 1200,
