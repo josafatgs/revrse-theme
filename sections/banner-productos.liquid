@@ -37,17 +37,11 @@
               <article class="bp-item" {{ block.shopify_attributes }}>
                 <div class="bp-card">
                   <a href="{{ prod.url }}">
-                    <div class="bp-item-image"
-                         data-images="
-                           {{ prod.featured_image | image_url: width: 800 }}
-                           {% if prod.images.size > 1 %}|{{ prod.images[1] | image_url: width: 800 }}{% endif %}
-                         ">
-                      <img
-                        src="{{ prod.featured_image | image_url: width: 800 }}"
-                        alt="{{ prod.title | escape }}">
+                    <div class="bp-item-image" data-images="{{ prod.featured_image | image_url: width: 800 }}{% if prod.images.size > 1 %}|{{ prod.images[1] | image_url: width: 800 }}{% endif %}">
+                      <img src="{{ prod.featured_image | image_url: width: 800 }}"
+                           alt="{{ prod.title | escape }}">
                     </div>
                   </a>
-
                   <div class="bp-card-footer">
                     <!-- Botón título -->
                     <a href="{{ prod.url }}" class="bp-card-button bp-card-button-main">
@@ -55,12 +49,10 @@
                         {{ prod.title | truncate: section.settings.title_characters }}
                       </span>
                     </a>
-
                     <!-- Botón precio -->
                     <a href="{{ prod.url }}" class="bp-card-button bp-card-button-price">
                       <span class="bp-card-price">{{ prod.price | money }}</span>
                     </a>
-
                     <!-- Botón estado por bloque -->
                     {% if block.settings.state_label != blank %}
                       <span class="bp-card-button bp-card-button-state">
@@ -84,8 +76,8 @@
 <style>
   .banner-products-wrapper-{{ section.id }} {
     padding: 70px 0;
+    overflow-x: hidden;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-container {
     display: grid;
     grid-template-columns: 1.7fr 1.3fr; /* banner más grande */
@@ -99,7 +91,6 @@
     overflow: hidden;
     border-radius: 12px;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-banner-img {
     width: 100%;
     height: 100%;
@@ -107,7 +98,6 @@
     object-fit: cover;
     display: block;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-banner-content {
     position: absolute;
     inset: 0;
@@ -118,9 +108,8 @@
     color: #ffffff;
     background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
-    margin: 0 0 12px;
+    margin: 0 0 12px 0;
     font-size: 34px;
   }
 
@@ -128,54 +117,47 @@
   .banner-products-wrapper-{{ section.id }} .bp-products {
     position: relative;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-slider {
     position: relative;
     overflow: hidden;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-track {
     display: flex;
     align-items: stretch;
     transition: transform 0.4s ease;
+    gap: 12px;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-item {
     flex: 0 0 33.333%; /* 3 productos visibles */
     padding: 0 8px;
     box-sizing: border-box;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card {
     display: flex;
     flex-direction: column;
     height: 100%;
     min-height: 360px;
-    background: #ffffff;
+    background: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-item-image {
     width: 100%;
     height: 220px;
     overflow: hidden;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-item-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card-footer {
     margin-top: auto;
     display: flex;
     flex-direction: column;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card-button,
   .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
     width: 100%;
@@ -187,244 +169,241 @@
     align-items: center;
     margin: 0;
   }
-
-  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button + .bp-card-button,
-  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button + .bp-card-button-state {
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button-state {
     border-top: 1px solid rgba(0,0,0,0.05);
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card-button-main {
     background: {{ section.settings.button_bg }};
     color: {{ section.settings.button_text_color }};
     font-size: {{ section.settings.title_font_size }}px;
     text-align: center;
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card-button-main:hover {
     filter: brightness(0.9);
   }
-
   .banner-products-wrapper-{{ section.id }} .bp-card-button-price {
     background: {{ section.settings.price_button_bg }};
-    color: {{ section.settings.price_button_text_color }};
-    font-weight: 600;
-    font-size: {{ section.settings.price_font_size }}px;
+    color: {{ section.settings.price_text_color }};
   }
-
-  .banner-products-wrapper-{{ section.id }} .bp-card-button-price:hover {
-    filter: brightness(0.95);
-  }
-
-  .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
-    background: {{ section.settings.state_button_bg }};
-    color: {{ section.settings.state_button_text_color }};
-    font-size: 13px;
-  }
-
-  .banner-products-wrapper-{{ section.id }} .bp-prev,
-  .banner-products-wrapper-{{ section.id }} .bp-next {
+  .bp-prev, .bp-next {
     position: absolute;
-    top: 50%;
+    top: 45%;
     transform: translateY(-50%);
-    border: none;
-    background: rgba(0,0,0,0.6);
-    color: #fff;
     width: 32px;
     height: 32px;
+    background: rgba(255,255,255,0.9);
+    border: none;
     border-radius: 50%;
+    font-size: 20px;
     cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+  }
+  .bp-prev {
+    left: 8px;
+  }
+  .bp-next {
+    right: 8px;
+  }
+  .bp-prev:hover, .bp-next:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
   }
 
-  .banner-products-wrapper-{{ section.id }} .bp-prev { left: 4px; }
-  .banner-products-wrapper-{{ section.id }} .bp-next { right: 4px; }
-
-  /* RESPONSIVE */
+  /* RESPONSIVE - MEJORADO PARA MÓVIL */
   @media (max-width: 989px) {
-    .banner-products-wrapper-{{ section.id }} {
-      padding: 40px 0;
-    }
     .banner-products-wrapper-{{ section.id }} .bp-container {
       grid-template-columns: 1fr;
       gap: 24px;
     }
-    .banner-products-wrapper-{{ section.id }} .bp-banner-img {
-      min-height: 280px;
-    }
-    .banner-products-wrapper-{{ section.id }} .bp-item {
-      flex: 0 0 50%; /* 2 productos en tablet */
+    .banner-products-wrapper-{{ section.id }} .bp-products {
+      order: -1;
     }
   }
-
+  @media (max-width: 767px) {
+    .banner-products-wrapper-{{ section.id }} {
+      padding: 40px 0;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-container {
+      padding: 0 12px;
+      gap: 20px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-img {
+      min-height: 250px !important;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+      padding: 24px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+      font-size: 24px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-sliders {
+      height: auto;
+      max-height: 420px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-track {
+      gap: 8px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 50%; /* 2 en tablet */
+    }
+    .bp-prev, .bp-next {
+      width: 36px !important;
+      height: 36px !important;
+      opacity: 0.9;
+    }
+  }
   @media (max-width: 600px) {
     .banner-products-wrapper-{{ section.id }} .bp-item {
-      flex: 0 0 100%; /* 1 producto en móvil */
+      flex: 0 0 100%; /* 1 en móvil */
+      padding: 0 4px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-card {
+      min-height: 340px;
     }
     .banner-products-wrapper-{{ section.id }} .bp-item-image {
-      height: 200px;
+      height: 180px;
     }
     .banner-products-wrapper-{{ section.id }} .bp-banner-content {
       padding: 20px;
     }
     .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
-      font-size: 24px;
+      font-size: 20px;
+    }
+  }
+  @media (max-width: 480px) {
+    .banner-products-wrapper-{{ section.id }} .bp-card {
+      min-height: 320px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item-image {
+      height: 160px;
     }
   }
 </style>
 
 <script>
-  (function() {
-    var slider = document.getElementById('bp-slider-{{ section.id }}');
-    if (!slider) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const sliderId = 'bp-slider-{{ section.id }}';
+    const track = document.querySelector(`#${sliderId} .bp-track`);
+    const prevBtn = document.querySelector(`#${sliderId} .bp-prev`);
+    const nextBtn = document.querySelector(`#${sliderId} .bp-next`);
+    const items = track.querySelectorAll('.bp-item');
+    let currentIndex = 0;
+    let visibleItems = 3;
 
-    var track = slider.querySelector('.bp-track');
-    var items = slider.querySelectorAll('.bp-item');
-    var prev  = slider.querySelector('.bp-prev');
-    var next  = slider.querySelector('.bp-next');
-
-    if (items.length === 0) return;
-
-    var currentIndex = 0;
-    var visible = 3; /* 3 productos desktop */
-
-    function updateVisible() {
-      if (window.innerWidth <= 600) {
-        visible = 1;
-      } else if (window.innerWidth <= 989) {
-        visible = 2;
-      } else {
-        visible = 3;
-      }
+    function updateVisibles() {
+      const width = window.innerWidth;
+      if (width < 600) visibleItems = 1;
+      else if (width < 989) visibleItems = 2;
+      else visibleItems = 3;
     }
 
     function updateSlider() {
-      updateVisible();
-      var maxIndex = Math.max(0, items.length - visible);
-      if (currentIndex > maxIndex) currentIndex = maxIndex;
-      var translateX = -(100 / visible) * currentIndex;
-      track.style.transform = 'translateX(' + translateX + '%)';
+      const itemWidth = items[0].offsetWidth + 24; // width + gap
+      const offset = -currentIndex * itemWidth;
+      track.style.transform = `translateX(${offset}px)`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= items.length - visibleItems;
     }
 
-    prev.addEventListener('click', function() {
-      currentIndex = Math.max(0, currentIndex - 1);
-      updateSlider();
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlider();
+      }
     });
 
-    next.addEventListener('click', function() {
-      currentIndex = Math.min(items.length - 1, currentIndex + 1);
-      updateSlider();
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < items.length - visibleItems) {
+        currentIndex++;
+        updateSlider();
+      }
     });
 
-    window.addEventListener('resize', updateSlider);
+    updateVisibles();
     updateSlider();
 
-    /* Rotar imágenes de cada producto cada segundo */
-    var imageWrappers = slider.querySelectorAll('.bp-item-image');
-    imageWrappers.forEach(function(wrapper) {
-      var raw = wrapper.getAttribute('data-images');
-      if (!raw) return;
-
-      var urls = raw.split('|').map(function(u){ return u.trim(); }).filter(Boolean);
-      if (urls.length < 2) return;
-
-      var img = wrapper.querySelector('img');
-      var index = 0;
-
-      setInterval(function() {
-        index = (index + 1) % urls.length;
-        img.src = urls[index];
-      }, 2000); // 2 segundo
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        updateVisibles();
+        currentIndex = Math.min(currentIndex, items.length - visibleItems);
+        updateSlider();
+      }, 250);
     });
-  })();
+  });
 </script>
 
 {% schema %}
 {
-  "name": "Banner-productos",
+  "name": "Banner + Productos Desli",
+  "tag": "section",
+  "class": "section",
   "settings": [
     {
       "type": "image_picker",
       "id": "banner_image",
-      "label": "Imagen de banner"
+      "label": "Imagen del banner"
     },
     {
       "type": "text",
       "id": "banner_heading",
       "label": "Título del banner",
-      "default": "Título del banner"
+      "default": "Ofertas especiales"
     },
     {
       "type": "textarea",
       "id": "banner_text",
-      "label": "Texto del banner",
-      "default": "Descripción del banner."
+      "label": "Texto del banner"
     },
     {
       "type": "url",
       "id": "banner_link",
-      "label": "Enlace del banner"
+      "label": "Link del banner"
     },
     {
       "type": "color",
       "id": "button_bg",
-      "label": "Color fondo botón título",
-      "default": "#1f3a93"
+      "label": "Fondo botón principal",
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "button_text_color",
-      "label": "Color texto botón título",
+      "label": "Texto botón principal",
       "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "price_button_bg",
+      "label": "Fondo botón precio",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "price_text_color",
+      "label": "Texto botón precio",
+      "default": "#000000"
     },
     {
       "type": "range",
       "id": "title_font_size",
-      "label": "Tamaño del título (px)",
       "min": 12,
       "max": 24,
       "step": 1,
+      "unit": "px",
+      "label": "Tamaño fuente título",
       "default": 14
     },
     {
       "type": "range",
       "id": "title_characters",
-      "label": "Número de caracteres del título",
-      "min": 10,
+      "min": 20,
       "max": 60,
       "step": 1,
-      "default": 30
-    },
-    {
-      "type": "color",
-      "id": "price_button_bg",
-      "label": "Color fondo botón precio",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "price_button_text_color",
-      "label": "Color texto botón precio",
-      "default": "#1f3a93"
-    },
-    {
-      "type": "range",
-      "id": "price_font_size",
-      "label": "Tamaño del precio (px)",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "default": 16
-    },
-    {
-      "type": "color",
-      "id": "state_button_bg",
-      "label": "Color fondo botón estado",
-      "default": "#f1c40f"
-    },
-    {
-      "type": "color",
-      "id": "state_button_text_color",
-      "label": "Color texto botón estado",
-      "default": "#333333"
+      "unit": "cha",
+      "label": "Caracteres máximo título",
+      "default": 35
     }
   ],
   "blocks": [
@@ -435,22 +414,34 @@
         {
           "type": "product",
           "id": "product",
-          "label": "Selecciona un producto"
+          "label": "Seleccionar producto"
         },
         {
           "type": "text",
           "id": "state_label",
-          "label": "Estado (ej. \"Querétaro\")",
-          "default": "Querétaro"
+          "label": "Etiqueta estado (ej: 'Nuevo')",
+          "default": "En stock"
         }
       ]
     }
   ],
-  "max_blocks": 12,
   "presets": [
     {
-      "name": "Banner + productos deslizables",
-      "category": "Productos"
+      "name": "Banner + Productos Deslizables",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
     }
   ]
 }
