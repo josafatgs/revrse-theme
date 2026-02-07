@@ -1,25 +1,19 @@
 {% comment %}
-  Sección: Banner izquierda + slider productos - Optimizada móvil
+  Sección: Banner izquierda + slider productos derecha (3 productos visibles)
 {% endcomment %}
 
-<section class="banner-products-wrapper-{{ section.id }} section-{{ section.id }}">
+<section class="banner-products-wrapper-{{ section.id }}">
   <div class="bp-container">
     <!-- BANNER IZQUIERDO -->
     <div class="bp-banner">
       {% if section.settings.banner_link != blank %}
         <a href="{{ section.settings.banner_link }}">
       {% endif %}
-      {% if section.settings.banner_image != blank %}
-        <img
-          src="{{ section.settings.banner_image | image_url: width: 2000 }}"
-          alt="{{ section.settings.banner_heading | escape }}"
-          class="bp-banner-img"
-          loading="lazy">
-      {% endif %}
-      {% if section.settings.banner_link != blank %}
-        </a>
-      {% endif %}
-      {% if section.settings.banner_heading != blank or section.settings.banner_text != blank %}
+        {% if section.settings.banner_image != blank %}
+          <img src="{{ section.settings.banner_image | image_url: width: 2000 }}"
+               alt="{{ section.settings.banner_heading | escape }}"
+               class="bp-banner-img">
+        {% endif %}
         <div class="bp-banner-content">
           {% if section.settings.banner_heading != blank %}
             <h2>{{ section.settings.banner_heading }}</h2>
@@ -27,10 +21,9 @@
           {% if section.settings.banner_text != blank %}
             <p>{{ section.settings.banner_text }}</p>
           {% endif %}
-          {% if section.settings.banner_link != blank %}
-            <a href="{{ section.settings.banner_link }}">Ver más</a>
-          {% endif %}
         </div>
+      {% if section.settings.banner_link != blank %}
+        </a>
       {% endif %}
     </div>
 
@@ -41,38 +34,33 @@
           {% for block in section.blocks %}
             {% assign prod = all_products[block.settings.product] %}
             {% if prod %}
-              <article class="bp-item {% if block.shopify_attributes %}shopify-{{ block.shopify_attributes }}{% endif %}" {{ block.shopify_attributes }}>
+              <article class="bp-item" {{ block.shopify_attributes }}>
                 <div class="bp-card">
                   <a href="{{ prod.url }}">
-                    <div class="bp-item-image" data-images="{{ prod.images | map: 'src' | join: ',' }}">
-                      {% if prod.featured_image %}
-                        <img
-                          src="{{ prod.featured_image | image_url: width: 800 }}"
-                          alt="{{ prod.title | escape }}"
-                          loading="lazy">
-                        {% if prod.images.size > 1 %}
-                          {% for image in prod.images limit: 4 %}
-                            {% unless forloop.first %}
-                              <img
-                                src="{{ image | image_url: width: 800 }}"
-                                alt="{{ prod.title | escape }}"
-                                loading="lazy"
-                                style="display: none;">
-                            {% endunless %}
-                          {% endfor %}
-                        {% endif %}
-                      {% endif %}
+                    <div class="bp-item-image"
+                         data-images="
+                           {{ prod.featured_image | image_url: width: 800 }}
+                           {% if prod.images.size > 1 %}|{{ prod.images[1] | image_url: width: 800 }}{% endif %}
+                         ">
+                      <img
+                        src="{{ prod.featured_image | image_url: width: 800 }}"
+                        alt="{{ prod.title | escape }}">
                     </div>
                   </a>
+
                   <div class="bp-card-footer">
                     <!-- Botón título -->
                     <a href="{{ prod.url }}" class="bp-card-button bp-card-button-main">
-                      <span class="bp-card-title">{{ prod.title | truncate: section.settings.title_characters }}</span>
+                      <span class="bp-card-title">
+                        {{ prod.title | truncate: section.settings.title_characters }}
+                      </span>
                     </a>
+
                     <!-- Botón precio -->
                     <a href="{{ prod.url }}" class="bp-card-button bp-card-button-price">
                       <span class="bp-card-price">{{ prod.price | money }}</span>
                     </a>
+
                     <!-- Botón estado por bloque -->
                     {% if block.settings.state_label != blank %}
                       <span class="bp-card-button bp-card-button-state">
@@ -85,6 +73,7 @@
             {% endif %}
           {% endfor %}
         </div>
+
         <button type="button" class="bp-prev" aria-label="Anterior">‹</button>
         <button type="button" class="bp-next" aria-label="Siguiente">›</button>
       </div>
@@ -92,161 +81,356 @@
   </div>
 </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const sectionId = '{{ section.id }}';
-  const slider = document.getElementById('bp-slider-' + sectionId);
-  if (!slider) return;
-
-  const track = slider.querySelector('.bp-track');
-  const items = slider.querySelectorAll('.bp-item');
-  const prev = slider.querySelector('.bp-prev');
-  const next = slider.querySelector('.bp-next');
-
-  if (items.length === 0) return;
-
-  let currentIndex = 0;
-  let visible = 3; // Default desktop
-
-  function updateVisible() {
-    if (window.innerWidth < 480) visible = 1;
-    else if (window.innerWidth < 768) visible = 2;
-    else visible = 3;
-  }
-
-  function updateSlider() {
-    const maxIndex = Math.max(0, items.length - visible);
-    if (currentIndex > maxIndex) currentIndex = maxIndex;
-    const translateX = -100 * currentIndex / visible;
-    track.style.transform = `translateX(${translateX}%)`;
-  }
-
-  // Touch swipe
-  let startX = 0;
-  track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-  track.addEventListener('touchend', e => {
-    const endX = e.changedTouches[0].clientX;
-    if (startX - endX > 50) next.click(); // Swipe left
-    if (endX - startX > 50) prev.click(); // Swipe right
-  });
-
-  prev.addEventListener('click', () => {
-    currentIndex = Math.max(0, currentIndex - 1);
-    updateSlider();
-  });
-
-  next.addEventListener('click', () => {
-    const maxIndex = Math.max(0, items.length - visible);
-    currentIndex = Math.min(maxIndex, currentIndex + 1);
-    updateSlider();
-  });
-
-  window.addEventListener('resize', () => {
-    updateVisible();
-    updateSlider();
-  });
-
-  updateVisible();
-  updateSlider();
-
-  // Auto-rotate images cada 3s
-  const imageWrappers = slider.querySelectorAll('.bp-item-image');
-  setInterval(() => {
-    imageWrappers.forEach(wrapper => {
-      const imgs = wrapper.querySelectorAll('img');
-      const current = wrapper.querySelector('img:not([style*="display: none"])');
-      const nextImg = current ? current.nextElementSibling : imgs[0];
-      if (nextImg) {
-        Array.from(imgs).forEach(img => img.style.display = 'none');
-        nextImg.style.display = 'block';
-      }
-    });
-  }, 3000);
-});
-</script>
-
 <style>
-  /* Estilos desktop originales (abreviados por espacio) */
   .banner-products-wrapper-{{ section.id }} {
     padding: 70px 0;
   }
-  .bp-container {
+
+  .banner-products-wrapper-{{ section.id }} .bp-container {
     display: grid;
-    grid-template-columns: 1.7fr 1.3fr;
+    grid-template-columns: 1.7fr 1.3fr; /* banner más grande */
     gap: 32px;
     align-items: stretch;
   }
-  /* ... resto desktop igual [file:16] ... */
 
-  /* OPTIMIZACIONES MÓVIL */
+  /* BANNER */
+  .banner-products-wrapper-{{ section.id }} .bp-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-banner-img {
+    width: 100%;
+    height: 100%;
+    min-height: 420px; /* banner más alto */
+    object-fit: cover;
+    display: block;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px;
+    color: #ffffff;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+    margin: 0 0 12px;
+    font-size: 34px;
+  }
+
+  /* SLIDER PRODUCTOS */
+  .banner-products-wrapper-{{ section.id }} .bp-products {
+    position: relative;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-slider {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-track {
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.4s ease;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item {
+    flex: 0 0 33.333%; /* 3 productos visibles */
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 360px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button,
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button + .bp-card-button,
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button + .bp-card-button-state {
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main {
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
+    font-size: {{ section.settings.title_font_size }}px;
+    text-align: center;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main:hover {
+    filter: brightness(0.9);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-price {
+    background: {{ section.settings.price_button_bg }};
+    color: {{ section.settings.price_button_text_color }};
+    font-weight: 600;
+    font-size: {{ section.settings.price_font_size }}px;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-price:hover {
+    filter: brightness(0.95);
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
+    background: {{ section.settings.state_button_bg }};
+    color: {{ section.settings.state_button_text_color }};
+    font-size: 13px;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-prev,
+  .banner-products-wrapper-{{ section.id }} .bp-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .banner-products-wrapper-{{ section.id }} .bp-prev { left: 4px; }
+  .banner-products-wrapper-{{ section.id }} .bp-next { right: 4px; }
+
+  /* RESPONSIVE */
   @media (max-width: 989px) {
     .banner-products-wrapper-{{ section.id }} {
-      padding: 40px 16px;
+      padding: 40px 0;
     }
-    .bp-container {
+    .banner-products-wrapper-{{ section.id }} .bp-container {
       grid-template-columns: 1fr;
       gap: 24px;
     }
-    .bp-banner-img {
+    .banner-products-wrapper-{{ section.id }} .bp-banner-img {
       min-height: 280px;
     }
-    .bp-item {
-      flex: 0 0 50%; /* 2 items tablet */
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 50%; /* 2 productos en tablet */
     }
   }
 
-  @media (max-width: 768px) {
-    .bp-banner-content {
-      padding: 24px;
+  @media (max-width: 600px) {
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 100%; /* 1 producto en móvil */
     }
-    .bp-banner-content h2 {
-      font-size: 28px;
+    .banner-products-wrapper-{{ section.id }} .bp-item-image {
+      height: 200px;
     }
-  }
-
-  @media (max-width: 480px) {
-    .banner-products-wrapper-{{ section.id }} {
-      padding: 30px 12px;
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+      padding: 20px;
     }
-    .bp-item {
-      flex: 0 0 100%; /* 1 item móvil */
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+      font-size: 24px;
     }
-    .bp-item-image {
-      height: 240px; /* Más alto para touch */
-    }
-    .bp-card-title {
-      font-size: 16px !important; /* Mínimo legible */
-    }
-    .bp-card-price {
-      font-size: 18px !important;
-    }
-    .bp-prev, .bp-next {
-      width: 44px;
-      height: 44px; /* Touch target 44px+ */
-      font-size: 20px;
-      top: 40%;
-    }
-  }
-
-  /* Touch improvements */
-  .bp-track {
-    touch-action: pan-y; /* Evita scroll horizontal accidental */
-  }
-  .bp-prev, .bp-next {
-    transition: all 0.3s ease;
-  }
-  .bp-prev:hover, .bp-next:hover {
-    transform: scale(1.1);
   }
 </style>
 
+<script>
+  (function() {
+    var slider = document.getElementById('bp-slider-{{ section.id }}');
+    if (!slider) return;
+
+    var track = slider.querySelector('.bp-track');
+    var items = slider.querySelectorAll('.bp-item');
+    var prev  = slider.querySelector('.bp-prev');
+    var next  = slider.querySelector('.bp-next');
+
+    if (items.length === 0) return;
+
+    var currentIndex = 0;
+    var visible = 3; /* 3 productos desktop */
+
+    function updateVisible() {
+      if (window.innerWidth <= 600) {
+        visible = 1;
+      } else if (window.innerWidth <= 989) {
+        visible = 2;
+      } else {
+        visible = 3;
+      }
+    }
+
+    function updateSlider() {
+      updateVisible();
+      var maxIndex = Math.max(0, items.length - visible);
+      if (currentIndex > maxIndex) currentIndex = maxIndex;
+      var translateX = -(100 / visible) * currentIndex;
+      track.style.transform = 'translateX(' + translateX + '%)';
+    }
+
+    prev.addEventListener('click', function() {
+      currentIndex = Math.max(0, currentIndex - 1);
+      updateSlider();
+    });
+
+    next.addEventListener('click', function() {
+      currentIndex = Math.min(items.length - 1, currentIndex + 1);
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+    updateSlider();
+
+    /* Rotar imágenes de cada producto cada segundo */
+    var imageWrappers = slider.querySelectorAll('.bp-item-image');
+    imageWrappers.forEach(function(wrapper) {
+      var raw = wrapper.getAttribute('data-images');
+      if (!raw) return;
+
+      var urls = raw.split('|').map(function(u){ return u.trim(); }).filter(Boolean);
+      if (urls.length < 2) return;
+
+      var img = wrapper.querySelector('img');
+      var index = 0;
+
+      setInterval(function() {
+        index = (index + 1) % urls.length;
+        img.src = urls[index];
+      }, 2000); // 2 segundo
+    });
+  })();
+</script>
+
 {% schema %}
 {
-  "name": "Banner + productos des",
+  "name": "Banner-productos",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Imagen de banner"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Título del banner",
+      "default": "Título del banner"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_text",
+      "label": "Texto del banner",
+      "default": "Descripción del banner."
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Enlace del banner"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Color fondo botón título",
+      "default": "#1f3a93"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Color texto botón título",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Tamaño del título (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "title_characters",
+      "label": "Número de caracteres del título",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "price_button_bg",
+      "label": "Color fondo botón precio",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "price_button_text_color",
+      "label": "Color texto botón precio",
+      "default": "#1f3a93"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Tamaño del precio (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "state_button_bg",
+      "label": "Color fondo botón estado",
+      "default": "#f1c40f"
+    },
+    {
+      "type": "color",
+      "id": "state_button_text_color",
+      "label": "Color texto botón estado",
+      "default": "#333333"
+    }
+  ],
   "blocks": [
     {
       "type": "product",
-      "name": "Productos",
+      "name": "Producto",
       "settings": [
         {
           "type": "product",
@@ -256,37 +440,18 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "type": "text",
           "id": "state_label",
-          "label": "Estado (ej. Nuevo)"
+          "label": "Estado (ej. \"Querétaro\")",
+          "default": "Querétaro"
         }
       ]
     }
   ],
-  "settings": [
-    /* Tus settings originales + móviles */
-    {
-      "type": "image_picker",
-      "id": "banner_image",
-      "label": "Imagen banner"
-    },
-    /* ... resto iguales ... */
-    {
-      "type": "range",
-      "id": "mobile_padding",
-      "label": "Padding móvil (px)",
-      "min": 20,
-      "max": 60,
-      "default": 30
-    }
-  ],
   "max_blocks": 12,
-  "presets": [{
-    "name": "Banner productos deslizables",
-    "category": "Productos",
-    "blocks": [
-      {"type": "product"},
-      {"type": "product"},
-      {"type": "product"}
-    ]
-  }]
+  "presets": [
+    {
+      "name": "Banner + productos deslizables",
+      "category": "Productos"
+    }
+  ]
 }
 {% endschema %}
