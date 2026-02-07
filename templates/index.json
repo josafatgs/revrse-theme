@@ -103,6 +103,13 @@
     "produc_inmo_rjHceW": {
       "type": "produc-inmo",
       "blocks": {
+        "product_gm9FGX": {
+          "type": "product",
+          "settings": {
+            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
+            "badge_text": ""
+          }
+        },
         "product_XzyAzL": {
           "type": "product",
           "settings": {
@@ -154,6 +161,7 @@
         }
       },
       "block_order": [
+        "product_gm9FGX",
         "product_XzyAzL",
         "product_xDx6fz",
         "product_pYX3hA",
@@ -192,8 +200,8 @@
         "card_bg": "#ffffff",
         "card_border_color": "#000000",
         "card_border_opacity": 8,
-        "price_color": "#111111",
-        "cta_bg": "#111111",
+        "price_color": "#34495e",
+        "cta_bg": "#34495e",
         "cta_text_color": "#ffffff",
         "sale_badge_bg": "#e11d48",
         "custom_badge_bg": "#2563eb"
