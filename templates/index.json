@@ -37,7 +37,7 @@
         "option_tipo_1_value": "property_type",
         "option_tipo_2_label": "Departamento",
         "option_tipo_2_value": "departamento",
-        "option_tipo_3_label": "Terreno",
+        "option_tipo_3_label": "Terreno y bodegas",
         "option_tipo_3_value": "terreno",
         "param_busqueda": "q",
         "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
