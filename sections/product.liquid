@@ -20,6 +20,21 @@
       <div class="product-info">
         <h1 class="product-title">{{ product.title }}</h1>
         
+        <!-- Current Variant Location -->
+        <div id="variant-location" class="product-location">
+          <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span id="location-text">
+            {% if product.metafields.custom.location %}
+              {{ product.metafields.custom.location }}
+            {% else %}
+              Ubicación por definir
+            {% endif %}
+          </span>
+        </div>
+        
         <!-- Product Price -->
         <div class="product-price">
           <span class="price-label">Precio:</span>
@@ -44,6 +59,7 @@
                   class="variant-option {% if variant.id == product.selected_or_first_available_variant.id %}active{% endif %}"
                   data-variant-id="{{ variant.id }}"
                   data-variant-price="{{ variant.price | money }}"
+                  data-variant-location="{{ variant.metafields.custom.location | default: 'Ubicación por definir' }}"
                   data-variant-bedrooms="{{ variant.metafields.custom.bedrooms | default: 0 }}"
                   data-variant-bathrooms="{{ variant.metafields.custom.bathrooms | default: 0 }}"
                   data-variant-parking="{{ variant.metafields.custom.parking_spaces | default: 0 }}"
@@ -99,6 +115,7 @@
 <!-- Product JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
   // Initialize Variant Selector
   window.variantSelector = new VariantSelector();
 });
@@ -107,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 class VariantSelector {
   constructor() {
     this.initVariantSelector();
+    this.updateWhatsAppLink();
   }
   
   initVariantSelector() {
@@ -132,11 +150,15 @@ class VariantSelector {
     
     // Update product information
     this.updateVariantInfo(button);
+    
+    // Update WhatsApp link
+    this.updateWhatsAppLink(button);
   }
   
   updateVariantInfo(button) {
     const variantData = {
       price: button.dataset.variantPrice,
+      location: button.dataset.variantLocation,
       bedrooms: button.dataset.variantBedrooms,
       bathrooms: button.dataset.variantBathrooms,
       parking: button.dataset.variantParking,
@@ -150,6 +172,12 @@ class VariantSelector {
     const priceElement = document.getElementById('variant-price');
     if (priceElement) {
       priceElement.textContent = variantData.price;
+    }
+    
+    // Update location
+    const locationElement = document.getElementById('location-text');
+    if (locationElement) {
+      locationElement.textContent = variantData.location;
     }
     
     // Update specifications
@@ -228,6 +256,23 @@ class VariantSelector {
     }
     
     specsContainer.innerHTML = specsHTML;
+  }
+  
+  updateWhatsAppLink(button = null) {
+    const whatsappLink = document.getElementById('whatsapp-link');
+    if (!whatsappLink) return;
+    
+    const baseUrl = whatsappLink.dataset.baseUrl;
+    const productTitle = whatsappLink.dataset.productTitle;
+    const productUrl = whatsappLink.dataset.productUrl;
+    
+    let variantText = '';
+    if (button) {
+      variantText = ` - Variante: ${button.textContent.trim()}`;
+    }
+    
+    const message = `Hola, me interesa la propiedad: ${decodeURIComponent(productTitle)}${variantText} - ${productUrl}`;
+    whatsappLink.href = baseUrl + encodeURIComponent(message);
   }
 }
 
