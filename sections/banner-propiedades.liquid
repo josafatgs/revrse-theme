@@ -1,56 +1,76 @@
 {% comment %}
-  Sección Hero con filtros: Tipo vivienda (casa, depto, terreno, bodega) y Venta/Renta
+  Sección: Hero con barra de búsqueda de propiedades - Versión optimizada para móvil
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}">
-  <div class="hero-bg">
+  <div class="hero-search-bg">
     {% if section.settings.background_image != blank %}
       <img
         src="{{ section.settings.background_image | image_url: width: 2000 }}"
-        alt="{{ section.settings.heading | escape }}"
-      >
+        alt="{{ section.settings.heading | escape }}">
     {% endif %}
-    <div class="hero-overlay"></div>
+    <div class="hero-search-overlay"></div>
   </div>
 
-  <div class="hero-content">
+  <div class="hero-search-content">
     {% if section.settings.heading != blank %}
-      <h1 class="hero-heading">{{ section.settings.heading }}</h1>
+      <h1 class="hero-search-heading">
+        {{ section.settings.heading }}
+      </h1>
     {% endif %}
 
     {% if section.settings.subheading != blank %}
-      <p class="hero-subheading">{{ section.settings.subheading }}</p>
+      <p class="hero-search-subheading">
+        {{ section.settings.subheading }}
+      </p>
     {% endif %}
 
-    <form class="hero-search-form" action="{{ section.settings.form_action | default: '/collections/all' }}" method="get">
-      <!-- Select Venta/Renta -->
+    <form
+      class="hero-search-form"
+      action="{{ section.settings.form_action | default: '/collections/all' }}"
+      method="get"
+      onsubmit="return handleSearch(event, this)"
+    >
+      <!-- Select Venta / Renta -->
       <select name="{{ section.settings.param_venta | default: 'venta' }}" id="venta-select-{{ section.id }}">
-        <option value="">{{ section.settings.label_venta_default | default: 'Venta/Renta' }}</option>
-        <option value="{{ section.settings.option_venta_1_value | default: 'venta' }}">{{ section.settings.option_venta_1_label | default: 'Venta' }}</option>
-        <option value="{{ section.settings.option_venta_2_value | default: 'renta' }}">{{ section.settings.option_venta_2_label | default: 'Renta' }}</option>
+        <option value="">{{ section.settings.label_venta_default }}</option>
+        {% if section.settings.option_venta_1_label != blank %}
+          <option value="{{ section.settings.option_venta_1_value }}">{{ section.settings.option_venta_1_label }}</option>
+        {% endif %}
+        {% if section.settings.option_venta_2_label != blank %}
+          <option value="{{ section.settings.option_venta_2_value }}">{{ section.settings.option_venta_2_label }}</option>
+        {% endif %}
       </select>
 
-      <!-- Select Tipo de vivienda -->
+      <!-- Select Tipo de inmueble -->
       <select name="{{ section.settings.param_tipo | default: 'tipo' }}" id="tipo-select-{{ section.id }}">
-        <option value="">{{ section.settings.label_tipo_default | default: 'Tipo de vivienda' }}</option>
-        <option value="{{ section.settings.option_tipo_1_value | default: 'casa' }}">{{ section.settings.option_tipo_1_label | default: 'Casa' }}</option>
-        <option value="{{ section.settings.option_tipo_2_value | default: 'departamento' }}">{{ section.settings.option_tipo_2_label | default: 'Departamento' }}</option>
-        <option value="{{ section.settings.option_tipo_3_value | default: 'terreno' }}">{{ section.settings.option_tipo_3_label | default: 'Terreno' }}</option>
-        <option value="{{ section.settings.option_tipo_4_value | default: 'bodega' }}">{{ section.settings.option_tipo_4_label | default: 'Bodega' }}</option>
+        <option value="">{{ section.settings.label_tipo_default }}</option>
+        {% if section.settings.option_tipo_1_label != blank %}
+          <option value="{{ section.settings.option_tipo_1_value }}">{{ section.settings.option_tipo_1_label }}</option>
+        {% endif %}
+        {% if section.settings.option_tipo_2_label != blank %}
+          <option value="{{ section.settings.option_tipo_2_value }}">{{ section.settings.option_tipo_2_label }}</option>
+        {% endif %}
+        {% if section.settings.option_tipo_3_label != blank %}
+          <option value="{{ section.settings.option_tipo_3_value }}">{{ section.settings.option_tipo_3_label }}</option>
+        {% endif %}
+        {% if section.settings.option_tipo_4_label != blank %}
+          <option value="{{ section.settings.option_tipo_4_value }}">{{ section.settings.option_tipo_4_label }}</option>
+        {% endif %}
       </select>
 
-      <!-- Campo de búsqueda -->
+      <!-- Campo texto -->
       <input
         type="search"
         name="{{ section.settings.param_busqueda | default: 'q' }}"
         id="search-input-{{ section.id }}"
-        placeholder="{{ section.settings.placeholder_busqueda | default: 'Buscar por ubicación, dirección...' }}"
+        placeholder="{{ section.settings.placeholder_busqueda }}"
         autocomplete="off"
       >
 
       <!-- Botón -->
       <button type="submit" class="hero-search-button">
-        {{ section.settings.boton_texto | default: 'Buscar' }}
+        {{ section.settings.boton_texto }}
       </button>
     </form>
   </div>
@@ -62,7 +82,7 @@ function handleSearch(event, form) {
   const venta = document.getElementById('venta-select-' + sectionId).value;
   const tipo = document.getElementById('tipo-select-' + sectionId).value;
   const q = document.getElementById('search-input-' + sectionId).value.trim();
-
+  
   if (!venta && !tipo && !q) {
     window.location.href = '/collections/all';
     return false;
@@ -72,7 +92,6 @@ function handleSearch(event, form) {
 </script>
 
 <style>
-  /* Estilos base - mismo diseño responsive */
   .hero-search-wrapper-{{ section.id }} {
     position: relative;
     overflow: hidden;
@@ -80,7 +99,46 @@ function handleSearch(event, form) {
     color: #ffffff;
   }
 
-  /* ... resto de estilos del hero (bg, overlay, content, heading, subheading) igual que antes ... */
+  .hero-search-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-search-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-search-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,{{ section.settings.overlay_intensity }});
+  }
+
+  .hero-search-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 16px;
+    text-align: center;
+  }
+
+  .hero-search-heading {
+    margin: 0 0 10px;
+    font-size: {{ section.settings.heading_size }}px;
+    font-weight: 700;
+    color: {{ section.settings.heading_color }};
+  }
+
+  .hero-search-subheading {
+    margin: 0 0 20px;
+    font-size: {{ section.settings.subheading_size }}px;
+    opacity: 0.9;
+  }
 
   .hero-search-form {
     display: grid;
@@ -99,20 +157,20 @@ function handleSearch(event, form) {
     padding: 12px 14px;
     font-size: 14px;
     outline: none;
-    color: {{ section.settings.search_textcolor | default: '#333333' }};
+    color: {{ section.settings.search_text_color }};
   }
 
   .hero-search-form select {
     border-right: 1px solid #e0e0e0;
-    background: white;
+    background: #ffffff;
   }
 
   .hero-search-form input {
-    background: white;
+    background: #ffffff;
   }
 
   .hero-search-form input::placeholder {
-    color: {{ section.settings.search_placeholder_color | default: '#999999' }};
+    color: {{ section.settings.search_placeholder_color }};
   }
 
   .hero-search-button {
@@ -121,8 +179,8 @@ function handleSearch(event, form) {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    background: {{ section.settings.button_color | default: '#3c7a4a' }};
-    color: {{ section.settings.button_text_color | default: '#ffffff' }};
+    background: {{ section.settings.button_color }};
+    color: {{ section.settings.button_text_color }};
     white-space: nowrap;
     transition: all 0.2s ease;
   }
@@ -133,36 +191,177 @@ function handleSearch(event, form) {
     transform: translateY(-1px);
   }
 
-  /* Responsive */
   @media (max-width: 900px) {
     .hero-search-wrapper-{{ section.id }} {
       min-height: {{ section.settings.altura_mobile }}vh;
     }
+
     .hero-search-form {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto;
       border-radius: 20px;
       gap: 1px;
     }
+
     .hero-search-form input {
       grid-column: 1 / -1;
       border-top: 1px solid #e0e0e0;
+      padding: 16px 16px;
+    }
+
+    .hero-search-button {
+      grid-column: 1 / -1;
+      margin-top: 0;
+      padding: 16px 0;
+      border-radius: 0 0 20px 20px;
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero-search-heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+    .hero-search-subheading {
+      font-size: {{ section.settings.subheading_size_mobile }}px;
+    }
+    .hero-search-content {
+      padding: 50px 12px 30px;
+    }
+
+    .hero-search-form {
+      grid-template-columns: 1fr;
+      border-radius: 16px;
+      max-width: 100%;
+    }
+
+    .hero-search-form select,
+    .hero-search-form input,
+    .hero-search-button {
+      border-radius: 0;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 18px 16px;
+      font-size: 16px;
+    }
+
+    .hero-search-button {
+      border-bottom: none;
+      border-radius: 0 0 16px 16px;
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Hero Búsqueda Inmuebles",
+  "name": "Hero búsqueda propiedades",
   "settings": [
-    /* ... todos los settings previos del hero ... */
-    
-    /* Configuración Venta/Renta */
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "range",
+      "id": "altura_desktop",
+      "label": "Altura en desktop (vh)",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "altura_mobile",
+      "label": "Altura en móvil (vh)",
+      "min": 40,
+      "max": 90,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "overlay_intensity",
+      "label": "Oscurecer imagen de fondo",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.5
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Busca tu propiedad ideal"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Encuentra casas, departamentos y terrenos en las mejores ubicaciones."
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Tamaño título (px)",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color del título",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Tamaño subtítulo (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Tamaño título móvil (px)",
+      "min": 18,
+      "max": 32,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subheading_size_mobile",
+      "label": "Tamaño subtítulo móvil (px)",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Barra de búsqueda"
+    },
+    {
+      "type": "text",
+      "id": "form_action",
+      "label": "URL de destino del formulario (default: /collections/all)",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "param_venta",
+      "label": "Nombre del parámetro para 'Venta/Renta'",
+      "default": "venta"
+    },
     {
       "type": "text",
       "id": "label_venta_default",
-      "label": "Texto por defecto Venta/Renta",
-      "default": "Venta/Renta"
+      "label": "Texto por defecto del select Venta/Renta",
+      "default": "Venta"
     },
     {
       "type": "text",
@@ -190,22 +389,20 @@ function handleSearch(event, form) {
     },
     {
       "type": "text",
-      "id": "param_venta",
-      "label": "Nombre del parámetro Venta/Renta",
-      "default": "venta"
+      "id": "param_tipo",
+      "label": "Nombre del parámetro para 'Tipo de inmueble'",
+      "default": "tipo"
     },
-
-    /* Configuración Tipo vivienda */
     {
       "type": "text",
       "id": "label_tipo_default",
-      "label": "Texto por defecto Tipo vivienda",
-      "default": "Tipo de vivienda"
+      "label": "Texto por defecto del select Tipo",
+      "default": "Tipo de inmueble"
     },
     {
       "type": "text",
       "id": "option_tipo_1_label",
-      "label": "Tipo 1 (Casa)",
+      "label": "Tipo 1 etiqueta (ej. Casa)",
       "default": "Casa"
     },
     {
@@ -217,7 +414,7 @@ function handleSearch(event, form) {
     {
       "type": "text",
       "id": "option_tipo_2_label",
-      "label": "Tipo 2 (Departamento)",
+      "label": "Tipo 2 etiqueta (ej. Departamento)",
       "default": "Departamento"
     },
     {
@@ -229,7 +426,7 @@ function handleSearch(event, form) {
     {
       "type": "text",
       "id": "option_tipo_3_label",
-      "label": "Tipo 3 (Terreno)",
+      "label": "Tipo 3 etiqueta (ej. Terreno)",
       "default": "Terreno"
     },
     {
@@ -241,7 +438,7 @@ function handleSearch(event, form) {
     {
       "type": "text",
       "id": "option_tipo_4_label",
-      "label": "Tipo 4 (Bodega)",
+      "label": "Tipo 4 etiqueta (ej. Bodega)",
       "default": "Bodega"
     },
     {
@@ -252,15 +449,52 @@ function handleSearch(event, form) {
     },
     {
       "type": "text",
-      "id": "param_tipo",
-      "label": "Nombre del parámetro Tipo vivienda",
-      "default": "tipo"
+      "id": "param_busqueda",
+      "label": "Nombre del parámetro de búsqueda",
+      "default": "q"
     },
-
-    /* ... resto de settings (form_action, placeholder_busqueda, boton_texto, colores, etc.) ... */
+    {
+      "type": "text",
+      "id": "placeholder_busqueda",
+      "label": "Placeholder del campo de búsqueda",
+      "default": "Buscar por ubicación, dirección o calle"
+    },
+    {
+      "type": "text",
+      "id": "boton_texto",
+      "label": "Texto del botón",
+      "default": "BUSCAR"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Color del botón",
+      "default": "#3c7a4a"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Color del texto del botón",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "search_text_color",
+      "label": "Color del texto de búsqueda",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "search_placeholder_color",
+      "label": "Color del placeholder",
+      "default": "#777777"
+    }
   ],
-  "presets": [{
-    "name": "Hero Búsqueda Inmuebles"
-  }]
+  "presets": [
+    {
+      "name": "Hero búsqueda propiedades",
+      "category": "Banners"
+    }
+  ]
 }
 {% endschema %}
