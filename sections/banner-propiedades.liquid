@@ -1,13 +1,19 @@
 {% comment %}
-  Sección: Hero con barra de búsqueda de propiedades (SIN campo de ubicación/dirección/calle)
-  Optimizada para móvil
+  Sección: Hero búsqueda propiedades (sin campo de ubicación)
+  Versión mejorada: más robusta, accesible, optimizada para móvil y SEO
 {% endcomment %}
 
-<section class="hero-search-wrapper-{{ section.id }}">
+<section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
   <div class="hero-search-bg">
     {% if section.settings.background_image != blank %}
       <img
-        src="{{ section.settings.background_image | image_url: width: 2000 }}"
+        src="{{ section.settings.background_image | img_url: '2048x' }}"
+        srcset="{
+          { section.settings.background_image | img_url: '600x' } 600w,
+          { section.settings.background_image | img_url: '1000x' } 1000w,
+          { section.settings.background_image | img_url: '2048x' } 2048w
+        }"
+        sizes="(max-width: 600px) 100vw, 50vw"
         alt="{{ section.settings.heading | escape }}"
         loading="lazy"
       >
@@ -29,15 +35,17 @@
       action="{{ section.settings.form_action | default: '/collections/all' }}"
       method="get"
       data-section-id="{{ section.id }}"
-      onsubmit="return handleSearch(event, this)"
+      novalidate
     >
-      <!-- Select Venta / Renta -->
+      <label class="hero-search-label visually-hidden" for="venta-select-{{ section.id }}">
+        {{ section.settings.label_venta_default }}
+      </label>
       <select
         name="{{ section.settings.param_venta | default: 'venta' }}"
         id="venta-select-{{ section.id }}"
         aria-label="{{ section.settings.label_venta_default | escape }}"
       >
-        <option value="">{{ section.settings.label_venta_default }}</option>
+        <option value="" disabled selected>{{ section.settings.label_venta_default }}</option>
 
         {% if section.settings.option_venta_1_label != blank %}
           <option value="{{ section.settings.option_venta_1_value }}">
@@ -52,13 +60,15 @@
         {% endif %}
       </select>
 
-      <!-- Select Tipo de inmueble -->
+      <label class="hero-search-label visually-hidden" for="tipo-select-{{ section.id }}">
+        {{ section.settings.label_tipo_default }}
+      </label>
       <select
         name="{{ section.settings.param_tipo | default: 'tipo' }}"
         id="tipo-select-{{ section.id }}"
         aria-label="{{ section.settings.label_tipo_default | escape }}"
       >
-        <option value="">{{ section.settings.label_tipo_default }}</option>
+        <option value="" disabled selected>{{ section.settings.label_tipo_default }}</option>
 
         {% if section.settings.option_tipo_1_label != blank %}
           <option value="{{ section.settings.option_tipo_1_value }}">
@@ -85,7 +95,6 @@
         {% endif %}
       </select>
 
-      <!-- Botón -->
       <button type="submit" class="hero-search-button">
         {{ section.settings.boton_texto }}
       </button>
@@ -94,23 +103,48 @@
 </section>
 
 <script>
-  function handleSearch(event, form) {
-    var sectionId = form.getAttribute('data-section-id') || '';
+  (function () {
+    // Espera a que el DOM esté listo y escucha submit en todos los forms de esta sección
+    document.addEventListener("DOMContentLoaded", function () {
+      const forms = document.querySelectorAll(
+        `.hero-search-form[data-section-id="${window.Shopify?.section?.id ?? ''}"]`
+      );
+      forms.forEach(function(form) {
+        form.addEventListener("submit", handleSearch);
+      });
+    });
 
-    var ventaEl = document.getElementById('venta-select-' + sectionId);
-    var tipoEl  = document.getElementById('tipo-select-' + sectionId);
+    function handleSearch(event) {
+      const form = event.target;
+      const sectionId = form.dataset.sectionId;
+      if (!sectionId) return true;
 
-    var venta = ventaEl ? ventaEl.value : '';
-    var tipo  = tipoEl ? tipoEl.value : '';
+      const ventaEl = document.getElementById(`venta-select-${sectionId}`);
+      const tipoEl  = document.getElementById(`tipo-select-${sectionId}`);
 
-    // Si todo está vacío, redirige al action para evitar submit "en blanco".
-    if (!venta && !tipo) {
-      window.location.href = form.action || '/collections/all';
-      return false;
+      const venta = (ventaEl?.value || '').trim();
+      const tipo  = (tipoEl?.value  || '').trim();
+
+      // Si no hay valor seleccionado en ninguno, redirigir a action para evitar búsqueda vacía
+      if (!venta && !tipo) {
+        event.preventDefault();
+        window.location.href = form.action || "/collections/all";
+        return false;
+      }
+
+      // Aquí puedes agregar tracking (Google/ Facebook / event pixel)
+      /*
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'HeroPropertySearch', {venta, tipo});
+      }
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'hero_search', {venta, tipo});
+      }
+      */
+
+      return true;
     }
-
-    return true;
-  }
+  })();
 </script>
 
 <style>
@@ -119,12 +153,18 @@
     overflow: hidden;
     min-height: {{ section.settings.altura_desktop }}vh;
     color: #ffffff;
+    --search-bg: rgba(255, 255, 255, 0.95);
+    --input-font-size: 14px;
+    --button-bg: {{ section.settings.button_color }};
+    --button-color: {{ section.settings.button_text_color }};
+    --input-color: {{ section.settings.search_text_color }};
   }
 
   .hero-search-bg {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    background-color: #111;
   }
 
   .hero-search-bg img {
@@ -132,6 +172,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    background-size: cover;
   }
 
   .hero-search-overlay {
@@ -164,43 +205,65 @@
 
   .hero-search-form {
     display: grid;
-    grid-template-columns: 1fr 1fr auto; /* Sin input de texto */
+    grid-template-columns: 1fr 1fr auto;
     gap: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--search-bg);
     border-radius: 999px;
     overflow: hidden;
     max-width: 650px;
     margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
 
   .hero-search-form select {
     border: none;
     padding: 12px 14px;
-    font-size: 14px;
+    font-size: var(--input-font-size);
     outline: none;
-    color: {{ section.settings.search_text_color }};
+    color: var(--input-color);
     background: #ffffff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    width: 100%;
   }
 
-  .hero-search-form select {
-    border-right: 1px solid #e0e0e0;
+  .hero-search-form select ~ select {
+    border-left: 1px solid #e0e0e0;
   }
 
   .hero-search-button {
     border: none;
     padding: 0 24px;
-    font-size: 14px;
+    font-size: var(--input-font-size);
     font-weight: 600;
     cursor: pointer;
-    background: {{ section.settings.button_color }};
-    color: {{ section.settings.button_text_color }};
+    background: var(--button-bg);
+    color: var(--button-color);
     white-space: nowrap;
     transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
   }
 
   .hero-search-button:hover,
+  .hero-search-button:focus,
   .hero-search-button:active {
     filter: brightness(0.9);
+  }
+
+  /* Helpers visuales (op_tional) */
+  .visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
   }
 
   /* Mobile */
@@ -223,18 +286,31 @@
 
     .hero-search-form {
       grid-template-columns: 1fr;
+      list-style: none;
+      padding: 0;
+      margin: 0;
       border-radius: 16px;
       max-width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     }
 
     .hero-search-form select {
+      border-top: none;
+      border-left: none;
       border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+      border-radius: 0;
+    }
+
+    .hero-search-form select:first-child {
       border-bottom: 1px solid #e0e0e0;
     }
 
     .hero-search-button {
       border-radius: 0 0 16px 16px;
       padding: 12px 14px;
+      width: 100%;
+      box-shadow: none;
     }
   }
 </style>
