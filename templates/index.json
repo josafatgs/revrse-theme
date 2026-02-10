@@ -20,9 +20,9 @@
         "heading": "Busca tu propiedad ideal",
         "subheading": "Encuentra casas, departamentos, terrenos y bodegas en las mejores ubicaciones.",
         "heading_size": 32,
+        "heading_size_mobile": 24,
         "heading_color": "#ffffff",
         "subheading_size": 16,
-        "heading_size_mobile": 24,
         "subheading_size_mobile": 14,
         "form_action": "/search",
         "param_venta": "Venta",
@@ -39,13 +39,15 @@
         "option_tipo_2_value": "departamento",
         "option_tipo_3_label": "Terreno",
         "option_tipo_3_value": "terreno",
+        "option_tipo_4_label": "Bodega",
+        "option_tipo_4_value": "bodega",
         "param_busqueda": "q",
         "placeholder_busqueda": "Buscar por ubicación, dirección o calle",
         "boton_texto": "BUSCAR",
-        "button_color": "#34495e",
-        "button_text_color": "#ffffff",
         "search_text_color": "#333333",
-        "search_placeholder_color": "#777777"
+        "search_placeholder_color": "#777777",
+        "button_color": "#34495e",
+        "button_text_color": "#ffffff"
       }
     },
     "banner_productos_hQj73J": {
