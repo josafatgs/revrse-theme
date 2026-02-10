@@ -1,5 +1,6 @@
 {% comment %}
-  Sección: Hero con barra de búsqueda de propiedades - Versión optimizada para móvil
+  Sección: Hero con barra de búsqueda de propiedades (SIN campo de ubicación/dirección/calle)
+  Optimizada para móvil
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}">
@@ -8,6 +9,7 @@
       <img
         src="{{ section.settings.background_image | image_url: width: 2000 }}"
         alt="{{ section.settings.heading | escape }}"
+        loading="lazy"
       >
     {% endif %}
     <div class="hero-search-overlay"></div>
@@ -83,16 +85,6 @@
         {% endif %}
       </select>
 
-      <!-- Campo texto (sin "buscar por ubicación") -->
-      <input
-        type="search"
-        name="{{ section.settings.param_busqueda | default: 'q' }}"
-        id="search-input-{{ section.id }}"
-        placeholder="{{ section.settings.placeholder_busqueda }}"
-        autocomplete="off"
-        aria-label="{{ section.settings.placeholder_busqueda | escape }}"
-      >
-
       <!-- Botón -->
       <button type="submit" class="hero-search-button">
         {{ section.settings.boton_texto }}
@@ -102,25 +94,23 @@
 </section>
 
 <script>
-function handleSearch(event, form) {
-  var sectionId = form.getAttribute('data-section-id') || '';
+  function handleSearch(event, form) {
+    var sectionId = form.getAttribute('data-section-id') || '';
 
-  var ventaEl = document.getElementById('venta-select-' + sectionId);
-  var tipoEl  = document.getElementById('tipo-select-' + sectionId);
-  var qEl     = document.getElementById('search-input-' + sectionId);
+    var ventaEl = document.getElementById('venta-select-' + sectionId);
+    var tipoEl  = document.getElementById('tipo-select-' + sectionId);
 
-  var venta = ventaEl ? ventaEl.value : '';
-  var tipo  = tipoEl ? tipoEl.value : '';
-  var q     = qEl ? qEl.value.trim() : '';
+    var venta = ventaEl ? ventaEl.value : '';
+    var tipo  = tipoEl ? tipoEl.value : '';
 
-  // Si está todo vacío, redirige al action para evitar submit "en blanco".
-  if (!venta && !tipo && !q) {
-    window.location.href = form.action || '/collections/all';
-    return false;
+    // Si todo está vacío, redirige al action para evitar submit "en blanco".
+    if (!venta && !tipo) {
+      window.location.href = form.action || '/collections/all';
+      return false;
+    }
+
+    return true;
   }
-
-  return true;
-}
 </script>
 
 <style>
@@ -160,31 +150,30 @@ function handleSearch(event, form) {
   }
 
   .hero-search-heading {
-    margin: 0 0 10px;
+    margin: 0 0 10px 0;
     font-size: {{ section.settings.heading_size }}px;
     font-weight: 700;
     color: {{ section.settings.heading_color }};
   }
 
   .hero-search-subheading {
-    margin: 0 0 20px;
+    margin: 0 0 20px 0;
     font-size: {{ section.settings.subheading_size }}px;
     opacity: 0.9;
   }
 
   .hero-search-form {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr auto;
+    grid-template-columns: 1fr 1fr auto; /* Sin input de texto */
     gap: 0;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 999px;
     overflow: hidden;
-    max-width: 900px;
+    max-width: 650px;
     margin: 0 auto;
   }
 
-  .hero-search-form select,
-  .hero-search-form input {
+  .hero-search-form select {
     border: none;
     padding: 12px 14px;
     font-size: 14px;
@@ -195,10 +184,6 @@ function handleSearch(event, form) {
 
   .hero-search-form select {
     border-right: 1px solid #e0e0e0;
-  }
-
-  .hero-search-form input::placeholder {
-    color: {{ section.settings.search_placeholder_color }};
   }
 
   .hero-search-button {
@@ -216,37 +201,18 @@ function handleSearch(event, form) {
   .hero-search-button:hover,
   .hero-search-button:active {
     filter: brightness(0.9);
-    transform: translateY(-1px);
   }
 
-  @media (max-width: 900px) {
+  /* Mobile */
+  @media (max-width: 600px) {
     .hero-search-wrapper-{{ section.id }} {
       min-height: {{ section.settings.altura_mobile }}vh;
     }
 
-    .hero-search-form {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      border-radius: 20px;
-      gap: 1px;
+    .hero-search-content {
+      padding: 50px 12px 30px;
     }
 
-    .hero-search-form input {
-      grid-column: 1 / -1;
-      border-top: 1px solid #e0e0e0;
-      padding: 16px 16px;
-    }
-
-    .hero-search-button {
-      grid-column: 1 / -1;
-      padding: 16px 0;
-      border-radius: 0 0 20px 20px;
-      font-size: 16px;
-      transform: none;
-    }
-  }
-
-  @media (max-width: 600px) {
     .hero-search-heading {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
@@ -255,28 +221,20 @@ function handleSearch(event, form) {
       font-size: {{ section.settings.subheading_size_mobile }}px;
     }
 
-    .hero-search-content {
-      padding: 50px 12px 30px;
-    }
-
     .hero-search-form {
       grid-template-columns: 1fr;
       border-radius: 16px;
       max-width: 100%;
     }
 
-    .hero-search-form select,
-    .hero-search-form input,
-    .hero-search-button {
-      border-radius: 0;
+    .hero-search-form select {
+      border-right: none;
       border-bottom: 1px solid #e0e0e0;
-      padding: 18px 16px;
-      font-size: 16px;
     }
 
     .hero-search-button {
-      border-bottom: none;
       border-radius: 0 0 16px 16px;
+      padding: 12px 14px;
     }
   }
 </style>
@@ -292,42 +250,24 @@ function handleSearch(event, form) {
     },
     {
       "type": "range",
-      "id": "altura_desktop",
-      "label": "Altura en desktop (vh)",
-      "min": 40,
-      "max": 100,
-      "step": 5,
-      "default": 70
-    },
-    {
-      "type": "range",
-      "id": "altura_mobile",
-      "label": "Altura en móvil (vh)",
-      "min": 40,
-      "max": 90,
-      "step": 5,
-      "default": 65
-    },
-    {
-      "type": "range",
       "id": "overlay_intensity",
-      "label": "Intensidad del overlay (0.0 a 0.9)",
+      "label": "Intensidad overlay",
       "min": 0,
       "max": 0.9,
       "step": 0.1,
-      "default": 0.3
+      "default": 0.4
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Título",
-      "default": "Encuentra tu propiedad ideal"
+      "default": "Busca tu propiedad ideal"
     },
     {
       "type": "text",
       "id": "subheading",
       "label": "Subtítulo",
-      "default": "Filtra por operación, tipo y palabra clave"
+      "default": "Encuentra casas, departamentos, terrenos y bodegas en las mejores ubicaciones."
     },
     {
       "type": "range",
@@ -336,6 +276,7 @@ function handleSearch(event, form) {
       "min": 24,
       "max": 72,
       "step": 2,
+      "unit": "px",
       "default": 44
     },
     {
@@ -345,6 +286,7 @@ function handleSearch(event, form) {
       "min": 18,
       "max": 48,
       "step": 2,
+      "unit": "px",
       "default": 32
     },
     {
@@ -360,6 +302,7 @@ function handleSearch(event, form) {
       "min": 12,
       "max": 28,
       "step": 1,
+      "unit": "px",
       "default": 18
     },
     {
@@ -369,6 +312,7 @@ function handleSearch(event, form) {
       "min": 12,
       "max": 24,
       "step": 1,
+      "unit": "px",
       "default": 16
     },
     {
@@ -379,134 +323,122 @@ function handleSearch(event, form) {
     },
 
     {
+      "type": "header",
+      "content": "Select Venta / Renta"
+    },
+    {
       "type": "text",
       "id": "param_venta",
-      "label": "Nombre parámetro Venta/Renta (query param)",
+      "label": "Parámetro URL (venta/renta)",
       "default": "venta"
     },
     {
       "type": "text",
       "id": "label_venta_default",
-      "label": "Label opción default Venta/Renta",
+      "label": "Label default",
       "default": "Venta / Renta"
     },
     {
       "type": "text",
       "id": "option_venta_1_label",
-      "label": "Opción venta 1 (texto)",
+      "label": "Opción 1 label",
       "default": "Venta"
     },
     {
       "type": "text",
       "id": "option_venta_1_value",
-      "label": "Opción venta 1 (valor)",
+      "label": "Opción 1 value",
       "default": "venta"
     },
     {
       "type": "text",
       "id": "option_venta_2_label",
-      "label": "Opción venta 2 (texto)",
+      "label": "Opción 2 label",
       "default": "Renta"
     },
     {
       "type": "text",
       "id": "option_venta_2_value",
-      "label": "Opción venta 2 (valor)",
+      "label": "Opción 2 value",
       "default": "renta"
     },
 
     {
+      "type": "header",
+      "content": "Select Tipo de inmueble"
+    },
+    {
       "type": "text",
       "id": "param_tipo",
-      "label": "Nombre parámetro Tipo (query param)",
+      "label": "Parámetro URL (tipo)",
       "default": "tipo"
     },
     {
       "type": "text",
       "id": "label_tipo_default",
-      "label": "Label opción default Tipo",
+      "label": "Label default",
       "default": "Tipo de inmueble"
     },
     {
       "type": "text",
       "id": "option_tipo_1_label",
-      "label": "Opción tipo 1 (texto)",
+      "label": "Tipo 1 label",
       "default": "Casa"
     },
     {
       "type": "text",
       "id": "option_tipo_1_value",
-      "label": "Opción tipo 1 (valor)",
+      "label": "Tipo 1 value",
       "default": "casa"
     },
     {
       "type": "text",
       "id": "option_tipo_2_label",
-      "label": "Opción tipo 2 (texto)",
+      "label": "Tipo 2 label",
       "default": "Departamento"
     },
     {
       "type": "text",
       "id": "option_tipo_2_value",
-      "label": "Opción tipo 2 (valor)",
+      "label": "Tipo 2 value",
       "default": "departamento"
     },
     {
       "type": "text",
       "id": "option_tipo_3_label",
-      "label": "Opción tipo 3 (texto)",
-      "default": "terreno"
+      "label": "Tipo 3 label"
     },
     {
       "type": "text",
       "id": "option_tipo_3_value",
-      "label": "Opción tipo 3 (valor)",
-      "default": "terreno"
+      "label": "Tipo 3 value"
     },
     {
       "type": "text",
       "id": "option_tipo_4_label",
-      "label": "Opción tipo 4 (texto)",
-      "default": "bodega"
+      "label": "Tipo 4 label"
     },
     {
       "type": "text",
       "id": "option_tipo_4_value",
-      "label": "Opción tipo 4 (valor)",
-      "default": "bodega"
+      "label": "Tipo 4 value"
     },
 
     {
-      "type": "text",
-      "id": "param_busqueda",
-      "label": "Nombre parámetro de búsqueda (query param)",
-      "default": "q"
+      "type": "header",
+      "content": "Botón y colores"
     },
-    {
-      "type": "text",
-      "id": "placeholder_busqueda",
-      "label": "Placeholder del campo de búsqueda",
-      "default": "Buscar propiedades…"
-    },
-
     {
       "type": "text",
       "id": "boton_texto",
-      "label": "Texto del botón",
+      "label": "Texto botón",
       "default": "Buscar"
     },
-
     {
       "type": "color",
       "id": "search_text_color",
-      "label": "Color texto inputs",
+      "label": "Color texto selects",
       "default": "#111111"
-    },
-    {
-      "type": "color",
-      "id": "search_placeholder_color",
-      "label": "Color placeholder",
-      "default": "#777777"
     },
     {
       "type": "color",
@@ -519,11 +451,36 @@ function handleSearch(event, form) {
       "id": "button_text_color",
       "label": "Color texto botón",
       "default": "#ffffff"
+    },
+
+    {
+      "type": "header",
+      "content": "Alturas"
+    },
+    {
+      "type": "range",
+      "id": "altura_desktop",
+      "label": "Altura (desktop)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "altura_mobile",
+      "label": "Altura (móvil)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 65
     }
   ],
   "presets": [
     {
-      "name": "Hero búsqueda propiedades"
+      "name": "Hero búsqueda propiedades (sin ubicación)"
     }
   ]
 }
