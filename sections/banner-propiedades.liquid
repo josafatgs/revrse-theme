@@ -1,6 +1,6 @@
 {% comment %}
   Sección: Hero búsqueda propiedades (sin campo de ubicación)
-  Versión mejorada: más robusta, accesible, optimizada para móvil y SEO
+  Redirige a: /collections/todos-los-inmuebles usando filtros 'collection' y 'type'
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
@@ -32,7 +32,7 @@
 
     <form
       class="hero-search-form"
-      action="{{ section.settings.form_action | default: '/collections/all' }}"
+      action="/collections/todos-los-inmuebles"
       method="get"
       data-section-id="{{ section.id }}"
       novalidate
@@ -41,55 +41,46 @@
         {{ section.settings.label_venta_default }}
       </label>
       <select
-        name="{{ section.settings.param_venta | default: 'venta' }}"
+        name="collection"
         id="venta-select-{{ section.id }}"
         aria-label="{{ section.settings.label_venta_default | escape }}"
       >
         <option value="" disabled selected>{{ section.settings.label_venta_default }}</option>
-
-        {% if section.settings.option_venta_1_label != blank %}
-          <option value="{{ section.settings.option_venta_1_value }}">
-            {{ section.settings.option_venta_1_label }}
-          </option>
-        {% endif %}
-
-        {% if section.settings.option_venta_2_label != blank %}
-          <option value="{{ section.settings.option_venta_2_value }}">
-            {{ section.settings.option_venta_2_label }}
-          </option>
-        {% endif %}
+        <option value="todos-los-inmuebles">Todos los inmuebles</option>
+        <option value="venta">Venta</option>
+        <option value="renta">Renta</option>
       </select>
 
       <label class="hero-search-label visually-hidden" for="tipo-select-{{ section.id }}">
         {{ section.settings.label_tipo_default }}
       </label>
       <select
-        name="{{ section.settings.param_tipo | default: 'tipo' }}"
+        name="type"
         id="tipo-select-{{ section.id }}"
         aria-label="{{ section.settings.label_tipo_default | escape }}"
       >
         <option value="" disabled selected>{{ section.settings.label_tipo_default }}</option>
 
         {% if section.settings.option_tipo_1_label != blank %}
-          <option value="{{ section.settings.option_tipo_1_value }}">
+          <option value="{{ section.settings.option_tipo_1_label }}">
             {{ section.settings.option_tipo_1_label }}
           </option>
         {% endif %}
 
         {% if section.settings.option_tipo_2_label != blank %}
-          <option value="{{ section.settings.option_tipo_2_value }}">
+          <option value="{{ section.settings.option_tipo_2_label }}">
             {{ section.settings.option_tipo_2_label }}
           </option>
         {% endif %}
 
         {% if section.settings.option_tipo_3_label != blank %}
-          <option value="{{ section.settings.option_tipo_3_value }}">
+          <option value="{{ section.settings.option_tipo_3_label }}">
             {{ section.settings.option_tipo_3_label }}
           </option>
         {% endif %}
 
         {% if section.settings.option_tipo_4_label != blank %}
-          <option value="{{ section.settings.option_tipo_4_value }}">
+          <option value="{{ section.settings.option_tipo_4_label }}">
             {{ section.settings.option_tipo_4_label }}
           </option>
         {% endif %}
@@ -104,7 +95,7 @@
 
 <script>
   (function () {
-    // Espera a que el DOM esté listo y escucha submit en todos los forms de esta sección
+    // Escucha el submit del formulario y deja que el navegador haga el GET
     document.addEventListener("DOMContentLoaded", function () {
       const forms = document.querySelectorAll(
         `.hero-search-form[data-section-id="${window.Shopify?.section?.id ?? ''}"]`
@@ -125,20 +116,13 @@
       const venta = (ventaEl?.value || '').trim();
       const tipo  = (tipoEl?.value  || '').trim();
 
-      // Si no hay valor seleccionado en ninguno, redirigir a action para evitar búsqueda vacía
-      if (!venta && !tipo) {
-        event.preventDefault();
-        window.location.href = form.action || "/collections/all";
-        return false;
-      }
-
-      // Aquí puedes agregar tracking (Google/ Facebook / event pixel)
+      // Puedes descomentar si quieres hacer tracking sin otorgar botón
       /*
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'hero_search_start', {venta, tipo});
+      }
       if (typeof fbq !== 'undefined') {
         fbq('trackCustom', 'HeroPropertySearch', {venta, tipo});
-      }
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'hero_search', {venta, tipo});
       }
       */
 
@@ -253,7 +237,6 @@
     filter: brightness(0.9);
   }
 
-  /* Helpers visuales (op_tional) */
   .visually-hidden {
     position: absolute;
     overflow: hidden;
@@ -286,9 +269,6 @@
 
     .hero-search-form {
       grid-template-columns: 1fr;
-      list-style: none;
-      padding: 0;
-      margin: 0;
       border-radius: 16px;
       max-width: 100%;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -392,21 +372,8 @@
       "default": 16
     },
     {
-      "type": "url",
-      "id": "form_action",
-      "label": "URL destino del formulario",
-      "default": "/collections/all"
-    },
-
-    {
       "type": "header",
       "content": "Select Venta / Renta"
-    },
-    {
-      "type": "text",
-      "id": "param_venta",
-      "label": "Parámetro URL (venta/renta)",
-      "default": "venta"
     },
     {
       "type": "text",
@@ -422,32 +389,14 @@
     },
     {
       "type": "text",
-      "id": "option_venta_1_value",
-      "label": "Opción 1 value",
-      "default": "venta"
-    },
-    {
-      "type": "text",
       "id": "option_venta_2_label",
       "label": "Opción 2 label",
       "default": "Renta"
-    },
-    {
-      "type": "text",
-      "id": "option_venta_2_value",
-      "label": "Opción 2 value",
-      "default": "renta"
     },
 
     {
       "type": "header",
       "content": "Select Tipo de inmueble"
-    },
-    {
-      "type": "text",
-      "id": "param_tipo",
-      "label": "Parámetro URL (tipo)",
-      "default": "tipo"
     },
     {
       "type": "text",
@@ -463,21 +412,9 @@
     },
     {
       "type": "text",
-      "id": "option_tipo_1_value",
-      "label": "Tipo 1 value",
-      "default": "casa"
-    },
-    {
-      "type": "text",
       "id": "option_tipo_2_label",
       "label": "Tipo 2 label",
       "default": "Departamento"
-    },
-    {
-      "type": "text",
-      "id": "option_tipo_2_value",
-      "label": "Tipo 2 value",
-      "default": "departamento"
     },
     {
       "type": "text",
