@@ -54,6 +54,9 @@
         {% if section.settings.option_tipo_3_label != blank %}
           <option value="{{ section.settings.option_tipo_3_value }}">{{ section.settings.option_tipo_3_label }}</option>
         {% endif %}
+        {% if section.settings.option_tipo_4_label != blank %}
+          <option value="{{ section.settings.option_tipo_4_value }}">{{ section.settings.option_tipo_4_label }}</option>
+        {% endif %}
       </select>
 
       <!-- Campo texto -->
@@ -431,6 +434,18 @@ function handleSearch(event, form) {
       "id": "option_tipo_3_value",
       "label": "Tipo 3 valor",
       "default": "terreno"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_4_label",
+      "label": "Tipo 4 etiqueta (ej. Bodega)",
+      "default": "Bodega"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_4_value",
+      "label": "Tipo 4 valor",
+      "default": "bodega"
     },
     {
       "type": "text",
