@@ -1,13 +1,18 @@
+{% comment %}
+  Sección: Hero búsqueda propiedades (sin campo de ubicación)
+  Redirige a: /collections/todos-los-inmuebles usando filtros 'collection' y 'type'
+{% endcomment %}
+
 <section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
   <div class="hero-search-bg">
     {% if section.settings.background_image != blank %}
       <img
         src="{{ section.settings.background_image | img_url: '2048x' }}"
-        srcset="
-          {{ section.settings.background_image | img_url: '600x' }} 600w,
-          {{ section.settings.background_image | img_url: '1000x' }} 1000w,
-          {{ section.settings.background_image | img_url: '2048x' }} 2048w
-        "
+        srcset="{
+          { section.settings.background_image | img_url: '600x' } 600w,
+          { section.settings.background_image | img_url: '1000x' } 1000w,
+          { section.settings.background_image | img_url: '2048x' } 2048w
+        }"
         sizes="(max-width: 600px) 100vw, 50vw"
         alt="{{ section.settings.heading | escape }}"
         loading="lazy"
@@ -30,18 +35,27 @@
       action="/collections/todos-los-inmuebles"
       method="get"
       data-section-id="{{ section.id }}"
+      novalidate
     >
-
-      <!-- Venta / Renta como tag (ver nota abajo) -->
-      <select name="tag" id="venta-select-{{ section.id }}">
+      <label class="hero-search-label visually-hidden" for="venta-select-{{ section.id }}">
+        {{ section.settings.label_venta_default }}
+      </label>
+      <select
+        name="collection"
+        id="venta-select-{{ section.id }}"
+        aria-label="{{ section.settings.label_venta_default | escape }}"
+      >
         <option value="" disabled selected>{{ section.settings.label_venta_default }}</option>
-        <option value="venta">Propiedades en venta</option>
-        <option value="renta">Propiedades en renta</option>
+        <option value="todos-los-inmuebles">Todos los inmuebles</option>
+        <option value="venta">Venta</option>
+        <option value="renta">Renta</option>
       </select>
 
-      <!-- Filtro de tipo de inmueble (product_type) -->
+      <label class="hero-search-label visually-hidden" for="tipo-select-{{ section.id }}">
+        {{ section.settings.label_tipo_default }}
+      </label>
       <select
-        name="filter.p.product_type"
+        name="type"
         id="tipo-select-{{ section.id }}"
         aria-label="{{ section.settings.label_tipo_default | escape }}"
       >
@@ -59,9 +73,17 @@
           </option>
         {% endif %}
 
-        <option value="Terreno">Terreno</option>
-        <option value="Bodega">Bodega</option>
+        {% if section.settings.option_tipo_3_label != blank %}
+          <option value="{{ section.settings.option_tipo_3_label }}">
+            {{ section.settings.option_tipo_3_label }}
+          </option>
+        {% endif %}
 
+        {% if section.settings.option_tipo_4_label != blank %}
+          <option value="{{ section.settings.option_tipo_4_label }}">
+            {{ section.settings.option_tipo_4_label }}
+          </option>
+        {% endif %}
       </select>
 
       <button type="submit" class="hero-search-button">
@@ -71,16 +93,206 @@
   </div>
 </section>
 
-<!-- Tu JS puedes dejarlo igual (opcional) -->
 <script>
   (function () {
-    // No es necesario revisar parámetros; deja que el GET haga su trabajo
+    // Escucha el submit del formulario y deja que el navegador haga el GET
+    document.addEventListener("DOMContentLoaded", function () {
+      const forms = document.querySelectorAll(
+        `.hero-search-form[data-section-id="${window.Shopify?.section?.id ?? ''}"]`
+      );
+      forms.forEach(function(form) {
+        form.addEventListener("submit", handleSearch);
+      });
+    });
+
+    function handleSearch(event) {
+      const form = event.target;
+      const sectionId = form.dataset.sectionId;
+      if (!sectionId) return true;
+
+      const ventaEl = document.getElementById(`venta-select-${sectionId}`);
+      const tipoEl  = document.getElementById(`tipo-select-${sectionId}`);
+
+      const venta = (ventaEl?.value || '').trim();
+      const tipo  = (tipoEl?.value  || '').trim();
+
+      // Puedes descomentar si quieres hacer tracking sin otorgar botón
+      /*
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'hero_search_start', {venta, tipo});
+      }
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'HeroPropertySearch', {venta, tipo});
+      }
+      */
+
+      return true;
+    }
   })();
 </script>
 
-<!-- Tus estilos CSS no cambian (visual sigue igual) -->
 <style>
-  /* ... PUEDES MANTENER TUS ESTILOS previos tal cual ... */
+  .hero-search-wrapper-{{ section.id }} {
+    position: relative;
+    overflow: hidden;
+    min-height: {{ section.settings.altura_desktop }}vh;
+    color: #ffffff;
+    --search-bg: rgba(255, 255, 255, 0.95);
+    --input-font-size: 14px;
+    --button-bg: {{ section.settings.button_color }};
+    --button-color: {{ section.settings.button_text_color }};
+    --input-color: {{ section.settings.search_text_color }};
+  }
+
+  .hero-search-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background-color: #111;
+  }
+
+  .hero-search-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-size: cover;
+  }
+
+  .hero-search-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, {{ section.settings.overlay_intensity }});
+  }
+
+  .hero-search-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 16px;
+    text-align: center;
+  }
+
+  .hero-search-heading {
+    margin: 0 0 10px 0;
+    font-size: {{ section.settings.heading_size }}px;
+    font-weight: 700;
+    color: {{ section.settings.heading_color }};
+  }
+
+  .hero-search-subheading {
+    margin: 0 0 20px 0;
+    font-size: {{ section.settings.subheading_size }}px;
+    opacity: 0.9;
+  }
+
+  .hero-search-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0;
+    background: var(--search-bg);
+    border-radius: 999px;
+    overflow: hidden;
+    max-width: 650px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .hero-search-form select {
+    border: none;
+    padding: 12px 14px;
+    font-size: var(--input-font-size);
+    outline: none;
+    color: var(--input-color);
+    background: #ffffff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .hero-search-form select ~ select {
+    border-left: 1px solid #e0e0e0;
+  }
+
+  .hero-search-button {
+    border: none;
+    padding: 0 24px;
+    font-size: var(--input-font-size);
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--button-bg);
+    color: var(--button-color);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .hero-search-button:hover,
+  .hero-search-button:focus,
+  .hero-search-button:active {
+    filter: brightness(0.9);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .hero-search-wrapper-{{ section.id }} {
+      min-height: {{ section.settings.altura_mobile }}vh;
+    }
+
+    .hero-search-content {
+      padding: 50px 12px 30px;
+    }
+
+    .hero-search-heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+
+    .hero-search-subheading {
+      font-size: {{ section.settings.subheading_size_mobile }}px;
+    }
+
+    .hero-search-form {
+      grid-template-columns: 1fr;
+      border-radius: 16px;
+      max-width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-search-form select {
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+      border-radius: 0;
+    }
+
+    .hero-search-form select:first-child {
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .hero-search-button {
+      border-radius: 0 0 16px 16px;
+      padding: 12px 14px;
+      width: 100%;
+      box-shadow: none;
+    }
+  }
 </style>
 
 {% schema %}
@@ -159,7 +371,6 @@
       "unit": "px",
       "default": 16
     },
-
     {
       "type": "header",
       "content": "Select Venta / Renta"
@@ -169,6 +380,18 @@
       "id": "label_venta_default",
       "label": "Label default",
       "default": "Venta / Renta"
+    },
+    {
+      "type": "text",
+      "id": "option_venta_1_label",
+      "label": "Opción 1 label",
+      "default": "Venta"
+    },
+    {
+      "type": "text",
+      "id": "option_venta_2_label",
+      "label": "Opción 2 label",
+      "default": "Renta"
     },
 
     {
@@ -192,6 +415,26 @@
       "id": "option_tipo_2_label",
       "label": "Tipo 2 label",
       "default": "Departamento"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_3_label",
+      "label": "Tipo 3 label"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_3_value",
+      "label": "Tipo 3 value"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_4_label",
+      "label": "Tipo 4 label"
+    },
+    {
+      "type": "text",
+      "id": "option_tipo_4_value",
+      "label": "Tipo 4 value"
     },
 
     {
