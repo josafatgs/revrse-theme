@@ -122,6 +122,8 @@
       const venta = document.getElementById("venta").value;
       const tipo = document.getElementById("tipo").value;
 
+      document.getElementById("search-query").value = `${venta} ${tipo}`;
+
       // Puedes descomentar si quieres hacer tracking sin otorgar botón
       /*
       if (typeof gtag !== 'undefined') {
