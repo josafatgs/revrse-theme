@@ -96,48 +96,20 @@
 </section>
 
 <script>
-  (function () {
-    // Escucha el submit del formulario y deja que el navegador haga el GET
-    document.addEventListener("DOMContentLoaded", function () {
-      const forms = document.querySelectorAll(
-        `.hero-search-form[data-section-id="${window.Shopify?.section?.id ?? ''}"]`
-      );
-      forms.forEach(function(form) {
-        form.addEventListener("submit", handleSearch);
-      });
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".hero-search-form");
+    if (!form) return;
+
+    form.addEventListener("submit", function () {
+      const venta = document.getElementById("venta")?.value || "";
+      const tipo  = document.getElementById("tipo")?.value || "";
+
+      const query = [venta, tipo].filter(Boolean).join(" ");
+      document.getElementById("search-query").value = query;
     });
-
-    function handleSearch(event) {
-      const form = event.target;
-      const sectionId = form.dataset.sectionId;
-      if (!sectionId) return true;
-
-      {% comment %} const ventaEl = document.getElementById(`venta-select-${sectionId}`);
-      const tipoEl  = document.getElementById(`tipo-select-${sectionId}`);
-
-      const venta = (ventaEl?.value || '').trim();
-      const tipo  = (tipoEl?.value  || '').trim(); {% endcomment %}
-
-     
-      const venta = document.getElementById("venta").value;
-      const tipo = document.getElementById("tipo").value;
-
-      document.getElementById("search-query").value = `${venta} ${tipo}`;
-
-      // Puedes descomentar si quieres hacer tracking sin otorgar botón
-      /*
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'hero_search_start', {venta, tipo});
-      }
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'HeroPropertySearch', {venta, tipo});
-      }
-      */
-
-      return true;
-    }
-  })();
+  });
 </script>
+
 
 <style>
   .hero-search-wrapper-{{ section.id }} {
