@@ -37,12 +37,14 @@
       data-section-id="{{ section.id }}"
       novalidate
     >
+      <input type="hidden" name="q" id="search-query">
+
       <label class="hero-search-label visually-hidden" for="venta-select-{{ section.id }}">
         {{ section.settings.label_venta_default }}
       </label>
       <select
         name="collection"
-        id="venta-select-{{ section.id }}"
+        id="venta"
         aria-label="{{ section.settings.label_venta_default | escape }}"
       >
         <option value="" disabled selected>{{ section.settings.label_venta_default }}</option>
@@ -56,7 +58,7 @@
       </label>
       <select
         name="type"
-        id="tipo-select-{{ section.id }}"
+        id="tipo"
         aria-label="{{ section.settings.label_tipo_default | escape }}"
       >
         <option value="" disabled selected>{{ section.settings.label_tipo_default }}</option>
@@ -110,11 +112,15 @@
       const sectionId = form.dataset.sectionId;
       if (!sectionId) return true;
 
-      const ventaEl = document.getElementById(`venta-select-${sectionId}`);
+      {% comment %} const ventaEl = document.getElementById(`venta-select-${sectionId}`);
       const tipoEl  = document.getElementById(`tipo-select-${sectionId}`);
 
       const venta = (ventaEl?.value || '').trim();
-      const tipo  = (tipoEl?.value  || '').trim();
+      const tipo  = (tipoEl?.value  || '').trim(); {% endcomment %}
+
+     
+      const venta = document.getElementById("venta").value;
+      const tipo = document.getElementById("tipo").value;
 
       // Puedes descomentar si quieres hacer tracking sin otorgar botón
       /*
