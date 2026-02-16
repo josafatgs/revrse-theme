@@ -43,7 +43,7 @@
         {{ section.settings.label_venta_default }}
       </label>
       <select
-        name="collection"
+        {% comment %} name="collection" {% endcomment %}
         id="venta"
         aria-label="{{ section.settings.label_venta_default | escape }}"
       >
@@ -57,7 +57,7 @@
         {{ section.settings.label_tipo_default }}
       </label>
       <select
-        name="type"
+        {% comment %} name="type" {% endcomment %}
         id="tipo"
         aria-label="{{ section.settings.label_tipo_default | escape }}"
       >
