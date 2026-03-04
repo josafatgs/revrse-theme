@@ -13,8 +13,8 @@
       "type": "banner-propiedades",
       "name": "Hero propiedades",
       "settings": {
-        "background_image": "shopify://shop_images/WhatsApp_Image_2026-02-04_at_1.40.00_PM_1.jpg",
-        "overlay_intensity": 0.7,
+        "background_image": "shopify://shop_images/xochimilco_cuarto_3.jpg",
+        "overlay_intensity": 0.3,
         "heading": "Busca tu propiedad ideal",
         "subheading": "Encuentra casas, departamentos, terrenos y bodegas en las mejores ubicaciones.",
         "heading_size": 32,
