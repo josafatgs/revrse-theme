@@ -22,34 +22,18 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
-    const whatsappLink = document.getElementById("whatsapp-link");
+    const link = document.getElementById("whatsapp-link");
     const phone = "2225138870";
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+    const pageURL = window.location.href;
 
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
+    const message = encodeURIComponent(
+        "Hola, me interesa obtener más información.\n\nPágina: " + pageURL
+    );
 
-            const locationURL = `https://maps.google.com/?q=${lat},${lon}`;
+    link.href = `https://wa.me/${phone}?text=${message}`;
 
-            const message = encodeURIComponent(
-                `Hola, me interesa obtener más información. 
-Mi ubicación aproximada es: ${locationURL}`
-            );
-
-            whatsappLink.href = `https://wa.me/${phone}?text=${message}`;
-
-        }, function() {
-
-            const message = encodeURIComponent(
-                "Hola, me interesa obtener más información."
-            );
-
-            whatsappLink.href = `https://wa.me/${phone}?text=${message}`;
-        });
-    }
 });
 </script>
