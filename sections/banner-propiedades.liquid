@@ -7,6 +7,7 @@
   <div class="hero-search-bg">
     {% if section.settings.background_image != blank %}
       <img
+        class="hero-search-bg-static"
         src="{{ section.settings.background_image | img_url: '2048x' }}"
         srcset="{
           { section.settings.background_image | img_url: '600x' } 600w,
@@ -19,14 +20,46 @@
       >
     {% endif %}
 
-    {% if section.settings.background_image_2 != blank %}
+    {% assign c1 = section.settings.background_image_2 %}
+    {% assign c2 = section.settings.background_image_3 %}
+    {% assign c3 = section.settings.background_image_4 %}
+
+    {% if c1 != blank or c2 != blank or c3 != blank %}
       <img
-        src="{{ section.settings.background_image_2 | img_url: '2048x' }}"
-        srcset="{
-          { section.settings.background_image_2 | img_url: '600x' } 600w,
-          { section.settings.background_image_2 | img_url: '1000x' } 1000w,
-          { section.settings.background_image_2 | img_url: '2048x' } 2048w
-        }"
+        class="hero-search-bg-carousel"
+        data-carousel
+        data-interval="{{ section.settings.carousel_interval | default: 3500 }}"
+        {% if c1 != blank %}
+          data-img-1-2048="{{ c1 | img_url: '2048x' }}"
+          data-img-1-1000="{{ c1 | img_url: '1000x' }}"
+          data-img-1-600="{{ c1 | img_url: '600x' }}"
+        {% endif %}
+        {% if c2 != blank %}
+          data-img-2-2048="{{ c2 | img_url: '2048x' }}"
+          data-img-2-1000="{{ c2 | img_url: '1000x' }}"
+          data-img-2-600="{{ c2 | img_url: '600x' }}"
+        {% endif %}
+        {% if c3 != blank %}
+          data-img-3-2048="{{ c3 | img_url: '2048x' }}"
+          data-img-3-1000="{{ c3 | img_url: '1000x' }}"
+          data-img-3-600="{{ c3 | img_url: '600x' }}"
+        {% endif %}
+        src="{% if c1 != blank %}{{ c1 | img_url: '2048x' }}{% elsif c2 != blank %}{{ c2 | img_url: '2048x' }}{% else %}{{ c3 | img_url: '2048x' }}{% endif %}"
+        srcset="
+          {% if c1 != blank %}
+            {{ c1 | img_url: '600x' }} 600w,
+            {{ c1 | img_url: '1000x' }} 1000w,
+            {{ c1 | img_url: '2048x' }} 2048w
+          {% elsif c2 != blank %}
+            {{ c2 | img_url: '600x' }} 600w,
+            {{ c2 | img_url: '1000x' }} 1000w,
+            {{ c2 | img_url: '2048x' }} 2048w
+          {% else %}
+            {{ c3 | img_url: '600x' }} 600w,
+            {{ c3 | img_url: '1000x' }} 1000w,
+            {{ c3 | img_url: '2048x' }} 2048w
+          {% endif %}
+        "
         sizes="(max-width: 600px) 100vw, 50vw"
         alt="{{ section.settings.heading | escape }}"
         loading="lazy"
@@ -113,18 +146,47 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".hero-search-form");
-    if (!form) return;
+    if (form) {
+      form.addEventListener("submit", function () {
+        const venta = document.getElementById("venta")?.value || "";
+        const tipo  = document.getElementById("tipo")?.value || "";
 
-    form.addEventListener("submit", function () {
-      const venta = document.getElementById("venta")?.value || "";
-      const tipo  = document.getElementById("tipo")?.value || "";
+        const query = [venta, tipo].filter(Boolean).join(" ");
+        document.getElementById("search-query").value = query;
+      });
+    }
 
-      const query = [venta, tipo].filter(Boolean).join(" ");
-      document.getElementById("search-query").value = query;
-    });
+    const img = document.querySelector('[data-carousel]');
+    if (!img) return;
+
+    const interval = parseInt(img.getAttribute('data-interval') || '3500', 10);
+
+    const slides = [];
+    for (let i = 1; i <= 3; i++) {
+      const s2048 = img.getAttribute(`data-img-${i}-2048`);
+      const s1000 = img.getAttribute(`data-img-${i}-1000`);
+      const s600  = img.getAttribute(`data-img-${i}-600`);
+      if (s2048 && s1000 && s600) {
+        slides.push({
+          src: s2048,
+          srcset: `${s600} 600w, ${s1000} 1000w, ${s2048} 2048w`
+        });
+      }
+    }
+    if (slides.length <= 1) return;
+
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % slides.length;
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = slides[idx].src;
+        img.srcset = slides[idx].srcset;
+        img.style.opacity = '1';
+      }, 250);
+    }, Math.max(1200, interval));
   });
 </script>
-
 
 <style>
   .hero-search-wrapper-{{ section.id }} {
@@ -155,6 +217,11 @@
     background-size: cover;
     width: 50%;
     flex: 0 0 50%;
+  }
+
+  .hero-search-bg-carousel {
+    transition: opacity 0.25s ease;
+    opacity: 1;
   }
 
   .hero-search-overlay {
@@ -314,7 +381,26 @@
     {
       "type": "image_picker",
       "id": "background_image_2",
-      "label": "Imagen de fondo 2"
+      "label": "Carrusel imagen 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_3",
+      "label": "Carrusel imagen 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_4",
+      "label": "Carrusel imagen 3"
+    },
+    {
+      "type": "range",
+      "id": "carousel_interval",
+      "label": "Velocidad carrusel (ms)",
+      "min": 1200,
+      "max": 9000,
+      "step": 300,
+      "default": 1500
     },
     {
       "type": "range",
@@ -405,7 +491,6 @@
       "label": "Opción 2 label",
       "default": "Renta"
     },
-
     {
       "type": "header",
       "content": "Select Tipo de inmueble"
@@ -448,7 +533,6 @@
       "id": "option_tipo_4_value",
       "label": "Tipo 4 value"
     },
-
     {
       "type": "header",
       "content": "Botón y colores"
@@ -477,7 +561,6 @@
       "label": "Color texto botón",
       "default": "#ffffff"
     },
-
     {
       "type": "header",
       "content": "Alturas"
