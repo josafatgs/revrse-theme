@@ -35,6 +35,8 @@
         "option_tipo_3_value": "terreno",
         "option_tipo_4_label": "Bodega",
         "option_tipo_4_value": "bodega",
+        "option_tipo_5_label": "Locales",
+        "option_tipo_5_value": "locales",
         "boton_texto": "BUSCAR",
         "search_text_color": "#333333",
         "button_color": "#13cae6",
