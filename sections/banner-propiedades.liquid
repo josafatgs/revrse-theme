@@ -3,7 +3,7 @@
   - Carrusel 3 imágenes (autoplay) en móvil y desktop
   - Fullscreen y respeta header fijo con 100dvh - altura header
   - Widget centrado y más grande en desktop
-  - En móvil centrado pero mismo tamaño (sin escala)
+  - En móvil centrado y mismo tamaño (sin escala) + centrado perfecto
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
@@ -134,7 +134,6 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // 1) Header fijo: medir altura real y guardarla en CSS var
     function setFixedHeaderHeightVar() {
       const header =
         document.querySelector('#shopify-section-header') ||
@@ -149,7 +148,6 @@
     setFixedHeaderHeightVar();
     window.addEventListener('resize', setFixedHeaderHeightVar);
 
-    // 2) Tu búsqueda
     const form = document.querySelector(".hero-search-form");
     if (form) {
       form.addEventListener("submit", function () {
@@ -161,7 +159,6 @@
       });
     }
 
-    // 3) Tu carrusel
     const img = document.querySelector('[data-carousel]');
     if (!img) return;
 
@@ -199,11 +196,9 @@
     position: relative;
     overflow: hidden;
 
-    /* Fullscreen respetando header fijo */
     min-height: calc(100vh - var(--fixed-header-h, 0px));
     min-height: calc(100dvh - var(--fixed-header-h, 0px));
 
-    /* Centrado vertical + horizontal */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -244,7 +239,7 @@
 
     width: min(1100px, calc(100% - 32px));
     margin: 0 auto;
-    padding: 0; /* para que el centrado sea real */
+    padding: 0;
     text-align: center;
   }
 
@@ -269,19 +264,18 @@
     border-radius: 999px;
     overflow: hidden;
 
-    max-width: 880px; /* más grande desktop */
+    max-width: 880px;
     margin: 0 auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
-    /* agrandar SOLO desktop */
     transform: scale(1.15);
     transform-origin: center;
   }
 
   .hero-search-form select {
     border: none;
-    padding: 16px 18px; /* más grande desktop */
-    font-size: 16px;    /* más grande desktop */
+    padding: 16px 18px;
+    font-size: 16px;
     outline: none;
     color: var(--input-color);
     background: #ffffff;
@@ -290,6 +284,7 @@
     appearance: none;
     cursor: pointer;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .hero-search-form select ~ select {
@@ -298,8 +293,8 @@
 
   .hero-search-button {
     border: none;
-    padding: 0 34px;  /* más grande desktop */
-    font-size: 15px;  /* más grande desktop */
+    padding: 0 34px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     background: var(--button-bg);
@@ -328,11 +323,36 @@
     white-space: nowrap;
   }
 
-  /* Mobile: centrado igual, pero SIN agrandar el widget */
+  /* Mobile: centrado PERFECTO */
   @media (max-width: 600px) {
     .hero-search-content {
-      width: calc(100% - 24px);
-      padding: 0;
+      width: 100%;
+      margin: 0;
+      padding: 0 12px;
+
+      /* fuerza centrado del bloque interno */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-search-subheading {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 34ch;
+    }
+
+    .hero-search-form {
+      width: 100%;
+      max-width: 420px; /* para que quede centrado y no se vea “gigante” */
+      margin-left: auto;
+      margin-right: auto;
+
+      grid-template-columns: 1fr;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+      transform: none;
     }
 
     .hero-search-heading {
@@ -343,17 +363,7 @@
       font-size: {{ section.settings.subheading_size_mobile }}px;
     }
 
-    .hero-search-form {
-      grid-template-columns: 1fr;
-      border-radius: 16px;
-      max-width: 100%;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-
-      transform: none; /* mismo tamaño en móvil */
-    }
-
     .hero-search-form select {
-      /* regresa al tamaño que ya tenías en móvil */
       padding: 12px 14px;
       font-size: var(--input-font-size);
 
@@ -401,17 +411,13 @@
 
     { "type": "header", "content": "Select Venta / Renta" },
     { "type": "text", "id": "label_venta_default", "label": "Label default", "default": "Venta / Renta" },
-    { "type": "text", "id": "option_venta_1_label", "label": "Opción 1 label", "default": "Venta" },
-    { "type": "text", "id": "option_venta_2_label", "label": "Opción 2 label", "default": "Renta" },
 
     { "type": "header", "content": "Select Tipo de inmueble" },
     { "type": "text", "id": "label_tipo_default", "label": "Label default", "default": "Tipo de inmueble" },
     { "type": "text", "id": "option_tipo_1_label", "label": "Tipo 1 label", "default": "Casa" },
     { "type": "text", "id": "option_tipo_2_label", "label": "Tipo 2 label", "default": "Departamento" },
     { "type": "text", "id": "option_tipo_3_label", "label": "Tipo 3 label" },
-    { "type": "text", "id": "option_tipo_3_value", "label": "Tipo 3 value" },
     { "type": "text", "id": "option_tipo_4_label", "label": "Tipo 4 label" },
-    { "type": "text", "id": "option_tipo_4_value", "label": "Tipo 4 value" },
 
     { "type": "header", "content": "Botón y colores" },
     { "type": "text", "id": "boton_texto", "label": "Texto botón", "default": "Buscar" },
@@ -428,3 +434,4 @@
   ]
 }
 {% endschema %}
+
