@@ -51,7 +51,7 @@
   {% endif %}
 {% endif %}
 
-{% stylesheet %}
+<style>
   .search-results {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -62,7 +62,7 @@
     grid-column: 1 / -1;
   }
 
-  {% comment %} Inyectar el CSS de la grilla directamente para un mejor rendimiento {% endcomment %}
+  
     .collection-products {
         display: grid;
         gap: 20px;
@@ -75,7 +75,7 @@
             grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
         }
     }
-{% endstylesheet %}
+  </style>
 
 {% schema %}
 {
