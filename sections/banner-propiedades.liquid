@@ -1,25 +1,10 @@
 {% comment %}
   Sección: Hero búsqueda propiedades (sin campo de ubicación)
-  Redirige a: /collections/todos-los-inmuebles usando filtros 'collection' y 'type'
+  Ahora: Sin banner principal, solo 3 imágenes en carrusel (autoplay) en móvil y web
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
   <div class="hero-search-bg">
-    {% if section.settings.background_image != blank %}
-      <img
-        class="hero-search-bg-static"
-        src="{{ section.settings.background_image | img_url: '2048x' }}"
-        srcset="{
-          { section.settings.background_image | img_url: '600x' } 600w,
-          { section.settings.background_image | img_url: '1000x' } 1000w,
-          { section.settings.background_image | img_url: '2048x' } 2048w
-        }"
-        sizes="(max-width: 600px) 100vw, 50vw"
-        alt="{{ section.settings.heading | escape }}"
-        loading="lazy"
-      >
-    {% endif %}
-
     {% assign c1 = section.settings.background_image_2 %}
     {% assign c2 = section.settings.background_image_3 %}
     {% assign c3 = section.settings.background_image_4 %}
@@ -60,7 +45,7 @@
             {{ c3 | img_url: '2048x' }} 2048w
           {% endif %}
         "
-        sizes="(max-width: 600px) 100vw, 50vw"
+        sizes="100vw"
         alt="{{ section.settings.heading | escape }}"
         loading="lazy"
       >
@@ -206,20 +191,14 @@
     inset: 0;
     overflow: hidden;
     background-color: #111;
-    display: flex;
   }
 
-  .hero-search-bg img {
+  .hero-search-bg-carousel {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     background-size: cover;
-    width: 50%;
-    flex: 0 0 50%;
-  }
-
-  .hero-search-bg-carousel {
     transition: opacity 0.25s ease;
     opacity: 1;
   }
@@ -357,15 +336,6 @@
       width: 100%;
       box-shadow: none;
     }
-
-    .hero-search-bg {
-      flex-direction: column;
-    }
-
-    .hero-search-bg img {
-      width: 100%;
-      flex-basis: auto;
-    }
   }
 </style>
 
@@ -373,11 +343,6 @@
 {
   "name": "Hero búsqueda propiedades",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Imagen de fondo"
-    },
     {
       "type": "image_picker",
       "id": "background_image_2",
