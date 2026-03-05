@@ -286,10 +286,9 @@ function updateURL(variantId) {
 </script>
 
 <style>
-  /* ===== Ajustes de UI compacta + colores specs + fix WhatsApp ===== */
-
+  /* ===== UI compacta + specs color + WhatsApp “bien colocado” ===== */
   .product-template{
-    /* Colores specs (los que ya traes) */
+    /* Colores specs */
     --spec-card-bg: #13CAE6;
     --spec-card-border: #34495E;
     --spec-icon-color: #111111;
@@ -304,14 +303,13 @@ function updateURL(variantId) {
     --ui-block-bg: #ffffff;
   }
 
-  /* Reducir márgenes de headings para que no “empujen” */
   .product-template h1,
   .product-template h2,
   .product-template h3{
     margin: 0;
   }
 
-  /* Distribución más ordenada de la información */
+  /* Grid de info */
   .product-template .product-info{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -319,9 +317,10 @@ function updateURL(variantId) {
   }
 
   .product-template .product-title{
-    grid-column: 1 / -1;
+    grid-column: 1 / -1; /* ocupar todo el ancho del grid [web:124] */
   }
 
+  /* Bloques */
   .product-template .product-location,
   .product-template .product-price,
   .product-template .footer__whatsapp-btn,
@@ -333,36 +332,49 @@ function updateURL(variantId) {
     background: var(--ui-block-bg);
   }
 
-  /* Botón WhatsApp siempre visible (no solo al hover) */
+  /* ===== WhatsApp como bloque del grid, con pill verde centrada ===== */
   .product-template .footer__whatsapp-btn,
   .product-template .footer__whatsapp-btn:link,
   .product-template .footer__whatsapp-btn:visited{
-    grid-column: 1 / -1; /* CTA a lo ancho completo; usa 1/-1 para abarcar todo el grid [web:124] */
+    grid-column: 1 / -1; /* bloque a lo ancho del grid [web:124] */
+    justify-self: stretch;
+
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 
-    background: #25D366 !important;
-    color: #07120a !important;
-    border: 1px solid rgba(0,0,0,.12) !important;
-
-    opacity: 1 !important;
-    visibility: visible !important;
-
-    min-height: 44px;
-    padding: 12px 14px;
-    border-radius: 12px;
     text-decoration: none;
+
+    opacity: 1;
+    visibility: visible;
   }
 
-  .product-template .footer__whatsapp-btn:hover,
-  .product-template .footer__whatsapp-btn:focus,
-  .product-template .footer__whatsapp-btn:active{
-    background: #1fb85a !important;
-    color: #07120a !important;
-    filter: none !important;
-    transform: none !important;
+  .product-template .footer__whatsapp-btn::before{
+    content: "";
+    position: absolute;
+    left: var(--ui-pad);
+    right: var(--ui-pad);
+    top: 50%;
+    transform: translateY(-50%);
+
+    height: 48px;
+    border-radius: 999px;
+    background: #25D366;
+    border: 1px solid rgba(0,0,0,.12);
+  }
+
+  .product-template .footer__whatsapp-btn > *{
+    position: relative;
+    z-index: 1;
+    color: #07120a;
+  }
+
+  .product-template .footer__whatsapp-btn:hover::before,
+  .product-template .footer__whatsapp-btn:focus::before,
+  .product-template .footer__whatsapp-btn:active::before{
+    background: #1fb85a;
   }
 
   .product-template .footer__whatsapp-btn svg{
@@ -384,7 +396,7 @@ function updateURL(variantId) {
     border-radius: 999px;
   }
 
-  /* Specs compactas */
+  /* Specs */
   .product-template .product-specs h3{
     margin: 0 0 6px 0;
   }
