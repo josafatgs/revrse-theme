@@ -285,6 +285,133 @@ function updateURL(variantId) {
 }
 </script>
 
+<style>
+/* ===== Bloques individuales ===== */
+.product-template{
+  --page-bg: #0f1115;
+  --block-bg: #151924;
+  --text: #f5f7ff;
+  --muted: rgba(245,247,255,.75);
+  --border: rgba(255,255,255,.12);
+  --shadow: 0 10px 30px rgba(0,0,0,.25);
+  --radius: 16px;
+  --pad: 14px;
+  --gap: 12px;
+
+  background: var(--page-bg);
+}
+
+/* Layout general */
+.product-container{ color: var(--text); }
+
+/* INFO: ahora cada “pieza” será un bloque */
+.product-info{
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* Selector de “qué elementos se vuelven bloque” */
+.product-info > .product-title,
+.product-info > .product-location,
+.product-info > .product-price,
+.product-info > .footer__whatsapp-btn,
+.product-info > .variant-selector,
+.product-info > .product-specs{
+  background: var(--block-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: var(--shadow);
+}
+
+/* El título (h1) por default no es contenedor; lo forzamos a “card” */
+.product-info > .product-title{
+  display: block;
+  margin: 0;
+}
+
+/* Ubicación */
+.product-location{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.product-location .location-icon{ flex: 0 0 auto; }
+
+/* Precio */
+.product-price{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.price-label{ color: var(--muted); }
+
+/* WhatsApp como bloque/botón */
+.footer__whatsapp-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  background: #25D366;
+  color: #07120a;
+  border-color: rgba(0,0,0,.08);
+}
+
+/* Variantes: que los botones vivan dentro de su bloque */
+.variant-selector h3{
+  margin: 0 0 10px 0;
+}
+.variant-options{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* separación entre botones; gap en flex es estándar [web:95] */
+}
+.variant-option{
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 12px;
+}
+.variant-option.active{
+  border-color: #ffd166;
+}
+
+/* Specs: cada spec-item como mini-bloque */
+.specs-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.spec-item{
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.spec-label{ color: var(--muted); }
+
+/* Descripción y form también como bloques individuales */
+.product-description,
+.product-form,
+.product-gallery{
+  background: var(--block-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: var(--shadow);
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .specs-grid{ grid-template-columns: 1fr; }
+}
+</style>
+
 {% schema %}
 {
   "name": "Product Template",
