@@ -285,6 +285,63 @@ function updateURL(variantId) {
 }
 </script>
 
+<style>
+  /* === SOLO COLORES (tomados del primer código) === */
+  .product-template{
+    /* Specs */
+    --spec-card-bg: #13CAE6;
+    --spec-card-border: #34495E;
+    --spec-icon-color: #111111;
+    --spec-label-color: #111111;
+    --spec-value-color: #111111;
+
+    /* Bloques/UI */
+    --ui-border: rgba(0,0,0,.10);
+    --ui-block-bg: #ffffff;
+
+    /* WhatsApp pill */
+    --wa-pill-bg: #25D366;
+    --wa-pill-bg-hover: #1fb85a;
+    --wa-pill-text: #07120a;
+    --wa-pill-border: rgba(0,0,0,.12);
+  }
+
+  /* Aplica colores a specs (si existen esos selectores en tu product.css) */
+  .product-template .spec-item{
+    background: var(--spec-card-bg);
+    border-color: var(--spec-card-border);
+  }
+  .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
+  .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
+  .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
+
+  /* Aplica colores a “bloques” (location/price/specs/variants/whatsapp si tu CSS los usa como cards) */
+  .product-template .product-location,
+  .product-template .product-price,
+  .product-template .variant-selector,
+  .product-template .product-specs,
+  .product-template .footer__whatsapp-btn{
+    background: var(--ui-block-bg);
+    border-color: var(--ui-border);
+  }
+
+  /* WhatsApp: si tu CSS anterior usa ::before para la pill, aquí solo pintamos colores */
+  .product-template .footer__whatsapp-btn::before{
+    background: var(--wa-pill-bg);
+    border-color: var(--wa-pill-border);
+  }
+  .product-template .footer__whatsapp-btn:hover::before,
+  .product-template .footer__whatsapp-btn:focus::before{
+    background: var(--wa-pill-bg-hover);
+  }
+  .product-template .footer__whatsapp-btn > *{
+    color: var(--wa-pill-text);
+  }
+  .product-template .footer__whatsapp-btn svg{
+    fill: currentColor;
+  }
+</style>
+
 {% schema %}
 {
   "name": "Product Template",
