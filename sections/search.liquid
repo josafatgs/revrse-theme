@@ -28,11 +28,16 @@
       {% paginate search.results by 20 %}
        {% if search.results_count > 0 %}
             <div class="collection-products">
-                {% for item in search.results %}
-                  {% if item.product == 'product' %}
-                    {% render 'product-card', product: item %}
-                  {% endif %}
-                {% endfor %}
+              {% for item in search.results %}
+                {% if item.object_type == 'product' %}
+                  
+                  <script>
+                    console.log("Entró al if: producto encontrado -> {{ item.title | escape }}");
+                  </script>
+
+                  {% render 'product-card', product: item %}
+                {% endif %}
+              {% endfor %}
             </div>
 
             {% comment %} Paginación {% endcomment %}
