@@ -1,7 +1,9 @@
 {% comment %}
   Sección: Hero búsqueda propiedades (sin campo de ubicación)
-  Ahora: Sin banner principal, solo 3 imágenes en carrusel (autoplay) en móvil y web
-  Ajuste: Fullscreen y respeta header fijo (mobile + desktop) con 100dvh - altura header
+  - Carrusel 3 imágenes (autoplay) en móvil y desktop
+  - Fullscreen y respeta header fijo con 100dvh - altura header
+  - Widget centrado y más grande en desktop
+  - En móvil centrado pero mismo tamaño (sin escala)
 {% endcomment %}
 
 <section class="hero-search-wrapper-{{ section.id }}" data-section-id="{{ section.id }}">
@@ -85,6 +87,7 @@
         <option value="todos-los-inmuebles">Todos los inmuebles</option>
         <option value="venta">Venta</option>
         <option value="renta">Renta</option>
+        <option value="renta">Locales</option>
       </select>
 
       <label class="hero-search-label visually-hidden" for="tipo-select-{{ section.id }}">
@@ -118,12 +121,6 @@
         {% if section.settings.option_tipo_4_label != blank %}
           <option value="{{ section.settings.option_tipo_4_label }}">
             {{ section.settings.option_tipo_4_label }}
-          </option>
-        {% endif %}
-
-        {% if section.settings.option_tipo_5_label != blank %}
-          <option value="{{ section.settings.option_tipo_5_label }}">
-            {{ section.settings.option_tipo_5_label }}
           </option>
         {% endif %}
       </select>
@@ -206,6 +203,11 @@
     min-height: calc(100vh - var(--fixed-header-h, 0px));
     min-height: calc(100dvh - var(--fixed-header-h, 0px));
 
+    /* Centrado vertical + horizontal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     color: #ffffff;
     --search-bg: rgba(255, 255, 255, 0.95);
     --input-font-size: 14px;
@@ -239,23 +241,22 @@
   .hero-search-content {
     position: relative;
     z-index: 2;
-    max-width: 1000px;
-    margin: 0 auto;
 
-    /* padding normal; el alto total ya descuenta el header */
-    padding: 80px 16px;
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 0; /* para que el centrado sea real */
     text-align: center;
   }
 
   .hero-search-heading {
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
     font-size: {{ section.settings.heading_size }}px;
     font-weight: 700;
     color: {{ section.settings.heading_color }};
   }
 
   .hero-search-subheading {
-    margin: 0 0 20px 0;
+    margin: 0 0 22px 0;
     font-size: {{ section.settings.subheading_size }}px;
     opacity: 0.9;
   }
@@ -267,15 +268,20 @@
     background: var(--search-bg);
     border-radius: 999px;
     overflow: hidden;
-    max-width: 650px;
+
+    max-width: 880px; /* más grande desktop */
     margin: 0 auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    /* agrandar SOLO desktop */
+    transform: scale(1.15);
+    transform-origin: center;
   }
 
   .hero-search-form select {
     border: none;
-    padding: 12px 14px;
-    font-size: var(--input-font-size);
+    padding: 16px 18px; /* más grande desktop */
+    font-size: 16px;    /* más grande desktop */
     outline: none;
     color: var(--input-color);
     background: #ffffff;
@@ -292,8 +298,8 @@
 
   .hero-search-button {
     border: none;
-    padding: 0 24px;
-    font-size: var(--input-font-size);
+    padding: 0 34px;  /* más grande desktop */
+    font-size: 15px;  /* más grande desktop */
     font-weight: 600;
     cursor: pointer;
     background: var(--button-bg);
@@ -322,10 +328,11 @@
     white-space: nowrap;
   }
 
-  /* Mobile */
+  /* Mobile: centrado igual, pero SIN agrandar el widget */
   @media (max-width: 600px) {
     .hero-search-content {
-      padding: 32px 12px 22px;
+      width: calc(100% - 24px);
+      padding: 0;
     }
 
     .hero-search-heading {
@@ -341,9 +348,15 @@
       border-radius: 16px;
       max-width: 100%;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+      transform: none; /* mismo tamaño en móvil */
     }
 
     .hero-search-form select {
+      /* regresa al tamaño que ya tenías en móvil */
+      padding: 12px 14px;
+      font-size: var(--input-font-size);
+
       border-top: none;
       border-left: none;
       border-right: none;
@@ -360,6 +373,7 @@
       padding: 12px 14px;
       width: 100%;
       box-shadow: none;
+      font-size: var(--input-font-size);
     }
   }
 </style>
@@ -398,8 +412,6 @@
     { "type": "text", "id": "option_tipo_3_value", "label": "Tipo 3 value" },
     { "type": "text", "id": "option_tipo_4_label", "label": "Tipo 4 label" },
     { "type": "text", "id": "option_tipo_4_value", "label": "Tipo 4 value" },
-    { "type": "text", "id": "option_tipo_5_label", "label": "Tipo 5 label" },
-    { "type": "text", "id": "option_tipo_5_value", "label": "Tipo 5 value" },
 
     { "type": "header", "content": "Botón y colores" },
     { "type": "text", "id": "boton_texto", "label": "Texto botón", "default": "Buscar" },
