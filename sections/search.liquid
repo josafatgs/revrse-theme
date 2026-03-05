@@ -28,9 +28,10 @@
       {% paginate search.results by 20 %}
        {% if search.results_count > 0 %}
             <div class="collection-products">
-                {% for product in search.results %}
-                    {% render 'product-card', product: product %}
-                    
+                {% for item in search.results %}
+                  {% if item.object_type == 'product' %}
+                    {% render 'product-card', product: item %}
+                  {% endif %}
                 {% endfor %}
             </div>
 
@@ -60,6 +61,20 @@
   .search-results .next {
     grid-column: 1 / -1;
   }
+
+  {% comment %} Inyectar el CSS de la grilla directamente para un mejor rendimiento {% endcomment %}
+    .collection-products {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat({{ section.settings.mobile_columns }}, 1fr); /* Mobile First */
+    }
+
+    /* Desktop View */
+    @media screen and (min-width: 750px) {
+        .collection-products {
+            grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
+        }
+    }
 {% endstylesheet %}
 
 {% schema %}
