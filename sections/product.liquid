@@ -285,6 +285,34 @@ function updateURL(variantId) {
 }
 </script>
 
+<style>
+  /* SOLO COLORES de las tarjetas de especificaciones */
+  .product-template{
+    --spec-card-bg: #c8b26a;       /* fondo tarjeta */
+    --spec-card-border: #b59f55;   /* borde tarjeta */
+    --spec-icon-color: #111111;    /* icono */
+    --spec-label-color: #111111;   /* título (Recámaras, etc.) */
+    --spec-value-color: #111111;   /* valor (3, 4, etc.) */
+  }
+
+  .product-template .spec-item{
+    background: var(--spec-card-bg);
+    border: 1px solid var(--spec-card-border);
+  }
+
+  .product-template .spec-item .spec-icon{
+    color: var(--spec-icon-color);
+  }
+
+  .product-template .spec-item .spec-label{
+    color: var(--spec-label-color);
+  }
+
+  .product-template .spec-item .spec-value{
+    color: var(--spec-value-color);
+  }
+</style>
+
 {% schema %}
 {
   "name": "Product Template",
