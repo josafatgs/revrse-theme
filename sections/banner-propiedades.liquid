@@ -120,6 +120,12 @@
             {{ section.settings.option_tipo_4_label }}
           </option>
         {% endif %}
+
+        {% if section.settings.option_tipo_5_label != blank %}
+          <option value="{{ section.settings.option_tipo_5_label }}">
+            {{ section.settings.option_tipo_5_label }}
+          </option>
+        {% endif %}
       </select>
 
       <button type="submit" class="hero-search-button">
