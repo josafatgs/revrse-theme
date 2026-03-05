@@ -1,6 +1,7 @@
 {% comment %}
   Barra lateral de redes sociales editable desde el editor de temas
-  Ajuste: fijarla abajo (bottom) en vez de centrada o arriba
+  Ajuste: fijarla abajo (bottom)
+  Extra: Facebook con fallback a URL fija si el setting está vacío
 {% endcomment %}
 
 <link rel="stylesheet"
@@ -9,14 +10,9 @@
 <style>
   .social-icon-bar-{{ section.id }} {
     position: fixed;
-
-    /* Abajo */
     bottom: max(12px, env(safe-area-inset-bottom));
     left: {{ section.settings.left_offset }}px;
-
-    /* Quitamos centrado vertical */
     transform: none;
-
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -42,16 +38,21 @@
   }
 </style>
 
+{% assign facebook_fallback = "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria/61581006441550/" %}
+
 <div class="social-icon-bar-{{ section.id }}">
-  {% if section.settings.facebook_url != blank %}
-    <a href="{{ section.settings.facebook_url }}"
-       class="social-facebook"
-       aria-label="Facebook"
-       target="_blank"
-       rel="noopener noreferrer">
-      <i class="fa fa-facebook"></i>
-    </a>
-  {% endif %}
+  {%- assign facebook_link = section.settings.facebook_url -%}
+  {%- if facebook_link == blank -%}
+    {%- assign facebook_link = facebook_fallback -%}
+  {%- endif -%}
+
+  <a href="{{ facebook_link }}"
+     class="social-facebook"
+     aria-label="Facebook"
+     target="_blank"
+     rel="noopener noreferrer">
+    <i class="fa fa-facebook"></i>
+  </a>
 
   {% if section.settings.instagram_url != blank %}
     <a href="{{ section.settings.instagram_url }}"
