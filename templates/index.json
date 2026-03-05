@@ -14,6 +14,7 @@
       "name": "Hero propiedades",
       "settings": {
         "background_image": "shopify://shop_images/xochimilco_cuarto_3.jpg",
+        "background_image_2": "shopify://shop_images/a4b01f07-ae9d-48e9-a946-d062c8b1e0ab.jpg",
         "overlay_intensity": 0.3,
         "heading": "Busca tu propiedad ideal",
         "subheading": "Encuentra casas, departamentos, terrenos y bodegas en las mejores ubicaciones.",
