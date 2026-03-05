@@ -286,30 +286,100 @@ function updateURL(variantId) {
 </script>
 
 <style>
-  /* SOLO COLORES de las tarjetas de especificaciones */
+  /* Compactar espacios y distribuir mejor la info (solo CSS) */
   .product-template{
-    --spec-card-bg: #13CAE6;       /* fondo tarjeta */
-    --spec-card-border: #34495E;   /* borde tarjeta */
-    --spec-icon-color: #111111;    /* icono */
-    --spec-label-color: #111111;   /* título (Recámaras, etc.) */
-    --spec-value-color: #111111;   /* valor (3, 4, etc.) */
+    --spec-card-bg: #13CAE6;
+    --spec-card-border: #34495E;
+    --spec-icon-color: #111111;
+    --spec-label-color: #111111;
+    --spec-value-color: #111111;
+
+    --ui-gap: 8px;       /* antes se veía muy separado */
+    --ui-pad: 10px;      /* padding compacto */
+    --ui-radius: 12px;
+    --ui-border: rgba(0,0,0,.10);
+  }
+
+  /* Quita márgenes grandes de títulos (normalmente vienen del theme) */
+  .product-template h1,
+  .product-template h2,
+  .product-template h3{
+    margin: 0;
+  }
+
+  .product-template .product-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--ui-gap);
+  }
+
+  /* Cada bloque ocupa bien el grid */
+  .product-template .product-title{
+    grid-column: 1 / -1;
+    padding: 0; /* el h1 no necesita caja grande */
+  }
+
+  .product-template .product-location,
+  .product-template .product-price,
+  .product-template .footer__whatsapp-btn,
+  .product-template .variant-selector,
+  .product-template .product-specs{
+    padding: var(--ui-pad);
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+    background: #ffffff; /* si tu tema es claro; cámbialo si es oscuro */
+  }
+
+  /* Botón WhatsApp en una sola fila */
+  .product-template .footer__whatsapp-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  /* Specs: grid compacto y uniforme */
+  .product-template .specs-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
   }
 
   .product-template .spec-item{
     background: var(--spec-card-bg);
     border: 1px solid var(--spec-card-border);
+    border-radius: 12px;
+    padding: 10px;
   }
 
-  .product-template .spec-item .spec-icon{
-    color: var(--spec-icon-color);
+  .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
+  .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
+  .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
+
+  /* Variant buttons más compactos */
+  .product-template .variant-options{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  .product-template .spec-item .spec-label{
-    color: var(--spec-label-color);
+  .product-template .variant-option{
+    padding: 8px 10px;
+    border-radius: 999px;
   }
 
-  .product-template .spec-item .spec-value{
-    color: var(--spec-value-color);
+  /* Mobile: una columna */
+  @media (max-width: 768px){
+    .product-template .product-info{
+      grid-template-columns: 1fr;
+    }
+
+    .product-template .specs-grid{
+      grid-template-columns: 1fr 1fr;
+    }
   }
 </style>
 
