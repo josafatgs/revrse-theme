@@ -57,30 +57,70 @@
 {% endif %}
 
 <style>
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
-  }
-
+/* Grid container principal */
+.collection-products {
+  display: grid;
+  gap: 16px; /* separación entre cards */
   
-    .collection-products {
-        display: grid;
-        gap: 20px;
-        grid-template-columns: repeat({{ section.settings.mobile_columns }}, 1fr); /* Mobile First */
-    }
+  /* Mobile First */
+  grid-template-columns: repeat(1, 1fr); /* por defecto 1 columna en móvil */
+}
 
-    /* Desktop View */
-    @media screen and (min-width: 750px) {
-        .collection-products {
-            grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
-        }
-    }
-  </style>
+/* Tablets */
+@media screen and (min-width: 600px) {
+  .collection-products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 1024px) {
+  .collection-products {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Opcional: ajustar la altura de los cards para que sea uniforme */
+.collection-products .pc-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Paginación ocupa todo el ancho */
+.collection-pagination {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+}
+
+/* Ajustes generales de mobile inputs */
+form[role="search"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+form[role="search"] input[type="search"] {
+  flex: 1 1 auto;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+form[role="search"] button {
+  padding: 8px 16px;
+  border: none;
+  background: #111;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+form[role="search"] button:hover {
+  background: #000;
+}
+</style>
 
 {% schema %}
 {
