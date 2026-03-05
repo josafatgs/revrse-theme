@@ -18,6 +18,21 @@
         loading="lazy"
       >
     {% endif %}
+
+    {% if section.settings.background_image_2 != blank %}
+      <img
+        src="{{ section.settings.background_image_2 | img_url: '2048x' }}"
+        srcset="{
+          { section.settings.background_image_2 | img_url: '600x' } 600w,
+          { section.settings.background_image_2 | img_url: '1000x' } 1000w,
+          { section.settings.background_image_2 | img_url: '2048x' } 2048w
+        }"
+        sizes="(max-width: 600px) 100vw, 50vw"
+        alt="{{ section.settings.heading | escape }}"
+        loading="lazy"
+      >
+    {% endif %}
+
     <div class="hero-search-overlay"></div>
   </div>
 
@@ -129,6 +144,7 @@
     inset: 0;
     overflow: hidden;
     background-color: #111;
+    display: flex;
   }
 
   .hero-search-bg img {
@@ -137,6 +153,8 @@
     object-fit: cover;
     display: block;
     background-size: cover;
+    width: 50%;
+    flex: 0 0 50%;
   }
 
   .hero-search-overlay {
@@ -272,6 +290,15 @@
       width: 100%;
       box-shadow: none;
     }
+
+    .hero-search-bg {
+      flex-direction: column;
+    }
+
+    .hero-search-bg img {
+      width: 100%;
+      flex-basis: auto;
+    }
   }
 </style>
 
@@ -283,6 +310,11 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Imagen de fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_2",
+      "label": "Imagen de fondo 2"
     },
     {
       "type": "range",
