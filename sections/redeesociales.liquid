@@ -1,6 +1,6 @@
 {% comment %}
   Barra lateral de redes sociales editable desde el editor de temas
-  Ajuste: fijarla arriba (top) en vez de centrada
+  Ajuste: fijarla abajo (bottom) en vez de centrada o arriba
 {% endcomment %}
 
 <link rel="stylesheet"
@@ -10,8 +10,8 @@
   .social-icon-bar-{{ section.id }} {
     position: fixed;
 
-    /* Arriba */
-    down: max(12px, env(safe-area-inset-top));
+    /* Abajo */
+    bottom: max(12px, env(safe-area-inset-bottom));
     left: {{ section.settings.left_offset }}px;
 
     /* Quitamos centrado vertical */
@@ -114,7 +114,7 @@
     {
       "type": "range",
       "id": "top_position",
-      "label": "Altura vertical (%) (ya no aplica si está arriba)",
+      "label": "Altura vertical (%) (ya no aplica si está abajo)",
       "min": 10,
       "max": 90,
       "step": 1,
