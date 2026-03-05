@@ -29,7 +29,7 @@
        {% if search.results_count > 0 %}
             <div class="collection-products">
                 {% for item in search.results %}
-                  {% if item.object_type == 'product' %}
+                  {% if item.product == 'product' %}
                     {% render 'product-card', product: item %}
                   {% endif %}
                 {% endfor %}
