@@ -26,25 +26,23 @@
 
     <div class="search-results">
       {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          {% comment %} <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
+       {% if search.results_count > 0 %}
+            <div class="collection-products">
+                {% for product in search.results %}
+                    {% render 'product-card', product: product %}
+                    
+                {% endfor %}
             </div>
-          </div> {% endcomment %}
 
-          {% render 'product-card', product: result %}
-        {% endfor %}
+            {% comment %} Paginación {% endcomment %}
+            <div class="collection-pagination">
+                {{ paginate | default_pagination }}
+            </div>
+
+        {% else %}
+            <p class="no-results-message">No se encontraron productos que coincidan con los filtros aplicados.</p>
+        {% endif %}
+       
 
         {{ paginate | default_pagination }}
       {% endpaginate %}
