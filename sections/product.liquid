@@ -286,37 +286,40 @@ function updateURL(variantId) {
 </script>
 
 <style>
-  /* Compactar espacios y distribuir mejor la info (solo CSS) */
+  /* ===== Ajustes de UI compacta + colores specs + fix WhatsApp ===== */
+
   .product-template{
+    /* Colores specs (los que ya traes) */
     --spec-card-bg: #13CAE6;
     --spec-card-border: #34495E;
     --spec-icon-color: #111111;
     --spec-label-color: #111111;
     --spec-value-color: #111111;
 
-    --ui-gap: 8px;       /* antes se veía muy separado */
-    --ui-pad: 10px;      /* padding compacto */
+    /* Compactación */
+    --ui-gap: 8px;
+    --ui-pad: 10px;
     --ui-radius: 12px;
     --ui-border: rgba(0,0,0,.10);
+    --ui-block-bg: #ffffff;
   }
 
-  /* Quita márgenes grandes de títulos (normalmente vienen del theme) */
+  /* Reducir márgenes de headings para que no “empujen” */
   .product-template h1,
   .product-template h2,
   .product-template h3{
     margin: 0;
   }
 
+  /* Distribución más ordenada de la información */
   .product-template .product-info{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--ui-gap);
   }
 
-  /* Cada bloque ocupa bien el grid */
   .product-template .product-title{
     grid-column: 1 / -1;
-    padding: 0; /* el h1 no necesita caja grande */
   }
 
   .product-template .product-location,
@@ -327,24 +330,69 @@ function updateURL(variantId) {
     padding: var(--ui-pad);
     border: 1px solid var(--ui-border);
     border-radius: var(--ui-radius);
-    background: #ffffff; /* si tu tema es claro; cámbialo si es oscuro */
+    background: var(--ui-block-bg);
   }
 
-  /* Botón WhatsApp en una sola fila */
-  .product-template .footer__whatsapp-btn{
+  /* Botón WhatsApp siempre visible (no solo al hover) */
+  .product-template .footer__whatsapp-btn,
+  .product-template .footer__whatsapp-btn:link,
+  .product-template .footer__whatsapp-btn:visited{
+    grid-column: 1 / -1; /* CTA a lo ancho completo; usa 1/-1 para abarcar todo el grid [web:124] */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+
+    background: #25D366 !important;
+    color: #07120a !important;
+    border: 1px solid rgba(0,0,0,.12) !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    min-height: 44px;
+    padding: 12px 14px;
+    border-radius: 12px;
     text-decoration: none;
   }
 
-  /* Specs: grid compacto y uniforme */
+  .product-template .footer__whatsapp-btn:hover,
+  .product-template .footer__whatsapp-btn:focus,
+  .product-template .footer__whatsapp-btn:active{
+    background: #1fb85a !important;
+    color: #07120a !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .product-template .footer__whatsapp-btn svg{
+    fill: currentColor;
+  }
+
+  /* Variantes compactas */
+  .product-template .variant-selector h3{
+    margin: 0 0 6px 0;
+  }
+  .product-template .variant-options{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .product-template .variant-option{
+    padding: 8px 10px;
+    border-radius: 999px;
+  }
+
+  /* Specs compactas */
+  .product-template .product-specs h3{
+    margin: 0 0 6px 0;
+  }
   .product-template .specs-grid{
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .product-template .spec-item{
@@ -358,25 +406,11 @@ function updateURL(variantId) {
   .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
   .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
 
-  /* Variant buttons más compactos */
-  .product-template .variant-options{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .product-template .variant-option{
-    padding: 8px 10px;
-    border-radius: 999px;
-  }
-
-  /* Mobile: una columna */
+  /* Mobile */
   @media (max-width: 768px){
     .product-template .product-info{
       grid-template-columns: 1fr;
     }
-
     .product-template .specs-grid{
       grid-template-columns: 1fr 1fr;
     }
