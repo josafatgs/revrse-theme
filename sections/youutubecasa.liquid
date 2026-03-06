@@ -1,8 +1,8 @@
 {% comment %}
-  Cuadro: video al centro + info alrededor
-  - YouTube/Vimeo: video_url (Shopify) con autoplay/loop/mute
-  - TikTok: URL -> iframe https://www.tiktok.com/embed/video/ID
-  - Mobile: video siempre dentro del borde (aspect-ratio + width:100%)
+  Section: Cuadro con video al centro y contenido alrededor
+  - YouTube/Vimeo: setting video_url (accept youtube/vimeo)
+  - TikTok: setting tiktok_url (url) -> convertimos /video/ID a iframe embed/video/ID
+  - Responsive: en móvil se apila y el video cabe completo dentro del cuadro
 {% endcomment %}
 
 {% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
@@ -17,6 +17,7 @@
   {%- endif -%}
 {%- endif -%}
 
+{%- comment -%} TikTok URL -> extraer ID después de /video/ {%- endcomment -%}
 {%- assign tt_id = nil -%}
 {%- if section.settings.tiktok_url != blank -%}
   {%- assign parts1 = section.settings.tiktok_url | split: '/video/' -%}
@@ -26,25 +27,10 @@
   {%- endif -%}
 {%- endif -%}
 
-<section
-  class="vbox-{{ section.id }}"
-  style="
-    --vbox-max: {{ section.settings.max_width }}px;
-    --vbox-pt: {{ section.settings.padding_top }}px;
-    --vbox-pb: {{ section.settings.padding_bottom }}px;
-    --vbox-bg: {{ section.settings.section_bg }};
-    --vbox-card-bg: {{ section.settings.card_bg }};
-    --vbox-text: {{ section.settings.text_color }};
-    --vbox-muted: {{ section.settings.muted_text_color }};
-    --vbox-radius: {{ section.settings.radius }}px;
-    --vbox-gap: {{ section.settings.gap }}px;
-    --vbox-pad: {{ section.settings.card_padding }}px;
-    --vbox-btn-bg: {{ section.settings.button_bg }};
-    --vbox-btn-text: {{ section.settings.button_text }};
-  "
->
+<section class="vbox-{{ section.id }}">
   <div class="vbox-container">
     <div class="vbox-card vbox-align-{{ section.settings.vertical_align }}">
+      <!-- TOP -->
       <div class="vbox-top">
         {% if section.settings.top_kicker != blank %}
           <div class="vbox-kicker">{{ section.settings.top_kicker }}</div>
@@ -57,6 +43,7 @@
         {% endif %}
       </div>
 
+      <!-- LEFT -->
       <div class="vbox-left">
         {% if section.settings.left_heading != blank %}
           <h3 class="vbox-subtitle">{{ section.settings.left_heading }}</h3>
@@ -76,6 +63,7 @@
         {% endif %}
       </div>
 
+      <!-- CENTER VIDEO -->
       <div class="vbox-center">
         {% if section.settings.video_source == 'youtube_vimeo' %}
           {% if yt_id or vm_id %}
@@ -114,13 +102,13 @@
             </div>
           {% else %}
             <div class="vbox-placeholder">
-              Pega una URL válida como tu ejemplo:
-              https://www.tiktok.com/@corporativo_alianza/video/7605636915240619285
+              Pega una URL válida de TikTok que incluya “/video/ID”
             </div>
           {% endif %}
         {% endif %}
       </div>
 
+      <!-- RIGHT -->
       <div class="vbox-right">
         {% if section.settings.right_heading != blank %}
           <h3 class="vbox-subtitle">{{ section.settings.right_heading }}</h3>
@@ -136,6 +124,7 @@
         {% endif %}
       </div>
 
+      <!-- BOTTOM -->
       <div class="vbox-bottom">
         {% if section.settings.bottom_text != blank %}
           <div class="vbox-bottom-text">{{ section.settings.bottom_text }}</div>
@@ -147,23 +136,23 @@
 
 <style>
   .vbox-{{ section.id }}{
-    background: var(--vbox-bg);
-    padding: var(--vbox-pt) 0 var(--vbox-pb);
-    color: var(--vbox-text);
+    background: {{ section.settings.section_bg }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    color: {{ section.settings.text_color }};
   }
   .vbox-{{ section.id }} .vbox-container{
-    max-width: var(--vbox-max);
+    max-width: {{ section.settings.max_width }}px;
     margin: 0 auto;
     padding: 0 16px;
   }
 
   .vbox-{{ section.id }} .vbox-card{
-    background: var(--vbox-card-bg);
+    background: {{ section.settings.card_bg }};
     border: 1px solid {{ section.settings.border_color | color_modify: 'alpha', border_alpha }};
-    border-radius: var(--vbox-radius);
-    padding: var(--vbox-pad);
+    border-radius: {{ section.settings.radius }}px;
+    padding: {{ section.settings.card_padding }}px;
     display: grid;
-    gap: var(--vbox-gap);
+    gap: {{ section.settings.gap }}px;
     grid-template-columns: 1fr minmax(320px, 1.2fr) 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
@@ -188,7 +177,7 @@
     font-size: 12px;
     letter-spacing: .08em;
     text-transform: uppercase;
-    color: var(--vbox-muted);
+    color: {{ section.settings.muted_text_color }};
     font-weight: 800;
     margin-bottom: 10px;
   }
@@ -210,14 +199,14 @@
   }
   .vbox-{{ section.id }} .vbox-list li{ margin: 6px 0; }
 
-  /* Embed responsive: SIEMPRE cabe */
+  /* Embed responsive */
   .vbox-{{ section.id }} .vbox-embed{
     width: 100%;
     max-width: 100%;
-    border-radius: calc(var(--vbox-radius) - 2px);
+    border-radius: calc({{ section.settings.radius }}px - 2px);
     overflow: hidden;
     background: #000;
-    aspect-ratio: 9 / 16; /* default vertical (TikTok) */
+    aspect-ratio: 9 / 16;
   }
   .vbox-{{ section.id }} .vbox-embed iframe{
     width: 100%;
@@ -232,10 +221,10 @@
   .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
 
   .vbox-{{ section.id }} .vbox-placeholder{
-    border-radius: calc(var(--vbox-radius) - 2px);
+    border-radius: calc({{ section.settings.radius }}px - 2px);
     border: 1px dashed rgba(0,0,0,.25);
     padding: 14px;
-    color: var(--vbox-muted);
+    color: {{ section.settings.muted_text_color }};
     background: rgba(0,0,0,0.03);
   }
 
@@ -244,8 +233,8 @@
     margin-top: 12px;
     padding: 12px 14px;
     border-radius: 10px;
-    background: var(--vbox-btn-bg);
-    color: var(--vbox-btn-text);
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text }};
     text-decoration: none;
     font-weight: 800;
   }
@@ -253,13 +242,15 @@
 
   .vbox-{{ section.id }} .vbox-bottom-text{
     margin-top: 6px;
-    color: var(--vbox-muted);
+    color: {{ section.settings.muted_text_color }};
     font-size: 13px;
   }
 
+  /* Mobile: apilar y asegurar que el video se vea completo en pantalla */
   @media (max-width: 989px){
     .vbox-{{ section.id }} .vbox-card{
       grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto;
       grid-template-areas:
         "top"
         "center"
@@ -271,15 +262,15 @@
     .vbox-{{ section.id }} .vbox-top{ text-align: left; }
     .vbox-{{ section.id }} .vbox-bottom{ text-align: left; }
 
-    /* En móvil, limita la altura del video para que siempre “quepa completo” en pantalla */
     .vbox-{{ section.id }} .vbox-embed{
       max-height: 70vh;
     }
   }
 </style>
 
+{% schema %}
 {
-  "name": "Cuadro: Video,
+  "name": "Cuadro: Video",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -305,12 +296,37 @@
       "label": "TikTok URL"
     },
 
-    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": true },
-    { "type": "checkbox", "id": "loop", "label": "Repetir (loop)", "default": true },
-    { "type": "checkbox", "id": "mute", "label": "Mute (recomendado para autoplay móvil)", "default": true },
-    { "type": "checkbox", "id": "show_controls", "label": "Mostrar controles", "default": true },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Repetir (loop)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mute",
+      "label": "Mute (recomendado para autoplay móvil)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Mostrar controles",
+      "default": true
+    },
 
-    { "type": "text", "id": "video_title", "label": "Título accesible del video", "default": "Video" },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Título accesible del video",
+      "default": "Video"
+    },
 
     {
       "type": "select",
@@ -387,3 +403,4 @@
     { "name": "Cuadro: Video centro + Info" }
   ]
 }
+{% endschema %}
