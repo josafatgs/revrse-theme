@@ -47,7 +47,8 @@
         {% for block in section.blocks %}
           {% assign p = all_products[block.settings.product] %}
           {% if p %}
-            <article class="po-item" {{ block.shopify_attributes }}>
+            {% render 'product', product: p %}
+            {% comment %} <article class="po-item" {{ block.shopify_attributes }}>
               <div class="po-card">
                 <a class="po-media" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
                   {% if p.featured_image %}
@@ -143,7 +144,7 @@
                   </a>
                 {% endif %}
               </div>
-            </article>
+            </article> {% endcomment %}
           {% endif %}
         {% endfor %}
       </div>
