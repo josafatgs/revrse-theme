@@ -118,45 +118,37 @@
     },
     "youutubecasa_AWt7NK": {
       "type": "youutubecasa",
-      "disabled": true,
+      "blocks": {
+        "tiktok_wFptm8": {
+          "type": "tiktok",
+          "settings": {
+            "embed_html": "<blockquote class=\"tiktok-embed\" cite=\"https://www.tiktok.com/@corporativo_alianza/video/7605636915240619285\" data-video-id=\"7605636915240619285\" style=\"max-width: 605px;min-width: 325px;\"> <section> <a target=\"_blank\" title=\"@corporativo_alianza\" href=\"https://www.tiktok.com/@corporativo_alianza?refer=embed\">@corporativo_alianza</a> 📍Oaxaca San Sebastián ETLA  Casa en venta o renta con amenidades de lujo: cancha de fútbol, alberca, terraza y más ¡Vive el estilo de vida que mereces! Contáctanos  📲💬 221 563 9019  📲💬 222 133 3810 <a title=\"venta\" target=\"_blank\" href=\"https://www.tiktok.com/tag/venta?refer=embed\">#venta</a> <a title=\"renta\" target=\"_blank\" href=\"https://www.tiktok.com/tag/renta?refer=embed\">#Renta</a> <a title=\"oaxacamexico\" target=\"_blank\" href=\"https://www.tiktok.com/tag/oaxacamexico?refer=embed\">#oaxacamexico</a> <a title=\"casa\" target=\"_blank\" href=\"https://www.tiktok.com/tag/casa?refer=embed\">#casa</a> <a target=\"_blank\" title=\"♬ original sound - Corporativo Alianza🏡👩🏻‍💼\" href=\"https://www.tiktok.com/music/original-sound-7605636985637636872?refer=embed\">♬ original sound - Corporativo Alianza🏡👩🏻‍💼</a> </section> </blockquote> <script async=\"\" src=\"https://www.tiktok.com/embed.js\"></script>"
+          }
+        },
+        "tiktok_LxpAUR": {
+          "type": "tiktok",
+          "settings": {
+            "embed_html": "<blockquote class=\"tiktok-embed\" cite=\"https://www.tiktok.com/@corporativo_alianza/video/7612857635473296660\" data-video-id=\"7612857635473296660\" style=\"max-width: 605px;min-width: 325px;\"> <section> <a target=\"_blank\" title=\"@corporativo_alianza\" href=\"https://www.tiktok.com/@corporativo_alianza?refer=embed\">@corporativo_alianza</a> <p>RENTA. 🚨🚨Oficinas en ubicación estratégica para potenciar tu empresa, precios accesibles y todos los servicios‼️  Te enviamos toda la info 📲221 563 9019  📲222 133 3810 </p> <a target=\"_blank\" title=\"♬ original sound - Corporativo Alianza🏡👩🏻‍💼\" href=\"https://www.tiktok.com/music/original-sound-7612857689257478930?refer=embed\">♬ original sound - Corporativo Alianza🏡👩🏻‍💼</a> </section> </blockquote> <script async=\"\" src=\"https://www.tiktok.com/embed.js\"></script>"
+          }
+        }
+      },
+      "block_order": [
+        "tiktok_wFptm8",
+        "tiktok_LxpAUR"
+      ],
       "name": "Video + Info (Derecha)",
       "settings": {
-        "video_source": "tiktok",
-        "video_url": "",
-        "tiktok_url": "https://www.tiktok.com/@corporativo_alianza/video/7605636915240619285?is_from_webapp=1&sender_device=pc",
-        "autoplay": true,
-        "loop": true,
-        "mute": true,
-        "show_controls": true,
-        "video_title": "Video",
-        "video_ratio": "16 / 9",
-        "tiktok_ratio": "9 / 16",
-        "top_kicker": "Conócenos",
-        "top_heading": "Tu título aquí",
-        "top_text": "<p>Descripción corta arriba del video.</p>",
-        "left_heading": "",
-        "left_text": "",
-        "left_list": "",
-        "right_heading": "",
-        "right_text": "",
-        "button_label": "Ver más",
-        "button_link": "",
-        "bottom_text": "",
-        "vertical_align": "top",
+        "heading": "TikTok",
         "max_width": 1050,
         "padding_top": 48,
         "padding_bottom": 48,
         "gap": 28,
-        "card_padding": 22,
         "radius": 10,
-        "section_bg": "#ffffff",
-        "card_bg": "#ffffff",
         "border_color": "#000000",
         "border_opacity": 10,
+        "section_bg": "#ffffff",
         "text_color": "#111111",
-        "muted_text_color": "#666666",
-        "button_bg": "#111111",
-        "button_text": "#ffffff"
+        "mobile_scale": 80
       }
     }
   },
