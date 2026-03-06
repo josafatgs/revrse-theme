@@ -66,15 +66,12 @@
     </div>
 
     <div class="property-video">
-
       <h2>Video</h2>
 
       <div class="video-container">
         {{ product.metafields.custom.youtube_video }}
       </div>
-
     </div>
-
   </div>
 </div>
 
@@ -256,45 +253,118 @@
 </script>
 
 <style>
-  /* === SOLO COLORES (sin tocar WhatsApp) + borde editable de bloques === */
-  .product-template{
-    /* Specs */
-    --spec-card-bg: #ffffff;
-    --spec-card-border: #13CAE6;
-    --spec-icon-color: #111111;
-    --spec-label-color: #111111;
-    --spec-value-color: #111111;
+    /* === SOLO COLORES (sin tocar WhatsApp) + borde editable de bloques === */
+    .product-template{
+      /* Specs */
+      --spec-card-bg: #ffffff;
+      --spec-card-border: #13CAE6;
+      --spec-icon-color: #111111;
+      --spec-label-color: #111111;
+      --spec-value-color: #111111;
 
-    /* Bloques */
-    --block-bg: #ffffff;
-    --block-border: #ffffff/* <--- cambia este para el borde de los bloques */
+      /* Bloques */
+      --block-bg: #ffffff;
+      --block-border: #ffffff/* <--- cambia este para el borde de los bloques */
+    }
+
+    /* Specs (tarjetas azules) */
+    .product-template .spec-item{
+      background: var(--spec-card-bg);
+      border: 2px solid var(--spec-card-border);
+    }
+    .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
+    .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
+    .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
+
+    /* Bloques generales: SOLO fondo + borde (NO WhatsApp) */
+    .product-template .product-location,
+    .product-template .product-price,
+    .product-template .variant-selector,
+    .product-template .product-specs{
+      background: var(--block-bg);
+      border-color: var(--block-border);
+    }
+
+    /* Si tu tema no define borde, esto asegura que exista (border-color solo se ve con border-style) [web:161] */
+    .product-template .product-location,
+    .product-template .product-price,
+    .product-template .variant-selector,
+    .product-template .product-specs{
+      border-style: solid;
+      border-width: 1px;
+    }
+
+    /* HEADER */
+
+  .product-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:20px;
   }
 
-  /* Specs (tarjetas azules) */
-  .product-template .spec-item{
-    background: var(--spec-card-bg);
-    border: 2px solid var(--spec-card-border);
-  }
-  .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
-  .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
-  .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
-
-  /* Bloques generales: SOLO fondo + borde (NO WhatsApp) */
-  .product-template .product-location,
-  .product-template .product-price,
-  .product-template .variant-selector,
-  .product-template .product-specs{
-    background: var(--block-bg);
-    border-color: var(--block-border);
+  .product-badges{
+  display:flex;
+  gap:10px;
+  margin-top:8px;
   }
 
-  /* Si tu tema no define borde, esto asegura que exista (border-color solo se ve con border-style) [web:161] */
-  .product-template .product-location,
-  .product-template .product-price,
-  .product-template .variant-selector,
-  .product-template .product-specs{
-    border-style: solid;
-    border-width: 1px;
+  .badge{
+  padding:6px 12px;
+  border-radius:20px;
+  background:#f2b705;
+  font-size:14px;
+  font-weight:600;
+  }
+
+  /* GALERÍA GRID */
+
+  .product-gallery-grid{
+  margin-top:20px;
+  }
+
+  /* SECCIÓN DETALLES + FORM */
+
+  .property-info-section{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:40px;
+  margin-top:50px;
+  }
+
+  .property-details{
+  background:#f5f5f5;
+  padding:30px;
+  border-radius:8px;
+  }
+
+  .property-contact{
+  background:#f5f5f5;
+  padding:30px;
+  border-radius:8px;
+  }
+
+  /* VIDEO */
+
+  .property-video{
+  margin-top:60px;
+  }
+
+  .video-container{
+  position:relative;
+  padding-bottom:56.25%;
+  height:0;
+  overflow:hidden;
+  border-radius:16px;
+  background:#f2d77e;
+  }
+
+  .video-container iframe{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   }
 </style>
 
