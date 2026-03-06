@@ -62,20 +62,12 @@
             "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
             "state_label": "Xilotzingo"
           }
-        },
-        "product_UTjeB8": {
-          "type": "product",
-          "settings": {
-            "product": "casa-en-fraccionamiento-lomas-del-valle",
-            "state_label": "Lomas del valle"
-          }
         }
       },
       "block_order": [
         "product_xwVTQD",
         "product_i4aCKW",
-        "product_cWtHfK",
-        "product_UTjeB8"
+        "product_cWtHfK"
       ],
       "name": "Banner + productos deslizables",
       "settings": {
