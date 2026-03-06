@@ -7,7 +7,14 @@
       data-lightbox-trigger="{{ forloop.index0 }}"
     >
       <img
-        src="{{ image | img_url: '1000x' }}"
+        src="{{ image | img_url: '900x' }}"
+        srcset="
+          {{ image | img_url: '400x' }} 400w,
+          {{ image | img_url: '600x' }} 600w,
+          {{ image | img_url: '900x' }} 900w,
+          {{ image | img_url: '1200x' }} 1200w
+        "
+        sizes="(max-width:768px) 100vw, 33vw"
         alt="{{ image.alt | escape }}"
         loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
       >
