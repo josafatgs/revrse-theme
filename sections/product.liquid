@@ -115,15 +115,19 @@
   }
 
   .badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    background:rgb(171, 240, 255);
-    border-color: #46c4e0;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
-    text-transform: uppercase;
-  }
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 50px; /* Un radio mayor da un aspecto más moderno (píldora) */
+  background-color: #46c4e0; /* El color más fuerte de fondo */
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em; /* Mejora la lectura en mayúsculas */
+  text-transform: uppercase;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sutil profundidad */
+}
 
   .product-price {
     display: block;
