@@ -1,0 +1,283 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bogle&display=swap');
+
+  .video-info-{{ section.id }}{
+    font-family: "BBH Sans Bogle", -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: {{ section.settings.padding_desktop }}px 0;
+  }
+
+  .video-info-{{ section.id }} .container{
+    width: min(1200px, 95%);
+    margin: 0 auto;
+  }
+
+  .video-info-{{ section.id }} .card{
+    background: linear-gradient(180deg, rgba(10, 37, 64, 1) 0%, rgba(30, 58, 138, 1) 100%);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 24px;
+    padding: 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .video-info-{{ section.id }} .video-wrap{
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.15);
+  }
+
+  .video-info-{{ section.id }} .video-wrap iframe{
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .video-info-{{ section.id }} .title{
+    font-size: {{ section.settings.title_size_desktop }}px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .video-info-{{ section.id }} .text{
+    font-size: {{ section.settings.text_size_desktop }}px;
+    color: #FED700;
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+    max-width: 560px;
+  }
+
+  .video-info-{{ section.id }} .button{
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    color: #fff;
+    padding: 1.1rem 2.4rem;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    transition: transform .2s ease, box-shadow .2s ease;
+    white-space: nowrap;
+  }
+
+  .video-info-{{ section.id }} .button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 20px 35px rgba(59, 130, 246, 0.4);
+  }
+
+  @media (max-width: 968px){
+    .video-info-{{ section.id }}{
+      padding: {{ section.settings.padding_mobile }}px 0;
+    }
+
+    .video-info-{{ section.id }} .card{
+      grid-template-columns: 1fr;
+      padding: 1.6rem;
+      gap: 1.5rem;
+    }
+
+    .video-info-{{ section.id }} .title{
+      font-size: {{ section.settings.title_size_mobile }}px;
+    }
+
+    .video-info-{{ section.id }} .text{
+      font-size: {{ section.settings.text_size_mobile }}px;
+    }
+
+    .video-info-{{ section.id }} .button{
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<section class="video-info-{{ section.id }}">
+  <div class="container">
+    <div class="card">
+
+      <div class="video-col">
+        {% if section.settings.video_url != blank %}
+          {% if section.settings.video_url.type == 'youtube' %}
+            <div class="video-wrap">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/{{ section.settings.video_url.id }}?rel=0&modestbranding=1"
+                title="{{ section.settings.title | escape }}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+              </iframe>
+            </div>
+          {% elsif section.settings.video_url.type == 'vimeo' %}
+            <div class="video-wrap">
+              <iframe
+                src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}"
+                title="{{ section.settings.title | escape }}"
+                loading="lazy"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="video-wrap"></div>
+        {% endif %}
+      </div>
+
+      <div class="info-col">
+        {% if section.settings.title != blank %}
+          <h2 class="title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="text">{{ section.settings.text }}</div>
+        {% endif %}
+
+        {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+          <a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_text }}</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video + info (split)",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL (YouTube o Vimeo)",
+      "accept": ["youtube", "vimeo"]
+    },
+
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Box Programador F64 Lite"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Descripción",
+      "default": "<p>Programador universal para lectura/escritura de firmware, compatible con múltiples interfaces.</p>"
+    },
+
+    {
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "Ver producto"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón"
+    },
+
+    {
+      "type": "header",
+      "content": "Tamaños (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño título (desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "text_size_desktop",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño descripción (desktop)",
+      "default": 18
+    },
+
+    {
+      "type": "header",
+      "content": "Tamaños (móvil)"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 18,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño título (móvil)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño descripción (móvil)",
+      "default": 16
+    },
+
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_desktop",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding sección (desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding sección (móvil)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    { "name": "Video + info (split)" }
+  ]
+}
+{% endschema %}
