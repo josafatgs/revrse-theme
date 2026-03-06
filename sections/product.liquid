@@ -17,22 +17,26 @@
         </div>
 
         <div class="product-header-right">
-          <span class="product-price product-title" id="">
-            {{ product.selected_or_first_available_variant.price | money }}
-          </span>
-          <a
-            href="https://wa.me/2225138870?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="whatsapp-btn-product"
-            id="whatsapp-link"
-            data-base-url="https://wa.me/2225138870?text="
-            data-product-title="{{ product.title | url_encode }}"
-            data-product-url="{{ shop.url | append: product.url | url_encode }}"
-          >
-            {% render 'svg', icon: 'whatsapp' %}
-            <span>Más información</span>
-          </a>
+          <div>
+            <span class="product-price product-title" id="">
+              {{ product.selected_or_first_available_variant.price | money }}
+            </span>
+          </div>
+          <div>
+            <a
+              href="https://wa.me/2225138870?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="whatsapp-btn-product"
+              id="whatsapp-link"
+              data-base-url="https://wa.me/2225138870?text="
+              data-product-title="{{ product.title | url_encode }}"
+              data-product-url="{{ shop.url | append: product.url | url_encode }}"
+            >
+              {% render 'svg', icon: 'whatsapp' %}
+              <span>Más información</span>
+            </a>
+          </div>
         </div>
 
       </div>
