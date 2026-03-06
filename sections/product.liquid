@@ -1,14 +1,17 @@
 <div class="product-template" data-product-id="{{ product.id }}">
   <div class="product-container">
-    
     <div class="product-hero">
       <header class="product-header">
         <div class="product-header-left">
           <h1 class="product-title">{{ product.title }}</h1>
           <div class="product-badges">
             <span class="badge badge-category">{{ product.category }}</span>
-            {% if product.tags contains 'venta' %}<span class="badge badge-sale">Venta</span>{% endif %}
-            {% if product.tags contains 'renta' %}<span class="badge badge-rent">Renta</span>{% endif %}
+            {% if product.tags contains 'venta' -%}
+              <span class="badge badge-sale">Venta</span>
+            {%- endif %}
+            {% if product.tags contains 'renta' -%}
+              <span class="badge badge-rent">Renta</span>
+            {%- endif %}
           </div>
         </div>
 
@@ -50,399 +53,422 @@
 
       <aside class="info-sidebar">
         <div class="product-form-container">
-  <div class="form-header">
-    <h3 class="form-title section-title">Quiero saber mas!</h3>
-    <p class="form-subtitle">Completa estos datos para enviarnos un mensaje directo.</p>
-  </div>
+          <div class="form-header">
+            <h3 class="form-title section-title">Quiero saber mas!</h3>
+            <p class="form-subtitle">Completa estos datos para enviarnos un mensaje directo.</p>
+          </div>
 
-  <div class="form-fields-grid">
-    <div class="form-field full-width">
-      <label for="wa_name" class="form-label">Tu Nombre</label>
-      <input type="text" id="wa_name" class="form-input" placeholder="Ej. Juan Pérez" required>
-    </div>
-    
-    <div class="form-field full-width">
-      <label for="wa_interest" class="form-label">Me interesa</label>
-      <select id="wa_interest" class="form-select">
-        <option value="Agendar una visita física">Agendar una visita física</option>
-        <option value="Solicitar brochure informativo">Solicitar brochure informativo</option>
-        <option value="Consultar opciones de crédito">Consultar opciones de crédito</option>
-      </select>
-    </div>
-  </div>
+          <div class="form-fields-grid">
+            <div class="form-field full-width">
+              <label for="wa_name" class="form-label">Tu Nombre</label>
+              <input type="text" id="wa_name" class="form-input" placeholder="Ej. Juan Pérez" required>
+            </div>
 
-  <button type="button" class="form-submit-btn" onclick="sendToWhatsApp()" style="background-color: var(--accent-blue); color: white;">
-    <span class="btn-text">Más info!</span>
-  </button>
+            <div class="form-field full-width">
+              <label for="wa_interest" class="form-label">Me interesa</label>
+              <select id="wa_interest" class="form-select">
+                <option value="Agendar una visita física">Agendar una visita física</option>
+                <option value="Solicitar brochure informativo">Solicitar brochure informativo</option>
+                <option value="Consultar opciones de crédito">Consultar opciones de crédito</option>
+              </select>
+            </div>
+          </div>
 
-  <div class="quick-actions">
-    <span class="quick-separator">O llámanos directamente</span>
-    <a href="tel:522225138870" class="quick-btn q-phone">
-      <span>📞 Llamar al asesor</span>
-    </a>
-  </div>
-</div>
+          <button
+            type="button"
+            class="form-submit-btn"
+            onclick="sendToWhatsApp()"
+            style="background-color: var(--accent-blue); color: white;"
+          >
+            <span class="btn-text">Más info!</span>
+          </button>
+
+          <div class="quick-actions">
+            <span class="quick-separator">O llámanos directamente</span>
+            <a href="tel:522225138870" class="quick-btn q-phone">
+              <span>📞 Llamar al asesor</span>
+            </a>
+          </div>
+        </div>
       </aside>
     </div>
 
     {% if product.metafields.custom.youtube_video != blank %}
       <section class="property-video">
         <h2 class="section-title">Recorrido Virtual</h2>
-        <div class="video-container">
-          {{ product.metafields.custom.youtube_video }}
+        <div class="video-wrapper-outer">
+          <div class="video-container">
+            {% assign video_url = product.metafields.custom.youtube_video %}
+
+            {% if video_url contains 'youtube.com/watch?v=' %}
+              {% assign video_id = video_url | split: 'v=' | last | split: '&' | first %}
+            {% elsif video_url contains 'youtu.be/' %}
+              {% assign video_id = video_url | split: '.be/' | last | split: '?' | first %}
+            {% endif %}
+
+            {% if video_id %}
+              <iframe
+                src="https://www.youtube.com/embed/{{ video_id }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            {% else %}
+              {{ video_url }}
+            {% endif %}
+          </div>
         </div>
       </section>
     {% endif %}
-
   </div>
 </div>
 
 <style>
-  :root {
-    --accent: #13CAE6;
-    --accent-dark: #00A8CC;
-    --text-main: #2C3E50;
-    --text-light: #7F8C8D;
-    --bg-body: #F4F7F6;
-    --white: #ffffff;
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-    --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08);
-  }
+    :root {
+      --accent: #13CAE6;
+      --accent-dark: #00A8CC;
+      --text-main: #2C3E50;
+      --text-light: #7F8C8D;
+      --bg-body: #F4F7F6;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08);
+    }
 
-  /* --- BASE --- */
-  body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; }
-  .product-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    /* --- BASE --- */
+    body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; }
+    .product-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-  /* --- HEADER REFINADO --- */
-  .product-header {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding-bottom: 25px;
-  }
+    /* --- HEADER REFINADO --- */
+    .product-header {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 25px;
+    }
 
-  .product-title {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin: 0 0 12px 0;
-    color: var(--text-main);
-  }
+    .product-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 12px 0;
+      color: var(--text-main);
+    }
 
-  .price-label {
-    display: block;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: var(--text-light);
-    letter-spacing: 1px;
-    font-weight: 600;
-  }
+    .price-label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
 
-  .product-price {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--accent-dark);
-    display: block;
-  }
+    .product-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-dark);
+      display: block;
+    }
 
-  /* --- BADGES MODERNOS --- */
-  .badge {
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    background: var(--white);
-    border: 1px solid #eee;
-    color: var(--text-main);
-    box-shadow: var(--shadow-sm);
-  }
-  .badge-category { border-left: 4px solid var(--accent); }
+    /* --- BADGES MODERNOS --- */
+    .badge {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--white);
+      border: 1px solid #eee;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-category { border-left: 4px solid var(--accent); }
 
-  /* --- BOTÓN WHATSAPP PREMIUM --- */
-  .whatsapp-btn-product {
-    background: #25D366;
-    color: white;
-    padding: 16px 30px;
-    border-radius: 12px;
+    /* --- BOTÓN WHATSAPP PREMIUM --- */
+    .whatsapp-btn-product {
+      background: #25D366;
+      color: white;
+      padding: 16px 30px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.2);
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* --- LAYOUT GRID --- */
+    .property-info-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .info-card {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      position: relative;
+      padding-left: 15px;
+    }
+    .section-title::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px; background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* --- DESKTOP ENHANCEMENTS --- */
+    @media (min-width: 992px) {
+      .product-header { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+      .product-header-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+      .property-info-section { grid-template-columns: 1.7fr 1fr; align-items: start; }
+      .sticky-form-container { position: sticky; top: 30px; }
+      .whatsapp-btn-product { width: auto; }
+    }
+
+    .whatsapp-btn-product {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.2);
+    justify-content: center;
+    gap: 8px; /* Espacio más compacto */
+
+    background-color: #25D366;
+    color: #ffffff;
+
+    /* Altura reducida y padding balanceado */
     width: 100%;
+    min-height: 44px; /* Altura estándar profesional (antes era 52px) */
+    padding: 8px 20px;
+
+    border-radius: 8px; /* Radio menos agresivo, más serio */
+    font-size: 14px; /* Texto un poco más pequeño */
+    font-weight: 600;
+    text-decoration: none;
+
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+    transition: all 0.2s ease;
+    border: none;
+  }
+
+  /* En Desktop se vuelve un botón de acción lateral, no un bloque gigante */
+  @media (min-width: 769px) {
+    .whatsapp-btn-product {
+      width: fit-content;
+      min-height: 40px;
+      padding: 6px 24px;
+      font-size: 13px;
+    }
+
+    .whatsapp-btn-product:hover {
+      background-color: #1ebe5d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+  }
+
+  .whatsapp-btn-product svg {
+    width: 18px; /* Icono más discreto */
+    height: 18px;
+    fill: currentColor;
+  }
+
+  :root {
+    --form-bg: #ffffff;
+    --input-border: #e2e8f0;
+    --accent-blue: #13CAE6;
+    --text-dark: #1e293b;
+  }
+
+  .product-form-container {
+    background: var(--form-bg);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); /* Match con property-details */
+    border: 1px solid rgba(0,0,0,0.03);
+  }
+
+  .form-header { margin-bottom: 25px; }
+  .form-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+  .form-subtitle { font-size: 0.9rem; color: #64748b; margin-top: 5px; }
+
+  .form-fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas para nombre y tel */
+    gap: 15px;
+  }
+
+  .full-width { grid-column: span 2; }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--input-border);
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(19, 202, 230, 0.1);
+  }
+
+  /* Botón Principal */
+  .form-submit-btn {
+    width: 100%;
+    background: var(--text-dark); /* Negro elegante para contrastar con el verde de WA */
+    color: white;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .form-submit-btn:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  /* Quick Actions Refinados */
+  .quick-actions {
+    margin-top: 25px;
+    text-align: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+  }
+
+  .quick-separator {
+    display: block;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .quick-action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .quick-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: var(--text-dark);
+    transition: all 0.2s;
+  }
+
+  .q-whatsapp:hover { border-color: #25D366; color: #25D366; background: #f0fff4; }
+  .q-phone:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: #f0f9ff; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .form-fields-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+  }
+
+  :root {
+    --accent-blue: #475569; /* Tu azul característico */
+    --accent-blue-hover: #475569;
+  }
+
+  .form-submit-btn {
+    width: 100%;
+    background-color: var(--accent-blue) !important;
+    color: white;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(19, 202, 230, 0.2);
+    display: flex;
+    align-items: center;
     justify-content: center;
   }
 
-  /* --- LAYOUT GRID --- */
-  .property-info-section {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-top: 40px;
+  .form-submit-btn:hover {
+    background-color: var(--text-dark) !important;
+    transform: translateY(-2px);
   }
 
-  .info-card {
-    background: var(--white);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: var(--shadow-md);
-    margin-bottom: 20px;
+  /* El separador de abajo para los Quick Actions */
+  .quick-separator {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    margin: 20px 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
-
-  .section-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 25px;
-    position: relative;
-    padding-left: 15px;
-  }
-  .section-title::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px; background: var(--accent);
-    border-radius: 2px;
-  }
-
-  /* --- DESKTOP ENHANCEMENTS --- */
-  @media (min-width: 992px) {
-    .product-header { flex-direction: row; justify-content: space-between; align-items: flex-end; }
-    .product-header-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
-    .property-info-section { grid-template-columns: 1.7fr 1fr; align-items: start; }
-    .sticky-form-container { position: sticky; top: 30px; }
-    .whatsapp-btn-product { width: auto; }
-  }
-
-  .whatsapp-btn-product {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* Espacio más compacto */
-  
-  background-color: #25D366;
-  color: #ffffff;
-  
-  /* Altura reducida y padding balanceado */
-  width: 100%;
-  min-height: 44px; /* Altura estándar profesional (antes era 52px) */
-  padding: 8px 20px;
-  
-  border-radius: 8px; /* Radio menos agresivo, más serio */
-  font-size: 14px; /* Texto un poco más pequeño */
-  font-weight: 600;
-  text-decoration: none;
-  
-  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
-  transition: all 0.2s ease;
-  border: none;
-}
-
-/* En Desktop se vuelve un botón de acción lateral, no un bloque gigante */
-@media (min-width: 769px) {
-  .whatsapp-btn-product {
-    width: fit-content;
-    min-height: 40px;
-    padding: 6px 24px;
-    font-size: 13px;
-  }
-  
-  .whatsapp-btn-product:hover {
-    background-color: #1ebe5d;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-  }
-}
-
-.whatsapp-btn-product svg {
-  width: 18px; /* Icono más discreto */
-  height: 18px;
-  fill: currentColor;
-}
-
-:root {
-  --form-bg: #ffffff;
-  --input-border: #e2e8f0;
-  --accent-blue: #13CAE6;
-  --text-dark: #1e293b;
-}
-
-.product-form-container {
-  background: var(--form-bg);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); /* Match con property-details */
-  border: 1px solid rgba(0,0,0,0.03);
-}
-
-.form-header { margin-bottom: 25px; }
-.form-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0; }
-.form-subtitle { font-size: 0.9rem; color: #64748b; margin-top: 5px; }
-
-.form-fields-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas para nombre y tel */
-  gap: 15px;
-}
-
-.full-width { grid-column: span 2; }
-
-.form-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #475569;
-  margin-bottom: 6px;
-  display: block;
-}
-
-.form-input, .form-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1.5px solid var(--input-border);
-  border-radius: 10px;
-  font-size: 15px;
-  transition: all 0.2s ease;
-  background: #f8fafc;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--accent-blue);
-  background: white;
-  box-shadow: 0 0 0 4px rgba(19, 202, 230, 0.1);
-}
-
-/* Botón Principal */
-.form-submit-btn {
-  width: 100%;
-  background: var(--text-dark); /* Negro elegante para contrastar con el verde de WA */
-  color: white;
-  padding: 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: transform 0.2s, background 0.2s;
-}
-
-.form-submit-btn:hover {
-  background: #000;
-  transform: translateY(-2px);
-}
-
-/* Quick Actions Refinados */
-.quick-actions {
-  margin-top: 25px;
-  text-align: center;
-  border-top: 1px solid #f1f5f9;
-  padding-top: 20px;
-}
-
-.quick-separator {
-  display: block;
-  font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-}
-
-.quick-action-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.quick-btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #e2e8f0;
-  background: white;
-  color: var(--text-dark);
-  transition: all 0.2s;
-}
-
-.q-whatsapp:hover { border-color: #25D366; color: #25D366; background: #f0fff4; }
-.q-phone:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: #f0f9ff; }
-
-/* Mobile */
-@media (max-width: 600px) {
-  .form-fields-grid { grid-template-columns: 1fr; }
-  .full-width { grid-column: span 1; }
-}
-
-:root {
-  --accent-blue: #475569; /* Tu azul característico */
-  --accent-blue-hover: #475569;
-}
-
-.form-submit-btn {
-  width: 100%;
-  background-color: var(--accent-blue) !important;
-  color: white;
-  padding: 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(19, 202, 230, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.form-submit-btn:hover {
-  background-color: var(--text-dark) !important;
-  transform: translateY(-2px);
-}
-
-/* El separador de abajo para los Quick Actions */
-.quick-separator {
-  display: block;
-  font-size: 11px;
-  color: #94a3b8;
-  margin: 20px 0 15px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
 </style>
-
 
 <script>
   function sendToWhatsApp() {
-  const name = document.getElementById('wa_name').value;
-  const interest = document.getElementById('wa_interest').value;
-  const propertyTitle = "{{ product.title }}";
-  const propertyUrl = window.location.href;
-  const phoneNumber = "522225138870";
+    const name = document.getElementById('wa_name').value;
+    const interest = document.getElementById('wa_interest').value;
+    const propertyTitle = '{{ product.title }}';
+    const propertyUrl = window.location.href;
+    const phoneNumber = '522225138870';
 
-  if (!name || name.trim() === "") {
-    alert("Por favor, ingresa tu nombre para poder atenderte mejor.");
-    return;
+    if (!name || name.trim() === '') {
+      alert('Por favor, ingresa tu nombre para poder atenderte mejor.');
+      return;
+    }
+
+    let message = `Hola! Mi nombre es *${name}* y estoy interesado en la propiedad: *${propertyTitle}*.\n\n`;
+    message += `Mi intención es: _${interest}_\n`;
+    message += `Enlace: ${propertyUrl}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
   }
-
-  let message = `Hola! Mi nombre es *${name}* y estoy interesado en la propiedad: *${propertyTitle}*.\n\n`;
-  message += `Mi intención es: _${interest}_\n`;
-  message += `Enlace: ${propertyUrl}`;
-
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-  window.open(whatsappUrl, '_blank');
-}
 </script>
