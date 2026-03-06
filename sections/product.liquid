@@ -3,35 +3,20 @@
 
 <div class="product-template" data-product-id="{{ product.id }}">
   <div class="product-container">
-    <!-- Breadcrumb Navigation -->
-    {% comment %}
-      <nav class="product-breadcrumb" aria-label="Breadcrumb">
-        {% render 'breadcrumb', product: product %}
-      </nav>
-    {% endcomment %}
-
+    
     <div class="product-hero">
       <div class="product-header">
         <div class="product-header-left">
           <h1 class="product-title">{{ product.title }}</h1>
-
           <div class="product-badges">
-            <span class="badge badge-category">
-              {{ product.category }}
-            </span>
-
-            {% if product.tags contains 'venta' %}
-              <span class="badge badge-sale">Venta</span>
-            {% endif %}
-
-            {% if product.tags contains 'renta' %}
-              <span class="badge badge-rent">Renta</span>
-            {% endif %}
+            <span class="badge badge-category">{{ product.category }}</span>
+            {% if product.tags contains 'venta' %}<span class="badge badge-sale">Venta</span>{% endif %}
+            {% if product.tags contains 'renta' %}<span class="badge badge-rent">Renta</span>{% endif %}
           </div>
         </div>
 
         <div class="product-header-right">
-          <span class="product-price">
+          <span class="product-price" id="variant-price">
             {{ product.selected_or_first_available_variant.price | money }}
           </span>
           <a
@@ -39,15 +24,17 @@
             target="_blank"
             rel="noopener noreferrer"
             class="whatsapp-btn-product"
+            id="whatsapp-link"
+            data-base-url="https://wa.me/2225138870?text="
+            data-product-title="{{ product.title | url_encode }}"
+            data-product-url="{{ shop.url | append: product.url | url_encode }}"
           >
             {% render 'svg', icon: 'whatsapp' %}
-
             <span>Más información</span>
           </a>
         </div>
       </div>
 
-      <!-- GALERÍA -->
       <div class="product-gallery-grid">
         {% render 'product-gallery', product: product %}
       </div>
@@ -56,20 +43,20 @@
     <div class="property-info-section">
       <div class="property-details">
         <h2>Detalles del Inmueble</h2>
-
-        <div class="" id="variant-specs">
+        <div class="specs-container" id="variant-specs">
           {% render 'product-specs', product: product %}
         </div>
 
         <div class="brief-description">
           <h2>Descripción</h2>
-          {{ product.description }}
+          <div class="rte">
+            {{ product.description }}
+          </div>
         </div>
       </div>
 
       <div class="property-contact">
         <h2>Solicitar información</h2>
-
         <div class="product-form">
           {% render 'product-form', product: product %}
         </div>
@@ -77,395 +64,222 @@
     </div>
 
     {% if product.metafields.custom.youtube_video != blank %}
-
       <div class="property-video">
-        <h2>Video</h2>
-
+        <h2>Video de la propiedad</h2>
         <div class="video-container">
           {{ product.metafields.custom.youtube_video }}
         </div>
       </div>
-
     {% endif %}
 
   </div>
 </div>
 
-<!-- Include Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<style>
+  /* --- VARIABLES Y BASES --- */
+  :root {
+    --spec-card-bg: #ffffff;
+    --spec-card-border: #13CAE6;
+    --block-bg: #ffffff;
+    --block-border: #eeeeee;
+    --bg-light: #f5f5f5;
+  }
 
-<!-- Product JavaScript -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Initialize Variant Selector
-    window.variantSelector = new VariantSelector();
-  });
+  .product-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+  }
 
-  // Variant Selector Class
-  class VariantSelector {
-    constructor() {
-      this.initVariantSelector();
-      this.updateWhatsAppLink();
+  /* --- HEADER (Mobile First) --- */
+  .product-header {
+    display: flex;
+    flex-direction: column; /* Apilado en móvil */
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .product-title {
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+  }
+
+  .product-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #46c4e0;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .product-price {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #111;
+  }
+
+  .whatsapp-btn-product {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: white;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    width: 100%; /* Full width en móvil */
+  }
+
+  /* --- INFO SECTION (Mobile First) --- */
+  .property-info-section {
+    display: flex;
+    flex-direction: column; /* Una columna en móvil */
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  .property-details, .property-contact {
+    background: var(--bg-light);
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  /* --- SPECS GRID --- */
+  #variant-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .spec-item {
+    background: var(--spec-card-bg);
+    border: 1.5px solid var(--spec-card-border);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  /* --- VIDEO --- */
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #000;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+  }
+
+  /* --- DESKTOP QUERIES (Min-width 992px) --- */
+  @media (min-width: 992px) {
+    .product-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
     }
 
-    initVariantSelector() {
+    .product-title { font-size: 2.2rem; }
+
+    .product-header-right { text-align: right; }
+    
+    .whatsapp-btn-product { width: auto; padding: 14px 28px; }
+
+    .property-info-section {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr; /* Proporción clásica real estate */
+      gap: 30px;
+    }
+
+    #variant-specs {
+      grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
+    }
+
+    .property-details, .property-contact { padding: 40px; }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  // Clase VariantSelector optimizada
+  class VariantSelector {
+    constructor() {
+      this.init();
+    }
+
+    init() {
       const variantButtons = document.querySelectorAll('.variant-option');
-      variantButtons.forEach((button) => {
-        button.addEventListener('click', (e) => {
+      variantButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
           e.preventDefault();
-          if (!button.disabled) {
-            this.selectVariant(button);
-          }
+          this.updateActiveUI(btn);
+          this.updateContent(btn.dataset);
         });
       });
     }
 
-    selectVariant(button) {
-      // Remove active class from all buttons
-      document.querySelectorAll('.variant-option').forEach((btn) => {
-        btn.classList.remove('active');
-      });
-
-      // Add active class to selected button
-      button.classList.add('active');
-
-      // Update product information
-      this.updateVariantInfo(button);
-
-      // Update WhatsApp link
-      this.updateWhatsAppLink(button);
+    updateActiveUI(selectedBtn) {
+      document.querySelectorAll('.variant-option').forEach(b => b.classList.remove('active'));
+      selectedBtn.classList.add('active');
     }
 
-    updateVariantInfo(button) {
-      const variantData = {
-        price: button.dataset.variantPrice,
-        location: button.dataset.variantLocation,
-        bedrooms: button.dataset.variantBedrooms,
-        bathrooms: button.dataset.variantBathrooms,
-        parking: button.dataset.variantParking,
-        area: button.dataset.variantArea,
-        type: button.dataset.variantType,
-        year: button.dataset.variantYear,
-        image: button.dataset.variantImage,
-      };
+    updateContent(data) {
+      // Precio
+      const priceEl = document.getElementById('variant-price');
+      if (priceEl && data.variantPrice) priceEl.textContent = data.variantPrice;
 
-      // Update price
-      const priceElement = document.getElementById('variant-price');
-      if (priceElement) {
-        priceElement.textContent = variantData.price;
-      }
-
-      // Update location
-      const locationElement = document.getElementById('location-text');
-      if (locationElement) {
-        locationElement.textContent = variantData.location;
-      }
-
-      // Update specifications
-      this.updateSpecs(variantData);
-
-      // Update gallery if variant has specific image
-      if (variantData.image && window.productGallery) {
-        // Implementation for updating gallery images
-      }
-    }
-
-    updateSpecs(data) {
+      // Specs (Inyectar HTML limpio)
       const specsContainer = document.getElementById('variant-specs');
-      if (!specsContainer) return;
+      if (specsContainer) {
+        const specs = [
+          { icon: '🛏️', label: 'Recámaras', value: data.variantBedrooms },
+          { icon: '🚿', label: 'Baños', value: data.variantBathrooms },
+          { icon: '🚗', label: 'Estacionamiento', value: data.variantParking },
+          { icon: '📐', label: 'Área', value: data.variantArea ? `${data.variantArea} m²` : null },
+          { icon: '🏠', label: 'Tipo', value: data.variantType }
+        ];
 
-      let specsHTML = '';
-
-      if (data.bedrooms && data.bedrooms > 0) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">🛏️</span>
-          <span class="spec-label">Recámaras</span>
-          <span class="spec-value">${data.bedrooms}</span>
-        </div>
-      `;
+        specsContainer.innerHTML = specs
+          .filter(s => s.value && s.value != "0")
+          .map(s => `
+            <div class="spec-item">
+              <span class="spec-icon">${s.icon}</span>
+              <span class="spec-label">${s.label}</span>
+              <span class="spec-value">${s.value}</span>
+            </div>
+          `).join('');
       }
 
-      if (data.bathrooms && data.bathrooms > 0) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">🚿</span>
-          <span class="spec-label">Baños</span>
-          <span class="spec-value">${data.bathrooms}</span>
-        </div>
-      `;
-      }
-
-      if (data.parking && data.parking > 0) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">🚗</span>
-          <span class="spec-label">Estacionamiento</span>
-          <span class="spec-value">${data.parking}</span>
-        </div>
-      `;
-      }
-
-      if (data.area && data.area > 0) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">📐</span>
-          <span class="spec-label">Área</span>
-          <span class="spec-value">${data.area} m²</span>
-        </div>
-      `;
-      }
-
-      if (data.type) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">🏠</span>
-          <span class="spec-label">Tipo</span>
-          <span class="spec-value">${data.type}</span>
-        </div>
-      `;
-      }
-
-      if (data.year) {
-        specsHTML += `
-        <div class="spec-item">
-          <span class="spec-icon">📅</span>
-          <span class="spec-label">Año</span>
-          <span class="spec-value">${data.year}</span>
-        </div>
-      `;
-      }
-
-      specsContainer.innerHTML = specsHTML;
+      this.updateWhatsApp(selectedBtn.textContent.trim());
     }
 
-    updateWhatsAppLink(button = null) {
-      const whatsappLink = document.getElementById('whatsapp-link');
-      if (!whatsappLink) return;
-
-      const baseUrl = whatsappLink.dataset.baseUrl;
-      const productTitle = whatsappLink.dataset.productTitle;
-      const productUrl = whatsappLink.dataset.productUrl;
-
-      let variantText = '';
-      if (button) {
-        variantText = ` - Variante: ${button.textContent.trim()}`;
-      }
-
-      const message = `Hola, me interesa la propiedad: ${decodeURIComponent(
-        productTitle
-      )}${variantText} - ${productUrl}`;
-      whatsappLink.href = baseUrl + encodeURIComponent(message);
+    updateWhatsApp(variantName) {
+      const link = document.getElementById('whatsapp-link');
+      if (!link) return;
+      const { baseUrl, productTitle, productUrl } = link.dataset;
+      const message = `Hola, me interesa: ${decodeURIComponent(productTitle)} (Variante: ${variantName}) - ${decodeURIComponent(productUrl)}`;
+      link.href = baseUrl + encodeURIComponent(message);
     }
   }
 
-  // Update browser URL when variant changes (optional)
-  function updateURL(variantId) {
-    if (history.replaceState) {
-      const newUrl = window.location.pathname + '?variant=' + variantId;
-      history.replaceState(null, null, newUrl);
-    }
-  }
+  document.addEventListener('DOMContentLoaded', () => new VariantSelector());
 </script>
-
-<style>
-      /* === SOLO COLORES (sin tocar WhatsApp) + borde editable de bloques === */
-      .product-template{
-        /* Specs */
-        --spec-card-bg: #ffffff;
-        --spec-card-border: #13CAE6;
-        --spec-icon-color: #111111;
-        --spec-label-color: #111111;
-        --spec-value-color: #111111;
-
-        /* Bloques */
-        --block-bg: #ffffff;
-        --block-border: #ffffff/* <--- cambia este para el borde de los bloques */
-      }
-
-      /* Specs (tarjetas azules) */
-      .product-template .spec-item{
-        background: var(--spec-card-bg);
-        border: 2px solid var(--spec-card-border);
-      }
-      .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
-      .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
-      .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
-
-      /* Bloques generales: SOLO fondo + borde (NO WhatsApp) */
-      .product-template .product-location,
-      .product-template .product-price,
-      .product-template .variant-selector,
-      .product-template .product-specs{
-        background: var(--block-bg);
-        border-color: var(--block-border);
-      }
-
-      /* Si tu tema no define borde, esto asegura que exista (border-color solo se ve con border-style) [web:161] */
-      .product-template .product-location,
-      .product-template .product-price,
-      .product-template .variant-selector,
-      .product-template .product-specs{
-        border-style: solid;
-        border-width: 1px;
-      }
-
-      /* HEADER */
-
-    .product-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:20px;
-    }
-
-    .product-badges{
-    display:flex;
-    gap:10px;
-    margin-top:8px;
-    }
-
-    .badge{
-    padding:6px 12px;
-    border-radius:20px;
-    background:#46c4e0;
-    font-size:14px;
-    font-weight:600;
-    color: white;
-    }
-
-    /* GALERÍA GRID */
-
-    .product-gallery-grid{
-    margin-top:20px;
-    }
-
-    /* SECCIÓN DETALLES + FORM */
-
-    .property-info-section{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top:50px;
-    }
-
-    .property-details{
-    background:#f5f5f5;
-    padding:30px;
-    border-radius:8px;
-    }
-
-    .property-contact{
-    background:#f5f5f5;
-    padding:30px;
-    border-radius:8px;
-    }
-
-    /* VIDEO */
-
-    .property-video{
-    margin-top:60px;
-    }
-
-    .video-container{
-    position:relative;
-    padding-bottom:56.25%;
-    height:0;
-    overflow:hidden;
-    border-radius:16px;
-    background:#f2d77e;
-    }
-
-    .video-container iframe{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    }
-
-    .whatsapp-btn-product{
-
-  display: flex;
-  border-radius: 10px;
-  align-items:center;
-  gap:10px;
-
-  background:#25D366;
-  color:white;
-
-  padding:14px 22px;
-
-  font-weight:600;
-  text-decoration:none;
-
-  transition:all .25s ease;
-
-  }
-
-  .whatsapp-btn-product:hover{
-
-  background:#1ebe5d;
-  transform:translateY(-2px);
-
-  }
-
-  .whatsapp-btn-product svg{
-
-  width:20px;
-  height:20px;
-
-  }
-</style>
-
-{% schema %}
-{
-  "name": "Product Template",
-  "tag": "section",
-  "class": "section",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Configuración de Contacto"
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_number",
-      "label": "Número de WhatsApp (con código de país)",
-      "default": "521234567890",
-      "info": "Ejemplo: 521234567890 (sin espacios ni símbolos)"
-    },
-    {
-      "type": "text",
-      "id": "phone_number",
-      "label": "Número de teléfono",
-      "default": "+52 123 456 7890"
-    },
-    {
-      "type": "header",
-      "content": "Configuración de Galería"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_autoplay",
-      "label": "Activar reproducción automática de imágenes",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "autoplay_delay",
-      "label": "Velocidad de reproducción automática (segundos)",
-      "min": 2,
-      "max": 10,
-      "step": 1,
-      "default": 4
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_lightbox",
-      "label": "Activar lightbox para vista ampliada",
-      "default": true
-    }
-  ]
-}
-{% endschema %}
