@@ -48,6 +48,51 @@
                         src="{{ prod.featured_image | image_url: width: 800 }}"
                         alt="{{ prod.title | escape }}"
                       >
+
+                      {%- comment -%} ICONOS OVERLAY: bedrooms / bathrooms / square_meters {%- endcomment -%}
+                      {%- assign sqm = prod.metafields.custom.square_meters.value -%}
+                      {%- assign beds = prod.metafields.custom.bedrooms.value -%}
+                      {%- assign baths = prod.metafields.custom.bathrooms.value -%}
+
+                      {%- if sqm != blank or beds != blank or baths != blank -%}
+                        <div class="bp-icons" aria-hidden="true">
+                          {%- if beds != blank -%}
+                            <span class="bp-icon-pill" title="{{ beds }} recámaras">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- cama -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M21 10.5V17h-1.5v-1.5h-15V17H3v-6.5C3 9.12 4.12 8 5.5 8h4C10.88 8 12 9.12 12 10.5V12h8.5c.28 0 .5-.22.5-.5zM11 12v-1.5C11 9.67 10.33 9 9.5 9h-4C4.67 9 4 9.67 4 10.5V12h7zm10 2v1H3v-1h18z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ beds }}</span>
+                            </span>
+                          {%- endif -%}
+
+                          {%- if baths != blank -%}
+                            <span class="bp-icon-pill" title="{{ baths }} baños">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- bañera -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M7 6c0-1.66 1.34-3 3-3s3 1.34 3 3v1h1V6c0-2.21-1.79-4-4-4S6 3.79 6 6v1H4v8c0 2.21 1.79 4 4 4v2h2v-2h4v2h2v-2c2.21 0 4-1.79 4-4V9H7V6zm13 9c0 1.66-1.34 3-3 3H8c-1.66 0-3-1.34-3-3v-4h15v4z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ baths }}</span>
+                            </span>
+                          {%- endif -%}
+
+                          {%- if sqm != blank -%}
+                            <span class="bp-icon-pill" title="{{ sqm }} m²">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- regla/medidas -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M17.6 3.6 20.4 6.4c.8.8.8 2.1 0 2.8L9.2 20.4c-.8.8-2.1.8-2.8 0L3.6 17.6c-.8-.8-.8-2.1 0-2.8L14.8 3.6c.8-.8 2.1-.8 2.8 0zM6 16l2 2 1.2-1.2-2-2L6 16zm3.4-3.4 2 2 1.2-1.2-2-2-1.2 1.2zM12.8 9l2 2 1.2-1.2-2-2L12.8 9z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ sqm }} m²</span>
+                            </span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
                     </div>
                   </a>
 
@@ -153,10 +198,12 @@
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   }
+
   .banner-products-wrapper-{{ section.id }} .bp-item-image {
     width: 100%;
     height: 220px;
     overflow: hidden;
+    position: relative; /* necesario para overlay */
   }
   .banner-products-wrapper-{{ section.id }} .bp-item-image img {
     width: 100%;
@@ -164,6 +211,42 @@
     object-fit: cover;
     display: block;
   }
+
+  /* Overlay iconos (igual que la otra sección, pero prefijo bp-) */
+  .banner-products-wrapper-{{ section.id }} .bp-icons{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+    pointer-events: none;
+    flex-wrap: wrap;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-icon-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(17,17,17,.75);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    backdrop-filter: blur(6px);
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-ico,
+  .banner-products-wrapper-{{ section.id }} .bp-ico svg{
+    width: 16px;
+    height: 16px;
+    display: block;
+    fill: currentColor;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-icon-text{
+    transform: translateY(.5px);
+  }
+
   .banner-products-wrapper-{{ section.id }} .bp-card-footer {
     margin-top: auto;
     display: flex;
@@ -366,87 +449,24 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "banner_image",
-      "label": "Imagen del banner"
-    },
-    {
-      "type": "text",
-      "id": "banner_heading",
-      "label": "Título del banner",
-      "default": "Ofertas especiales"
-    },
-    {
-      "type": "textarea",
-      "id": "banner_text",
-      "label": "Texto del banner"
-    },
-    {
-      "type": "url",
-      "id": "banner_link",
-      "label": "Link del banner"
-    },
-    {
-      "type": "color",
-      "id": "button_bg",
-      "label": "Fondo botón principal",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Texto botón principal",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "price_button_bg",
-      "label": "Fondo botón precio",
-      "default": "#f8f8f8"
-    },
-    {
-      "type": "color",
-      "id": "price_text_color",
-      "label": "Texto botón precio",
-      "default": "#000000"
-    },
-    {
-      "type": "range",
-      "id": "title_font_size",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño fuente título",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "title_characters",
-      "min": 20,
-      "max": 60,
-      "step": 1,
-      "label": "Caracteres máximo título",
-      "default": 35
-    }
+    { "type": "image_picker", "id": "banner_image", "label": "Imagen del banner" },
+    { "type": "text", "id": "banner_heading", "label": "Título del banner", "default": "Ofertas especiales" },
+    { "type": "textarea", "id": "banner_text", "label": "Texto del banner" },
+    { "type": "url", "id": "banner_link", "label": "Link del banner" },
+    { "type": "color", "id": "button_bg", "label": "Fondo botón principal", "default": "#000000" },
+    { "type": "color", "id": "button_text_color", "label": "Texto botón principal", "default": "#ffffff" },
+    { "type": "color", "id": "price_button_bg", "label": "Fondo botón precio", "default": "#f8f8f8" },
+    { "type": "color", "id": "price_text_color", "label": "Texto botón precio", "default": "#000000" },
+    { "type": "range", "id": "title_font_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Tamaño fuente título", "default": 14 },
+    { "type": "range", "id": "title_characters", "min": 20, "max": 60, "step": 1, "label": "Caracteres máximo título", "default": 35 }
   ],
   "blocks": [
     {
       "type": "product",
       "name": "Producto",
       "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Seleccionar producto"
-        },
-        {
-          "type": "text",
-          "id": "state_label",
-          "label": "Etiqueta estado (ej: 'Nuevo')",
-          "default": "En stock"
-        }
+        { "type": "product", "id": "product", "label": "Seleccionar producto" },
+        { "type": "text", "id": "state_label", "label": "Etiqueta estado (ej: 'Nuevo')", "default": "En stock" }
       ]
     }
   ],
