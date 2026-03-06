@@ -1,5 +1,8 @@
 {% liquid
   assign p = product
+  assign sqm = p.metafields.custom.square_meters.value
+  assign beds = p.metafields.custom.bedrooms.value
+  assign baths = p.metafields.custom.bathrooms.value
 %}
 
 <article class="pc-card">
@@ -20,6 +23,26 @@
       <span class="pc-badge">Oferta</span>
     {% endif %}
   </a>
+
+  <div class="pc-overlay">
+    {% if sqm %}
+      <div class="pc-meta">
+        {{ sqm }} m²
+      </div>
+    {% endif %}
+
+    {% if beds %}
+      <div class="pc-meta">
+        🛏 {{ beds }}
+      </div>
+    {% endif %}
+
+    {% if baths %}
+      <div class="pc-meta">
+        🛁 {{ baths }}
+      </div>
+    {% endif %}
+  </div>
 
   <div class="pc-body">
     {% if p.vendor != blank %}
