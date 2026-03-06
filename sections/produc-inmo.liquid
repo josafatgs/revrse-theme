@@ -45,7 +45,7 @@
 
       <div class="po-track" id="po-track-{{ section.id }}">
         {% for block in section.blocks %}
-          {% assign p = all_products[block.settings.product] %}
+          {% comment %} {% assign p = all_products[block.settings.product] %}
           {% if p %}
             <article class="po-item" {{ block.shopify_attributes }}>
               <div class="po-card">
@@ -144,7 +144,9 @@
                 {% endif %}
               </div>
             </article>
-          {% endif %}
+          {% endif %} {% endcomment %}
+
+          {% render 'product' product: block %}
         {% endfor %}
       </div>
 
