@@ -34,18 +34,16 @@
           <span class="product-price">
             {{ product.selected_or_first_available_variant.price | money }}
           </span>
-          <a 
-            href="https://wa.me/2225138870?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}" 
-            target="_blank" 
+          <a
+            href="https://wa.me/2225138870?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}"
+            target="_blank"
             rel="noopener noreferrer"
             class="whatsapp-btn-product"
-            >
-
+          >
             {% render 'svg', icon: 'whatsapp' %}
 
             <span>Más información</span>
-
-            </a>
+          </a>
         </div>
       </div>
 
@@ -265,153 +263,153 @@
 </script>
 
 <style>
-    /* === SOLO COLORES (sin tocar WhatsApp) + borde editable de bloques === */
-    .product-template{
-      /* Specs */
-      --spec-card-bg: #ffffff;
-      --spec-card-border: #13CAE6;
-      --spec-icon-color: #111111;
-      --spec-label-color: #111111;
-      --spec-value-color: #111111;
+      /* === SOLO COLORES (sin tocar WhatsApp) + borde editable de bloques === */
+      .product-template{
+        /* Specs */
+        --spec-card-bg: #ffffff;
+        --spec-card-border: #13CAE6;
+        --spec-icon-color: #111111;
+        --spec-label-color: #111111;
+        --spec-value-color: #111111;
 
-      /* Bloques */
-      --block-bg: #ffffff;
-      --block-border: #ffffff/* <--- cambia este para el borde de los bloques */
+        /* Bloques */
+        --block-bg: #ffffff;
+        --block-border: #ffffff/* <--- cambia este para el borde de los bloques */
+      }
+
+      /* Specs (tarjetas azules) */
+      .product-template .spec-item{
+        background: var(--spec-card-bg);
+        border: 2px solid var(--spec-card-border);
+      }
+      .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
+      .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
+      .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
+
+      /* Bloques generales: SOLO fondo + borde (NO WhatsApp) */
+      .product-template .product-location,
+      .product-template .product-price,
+      .product-template .variant-selector,
+      .product-template .product-specs{
+        background: var(--block-bg);
+        border-color: var(--block-border);
+      }
+
+      /* Si tu tema no define borde, esto asegura que exista (border-color solo se ve con border-style) [web:161] */
+      .product-template .product-location,
+      .product-template .product-price,
+      .product-template .variant-selector,
+      .product-template .product-specs{
+        border-style: solid;
+        border-width: 1px;
+      }
+
+      /* HEADER */
+
+    .product-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px;
     }
 
-    /* Specs (tarjetas azules) */
-    .product-template .spec-item{
-      background: var(--spec-card-bg);
-      border: 2px solid var(--spec-card-border);
-    }
-    .product-template .spec-item .spec-icon{ color: var(--spec-icon-color); }
-    .product-template .spec-item .spec-label{ color: var(--spec-label-color); }
-    .product-template .spec-item .spec-value{ color: var(--spec-value-color); }
-
-    /* Bloques generales: SOLO fondo + borde (NO WhatsApp) */
-    .product-template .product-location,
-    .product-template .product-price,
-    .product-template .variant-selector,
-    .product-template .product-specs{
-      background: var(--block-bg);
-      border-color: var(--block-border);
+    .product-badges{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
     }
 
-    /* Si tu tema no define borde, esto asegura que exista (border-color solo se ve con border-style) [web:161] */
-    .product-template .product-location,
-    .product-template .product-price,
-    .product-template .variant-selector,
-    .product-template .product-specs{
-      border-style: solid;
-      border-width: 1px;
+    .badge{
+    padding:6px 12px;
+    border-radius:20px;
+    background:#46c4e0;
+    font-size:14px;
+    font-weight:600;
+    color: white;
     }
 
-    /* HEADER */
+    /* GALERÍA GRID */
 
-  .product-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  margin-bottom:20px;
-  }
+    .product-gallery-grid{
+    margin-top:20px;
+    }
 
-  .product-badges{
-  display:flex;
+    /* SECCIÓN DETALLES + FORM */
+
+    .property-info-section{
+    display:grid;
+    grid-template-columns: 2fr 1fr;
+    gap:40px;
+    margin-top:50px;
+    }
+
+    .property-details{
+    background:#f5f5f5;
+    padding:30px;
+    border-radius:8px;
+    }
+
+    .property-contact{
+    background:#f5f5f5;
+    padding:30px;
+    border-radius:8px;
+    }
+
+    /* VIDEO */
+
+    .property-video{
+    margin-top:60px;
+    }
+
+    .video-container{
+    position:relative;
+    padding-bottom:56.25%;
+    height:0;
+    overflow:hidden;
+    border-radius:16px;
+    background:#f2d77e;
+    }
+
+    .video-container iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    }
+
+    .whatsapp-btn-product{
+
+  display: flex;
+  border-radius: 10px;
+  align-items:center;
   gap:10px;
-  margin-top:8px;
-  }
 
-  .badge{
-  padding:6px 12px;
-  border-radius:20px;
-  background:#46c4e0;
-  font-size:14px;
+  background:#25D366;
+  color:white;
+
+  padding:14px 22px;
+
   font-weight:600;
-  color: white;
+  text-decoration:none;
+
+  transition:all .25s ease;
+
   }
 
-  /* GALERÍA GRID */
+  .whatsapp-btn-product:hover{
 
-  .product-gallery-grid{
-  margin-top:20px;
+  background:#1ebe5d;
+  transform:translateY(-2px);
+
   }
 
-  /* SECCIÓN DETALLES + FORM */
+  .whatsapp-btn-product svg{
 
-  .property-info-section{
-  display:grid;
-  grid-template-columns: 2fr 1fr;
-  gap:40px;
-  margin-top:50px;
+  width:20px;
+  height:20px;
+
   }
-
-  .property-details{
-  background:#f5f5f5;
-  padding:30px;
-  border-radius:8px;
-  }
-
-  .property-contact{
-  background:#f5f5f5;
-  padding:30px;
-  border-radius:8px;
-  }
-
-  /* VIDEO */
-
-  .property-video{
-  margin-top:60px;
-  }
-
-  .video-container{
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  overflow:hidden;
-  border-radius:16px;
-  background:#f2d77e;
-  }
-
-  .video-container iframe{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  }
-
-  .whatsapp-btn-product{
-
-display: flex;
-border-radius: 10px;
-align-items:center;
-gap:10px;
-
-background:#25D366;
-color:white;
-
-padding:14px 22px;
-
-font-weight:600;
-text-decoration:none;
-
-transition:all .25s ease;
-
-}
-
-.whatsapp-btn-product:hover{
-
-background:#1ebe5d;
-transform:translateY(-2px);
-
-}
-
-.whatsapp-btn-product svg{
-
-width:20px;
-height:20px;
-
-}
 </style>
 
 {% schema %}
