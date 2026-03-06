@@ -4,9 +4,11 @@
 <div class="product-template" data-product-id="{{ product.id }}">
   <div class="product-container">
     <!-- Breadcrumb Navigation -->
-    {% comment %} <nav class="product-breadcrumb" aria-label="Breadcrumb">
-      {% render 'breadcrumb', product: product %}
-    </nav> {% endcomment %}
+    {% comment %}
+      <nav class="product-breadcrumb" aria-label="Breadcrumb">
+        {% render 'breadcrumb', product: product %}
+      </nav>
+    {% endcomment %}
 
     <div class="product-hero">
       <div class="product-header">
@@ -41,18 +43,26 @@
       </div>
     </div>
 
-    <!-- Product Description -->
-    {% if product.description != blank %}
-      <div class="product-description">
-        <h2>Descripción de la Propiedad</h2>
-        <div class="description-content">
+    <div class="property-info-section">
+      <div class="property-details">
+        <h2>Detalles del Inmueble</h2>
+
+        <div class="specs-grid" id="variant-specs">
+          {% render 'product-specs', product: product %}
+        </div>
+
+        <div class="brief-description">
           {{ product.description }}
         </div>
       </div>
-    {% endif %}
 
-    <div class="product-form">
-      {% render 'product-form', product: product, current_variant: product.selected_or_first_available_variant %}
+      <div class="property-contact">
+        <h2>Solicitar información</h2>
+
+        <div class="product-form">
+          {% render 'product-form', product: product %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
