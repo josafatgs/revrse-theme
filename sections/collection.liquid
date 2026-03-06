@@ -30,7 +30,7 @@
                     {% if collection.products.size > 0 %}
                         <div class="collection-products">
                             {% for product in collection.products %}
-                                {% render 'product-card', product: product %}
+                                {% render 'product', product: product %}
                             {% endfor %}
                         </div>
 
