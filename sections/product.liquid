@@ -75,13 +75,18 @@
       </div>
     </div>
 
-    <div class="property-video">
-      <h2>Video</h2>
+    {% if product.metafields.custom.youtube_video != blank %}
 
-      <div class="video-container">
-        {{ product.metafields.custom.youtube_video }}
+      <div class="property-video">
+        <h2>Video</h2>
+
+        <div class="video-container">
+          {{ product.metafields.custom.youtube_video }}
+        </div>
       </div>
-    </div>
+
+    {% endif %}
+
   </div>
 </div>
 
