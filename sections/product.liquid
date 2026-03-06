@@ -384,3 +384,31 @@
   .full-width { grid-column: span 1; }
 }
 </style>
+
+
+<script>
+  function sendToWhatsApp() {
+  const name = document.getElementById('wa_name').value;
+  const interest = document.getElementById('wa_interest').value;
+  const propertyTitle = "{{ product.title }}";
+  const propertyUrl = window.location.href;
+  const phoneNumber = "522225138870"; // Formato internacional sin símbolos
+
+  if (!name) {
+    alert("Por favor, dinos tu nombre para personalizar el mensaje.");
+    return;
+  }
+
+  // Construcción del mensaje elegante
+  let message = `Hola! Mi nombre es *${name}* y estoy interesado en la propiedad: *${propertyTitle}*.\n\n`;
+  message += `Mi intención es: _${interest}_\n`;
+  message += `Enlace de la propiedad: ${propertyUrl}`;
+
+  // Codificar para URL
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+  // Abrir en pestaña nueva
+  window.open(whatsappUrl, '_blank');
+}
+</script>
