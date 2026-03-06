@@ -62,6 +62,51 @@
                     <div class="po-media-fallback" aria-hidden="true"></div>
                   {% endif %}
 
+                  {%- comment -%} ICONOS OVERLAY: bedrooms / bathrooms / square_meters {%- endcomment -%}
+                  {%- assign sqm = p.metafields.custom.square_meters.value -%}
+                  {%- assign beds = p.metafields.custom.bedrooms.value -%}
+                  {%- assign baths = p.metafields.custom.bathrooms.value -%}
+
+                  {%- if sqm != blank or beds != blank or baths != blank -%}
+                    <div class="po-icons" aria-hidden="true">
+                      {%- if beds != blank -%}
+                        <span class="po-icon-pill" title="{{ beds }} recámaras">
+                          <span class="po-ico" aria-hidden="true">
+                            <!-- cama -->
+                            <svg viewBox="0 0 24 24" role="img" focusable="false">
+                              <path d="M7 13c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h3c1.1 0 2 .9 2 2v3H7zm10 0h-5V8c0-1.1.9-2 2-2h3c1.1 0 2 .9 2 2v3c0 1.1-.9 2-2 2zM4 14c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v5h-2v-2H6v2H4v-5z"/>
+                            </svg>
+                          </span>
+                          <span class="po-icon-text">{{ beds }}</span>
+                        </span>
+                      {%- endif -%}
+
+                      {%- if baths != blank -%}
+                        <span class="po-icon-pill" title="{{ baths }} baños">
+                          <span class="po-ico" aria-hidden="true">
+                            <!-- baño -->
+                            <svg viewBox="0 0 24 24" role="img" focusable="false">
+                              <path d="M7 7a5 5 0 0 1 10 0v5h1a1 1 0 0 1 0 2h-.4l-.6 3.1A3 3 0 0 1 14.1 20H9.9a3 3 0 0 1-2.9-2.4L6.4 14H6a1 1 0 0 1 0-2h1V7zm2 5h6V7a3 3 0 0 0-6 0v5z"/>
+                            </svg>
+                          </span>
+                          <span class="po-icon-text">{{ baths }}</span>
+                        </span>
+                      {%- endif -%}
+
+                      {%- if sqm != blank -%}
+                        <span class="po-icon-pill" title="{{ sqm }} m²">
+                          <span class="po-ico" aria-hidden="true">
+                            <!-- regla/medidas -->
+                            <svg viewBox="0 0 24 24" role="img" focusable="false">
+                              <path d="M17.6 3.6 20.4 6.4c.8.8.8 2.1 0 2.8L9.2 20.4c-.8.8-2.1.8-2.8 0L3.6 17.6c-.8-.8-.8-2.1 0-2.8L14.8 3.6c.8-.8 2.1-.8 2.8 0zM6 16l2 2 1.2-1.2-2-2L6 16zm3.4-3.4 2 2 1.2-1.2-2-2-1.2 1.2zM12.8 9l2 2 1.2-1.2-2-2L12.8 9z"/>
+                            </svg>
+                          </span>
+                          <span class="po-icon-text">{{ sqm }} m²</span>
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
                   {% if section.settings.show_badges %}
                     {% if p.compare_at_price > p.price %}
                       <span class="po-badge po-badge-sale">Oferta</span>
@@ -192,6 +237,41 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #eee, #f8f8f8);
+  }
+
+  /* Overlay iconos */
+  .po-products-{{ section.id }} .po-icons{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+    pointer-events: none;
+    flex-wrap: wrap;
+  }
+  .po-products-{{ section.id }} .po-icon-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(17,17,17,.75);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    backdrop-filter: blur(6px);
+  }
+  .po-products-{{ section.id }} .po-ico,
+  .po-products-{{ section.id }} .po-ico svg{
+    width: 16px;
+    height: 16px;
+    display: block;
+    fill: currentColor;
+  }
+  .po-products-{{ section.id }} .po-icon-text{
+    transform: translateY(.5px);
   }
 
   .po-products-{{ section.id }} .po-badge{
@@ -465,5 +545,3 @@
   ]
 }
 {% endschema %}
-
-
