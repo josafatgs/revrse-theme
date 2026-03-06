@@ -191,4 +191,50 @@
     .sticky-form-container { position: sticky; top: 30px; }
     .whatsapp-btn-product { width: auto; }
   }
+
+  .whatsapp-btn-product {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espacio más compacto */
+  
+  background-color: #25D366;
+  color: #ffffff;
+  
+  /* Altura reducida y padding balanceado */
+  width: 100%;
+  min-height: 44px; /* Altura estándar profesional (antes era 52px) */
+  padding: 8px 20px;
+  
+  border-radius: 8px; /* Radio menos agresivo, más serio */
+  font-size: 14px; /* Texto un poco más pequeño */
+  font-weight: 600;
+  text-decoration: none;
+  
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* En Desktop se vuelve un botón de acción lateral, no un bloque gigante */
+@media (min-width: 769px) {
+  .whatsapp-btn-product {
+    width: fit-content;
+    min-height: 40px;
+    padding: 6px 24px;
+    font-size: 13px;
+  }
+  
+  .whatsapp-btn-product:hover {
+    background-color: #1ebe5d;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  }
+}
+
+.whatsapp-btn-product svg {
+  width: 18px; /* Icono más discreto */
+  height: 18px;
+  fill: currentColor;
+}
 </style>
