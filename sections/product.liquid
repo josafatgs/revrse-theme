@@ -430,23 +430,20 @@
   const interest = document.getElementById('wa_interest').value;
   const propertyTitle = "{{ product.title }}";
   const propertyUrl = window.location.href;
-  const phoneNumber = "522225138870"; // Formato internacional sin símbolos
+  const phoneNumber = "522225138870";
 
-  if (!name) {
-    alert("Por favor, dinos tu nombre para personalizar el mensaje.");
+  if (!name || name.trim() === "") {
+    alert("Por favor, ingresa tu nombre para poder atenderte mejor.");
     return;
   }
 
-  // Construcción del mensaje elegante
   let message = `Hola! Mi nombre es *${name}* y estoy interesado en la propiedad: *${propertyTitle}*.\n\n`;
   message += `Mi intención es: _${interest}_\n`;
-  message += `Enlace de la propiedad: ${propertyUrl}`;
+  message += `Enlace: ${propertyUrl}`;
 
-  // Codificar para URL
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
 
-  // Abrir en pestaña nueva
   window.open(whatsappUrl, '_blank');
 }
 </script>
