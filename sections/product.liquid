@@ -277,6 +277,73 @@
 
     .property-details, .property-contact { padding: 40px; }
   }
+
+  /* Contenedor principal del Header */
+.product-header {
+  display: flex;
+  flex-direction: column; /* Apilado en móvil por defecto */
+  gap: 20px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+
+/* Título y Badges */
+.product-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.product-title {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 1.75rem; /* Ajustable según tu diseño */
+}
+
+/* Precio y Botón WhatsApp */
+.product-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%; /* Botón y precio ocupan todo el ancho en móvil */
+}
+
+.product-price {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #111;
+}
+
+/* --- DESKTOP: Alineación perfecta --- */
+@media (min-width: 992px) {
+  .product-header {
+    flex-direction: row; /* Uno a la izquierda, otro a la derecha */
+    justify-content: space-between;
+    align-items: flex-end; /* <--- LA CLAVE: Alinea ambos bloques por su base */
+  }
+
+  .product-header-left {
+    width: auto;
+    max-width: 60%; /* Evita que el título empuje demasiado al botón */
+  }
+
+  .product-header-right {
+    width: auto;
+    align-items: flex-end; /* Alinea precio y botón a la derecha */
+    text-align: right;
+  }
+
+  .product-title {
+    font-size: 2.5rem; /* Más grande en desktop */
+  }
+
+  .product-price {
+    font-size: 2rem;
+    margin-bottom: 5px; /* Pequeño ajuste visual para separarlo del botón */
+  }
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
