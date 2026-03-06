@@ -1,283 +1,256 @@
+{% comment %}
+  Section: Video izquierda + info derecha (editable en editor)
+  - Video externo (YouTube/Vimeo) via setting type: video_url
+  - Responsive: 2 columnas desktop, 1 columna móvil
+{% endcomment %}
+
+<section
+  class="viw-{{ section.id }}"
+  style="
+    --viw-max: {{ section.settings.max_width }}px;
+    --viw-pt: {{ section.settings.padding_top }}px;
+    --viw-pb: {{ section.settings.padding_bottom }}px;
+    --viw-gap: {{ section.settings.gap }}px;
+    --viw-radius: {{ section.settings.radius }}px;
+    --viw-bg: {{ section.settings.background }};
+    --viw-text: {{ section.settings.text_color }};
+    --viw-muted: {{ section.settings.muted_text_color }};
+    --viw-btn-bg: {{ section.settings.button_bg }};
+    --viw-btn-text: {{ section.settings.button_text }};
+  "
+>
+  <div class="viw-container">
+    <div class="viw-grid viw-align-{{ section.settings.vertical_align }}">
+      <!-- VIDEO -->
+      <div class="viw-video">
+        {% if section.settings.video_url != blank %}
+          <div class="viw-video-frame viw-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
+            <iframe
+              src="{{ section.settings.video_url }}"
+              title="{{ section.settings.video_title | escape }}"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        {% else %}
+          <div class="viw-video-placeholder">
+            Agrega un link de YouTube/Vimeo en el editor
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- INFO -->
+      <div class="viw-info">
+        {% if section.settings.kicker != blank %}
+          <div class="viw-kicker">{{ section.settings.kicker }}</div>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="viw-title">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="viw-text rte">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.features != blank %}
+          {% assign feats = section.settings.features | newline_to_br | split: '<br />' %}
+          <ul class="viw-features">
+            {% for f in feats %}
+              {% assign item = f | strip %}
+              {% if item != blank %}
+                <li>{{ item }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a class="viw-button" href="{{ section.settings.button_link }}">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bogle&display=swap');
-
-  .video-info-{{ section.id }}{
-    font-family: "BBH Sans Bogle", -apple-system, BlinkMacSystemFont, sans-serif;
-    padding: {{ section.settings.padding_desktop }}px 0;
+  .viw-{{ section.id }}{
+    background: var(--viw-bg);
+    padding: var(--viw-pt) 0 var(--viw-pb);
+    color: var(--viw-text);
   }
-
-  .video-info-{{ section.id }} .container{
-    width: min(1200px, 95%);
+  .viw-{{ section.id }} .viw-container{
+    max-width: var(--viw-max);
     margin: 0 auto;
+    padding: 0 16px;
   }
 
-  .video-info-{{ section.id }} .card{
-    background: linear-gradient(180deg, rgba(10, 37, 64, 1) 0%, rgba(30, 58, 138, 1) 100%);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 24px;
-    padding: 2.5rem 3rem;
+  .viw-{{ section.id }} .viw-grid{
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 3rem;
-    align-items: center;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--viw-gap);
   }
 
-  .video-info-{{ section.id }} .video-wrap{
+  .viw-{{ section.id }} .viw-align-top{ align-items: start; }
+  .viw-{{ section.id }} .viw-align-center{ align-items: center; }
+  .viw-{{ section.id }} .viw-align-bottom{ align-items: end; }
+
+  .viw-{{ section.id }} .viw-video-frame{
     width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 18px;
+    border-radius: var(--viw-radius);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-    background: rgba(0,0,0,0.15);
+    background: #000;
+    aspect-ratio: 16 / 9;
   }
-
-  .video-info-{{ section.id }} .video-wrap iframe{
+  .viw-{{ section.id }} .viw-video-frame iframe{
     width: 100%;
     height: 100%;
     border: 0;
     display: block;
   }
 
-  .video-info-{{ section.id }} .title{
-    font-size: {{ section.settings.title_size_desktop }}px;
+  .viw-{{ section.id }} .viw-video-placeholder{
+    border-radius: var(--viw-radius);
+    border: 1px dashed rgba(0,0,0,.25);
+    padding: 18px;
+    color: var(--viw-muted);
+    background: rgba(0,0,0,.03);
+  }
+
+  .viw-{{ section.id }} .viw-kicker{
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--viw-muted);
     font-weight: 700;
-    color: #fff;
+    margin-bottom: 10px;
+  }
+  .viw-{{ section.id }} .viw-title{
+    margin: 0 0 10px;
+    font-size: 34px;
     line-height: 1.1;
-    margin: 0 0 12px 0;
-    letter-spacing: -0.02em;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .viw-{{ section.id }} .viw-text{
+    color: var(--viw-text);
+    opacity: .92;
+  }
+  .viw-{{ section.id }} .viw-features{
+    margin: 14px 0 0;
+    padding-left: 18px;
+    color: var(--viw-text);
+    opacity: .95;
+  }
+  .viw-{{ section.id }} .viw-features li{
+    margin: 6px 0;
   }
 
-  .video-info-{{ section.id }} .text{
-    font-size: {{ section.settings.text_size_desktop }}px;
-    color: #FED700;
-    line-height: 1.5;
-    margin: 0 0 18px 0;
-    max-width: 560px;
-  }
-
-  .video-info-{{ section.id }} .button{
-    display: inline-block;
-    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-    color: #fff;
-    padding: 1.1rem 2.4rem;
-    font-size: 16px;
-    font-weight: 600;
+  .viw-{{ section.id }} .viw-button{
+    display: inline-flex;
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--viw-btn-bg);
+    color: var(--viw-btn-text);
     text-decoration: none;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-    transition: transform .2s ease, box-shadow .2s ease;
-    white-space: nowrap;
+    font-weight: 800;
   }
+  .viw-{{ section.id }} .viw-button:hover{ filter: brightness(.92); }
 
-  .video-info-{{ section.id }} .button:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 20px 35px rgba(59, 130, 246, 0.4);
-  }
+  /* Ratio options */
+  .viw-{{ section.id }} .viw-ratio-16-9{ aspect-ratio: 16 / 9; }
+  .viw-{{ section.id }} .viw-ratio-4-3{ aspect-ratio: 4 / 3; }
+  .viw-{{ section.id }} .viw-ratio-1-1{ aspect-ratio: 1 / 1; }
+  .viw-{{ section.id }} .viw-ratio-9-16{ aspect-ratio: 9 / 16; }
 
-  @media (max-width: 968px){
-    .video-info-{{ section.id }}{
-      padding: {{ section.settings.padding_mobile }}px 0;
-    }
-
-    .video-info-{{ section.id }} .card{
+  /* Responsive */
+  @media (max-width: 989px){
+    .viw-{{ section.id }} .viw-grid{
       grid-template-columns: 1fr;
-      padding: 1.6rem;
-      gap: 1.5rem;
     }
-
-    .video-info-{{ section.id }} .title{
-      font-size: {{ section.settings.title_size_mobile }}px;
-    }
-
-    .video-info-{{ section.id }} .text{
-      font-size: {{ section.settings.text_size_mobile }}px;
-    }
-
-    .video-info-{{ section.id }} .button{
-      width: 100%;
-      text-align: center;
+    .viw-{{ section.id }} .viw-title{
+      font-size: 26px;
     }
   }
 </style>
 
-<section class="video-info-{{ section.id }}">
-  <div class="container">
-    <div class="card">
-
-      <div class="video-col">
-        {% if section.settings.video_url != blank %}
-          {% if section.settings.video_url.type == 'youtube' %}
-            <div class="video-wrap">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/{{ section.settings.video_url.id }}?rel=0&modestbranding=1"
-                title="{{ section.settings.title | escape }}"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-              </iframe>
-            </div>
-          {% elsif section.settings.video_url.type == 'vimeo' %}
-            <div class="video-wrap">
-              <iframe
-                src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}"
-                title="{{ section.settings.title | escape }}"
-                loading="lazy"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowfullscreen>
-              </iframe>
-            </div>
-          {% endif %}
-        {% else %}
-          <div class="video-wrap"></div>
-        {% endif %}
-      </div>
-
-      <div class="info-col">
-        {% if section.settings.title != blank %}
-          <h2 class="title">{{ section.settings.title }}</h2>
-        {% endif %}
-
-        {% if section.settings.text != blank %}
-          <div class="text">{{ section.settings.text }}</div>
-        {% endif %}
-
-        {% if section.settings.button_text != blank and section.settings.button_link != blank %}
-          <a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_text }}</a>
-        {% endif %}
-      </div>
-
-    </div>
-  </div>
-</section>
-
 {% schema %}
 {
-  "name": "Video + info (split)",
+  "name": "Video + Info (Derecha)",
+  "tag": "section",
+  "class": "section",
   "settings": [
-    {
-      "type": "header",
-      "content": "Video"
-    },
     {
       "type": "video_url",
       "id": "video_url",
-      "label": "Video URL (YouTube o Vimeo)",
+      "label": "URL del video (YouTube/Vimeo)",
       "accept": ["youtube", "vimeo"]
     },
-
-    {
-      "type": "header",
-      "content": "Contenido"
-    },
     {
       "type": "text",
-      "id": "title",
-      "label": "Título",
-      "default": "Box Programador F64 Lite"
+      "id": "video_title",
+      "label": "Título accesible del video (SEO/ARIA)",
+      "default": "Video"
     },
     {
-      "type": "richtext",
-      "id": "text",
-      "label": "Descripción",
-      "default": "<p>Programador universal para lectura/escritura de firmware, compatible con múltiples interfaces.</p>"
-    },
-
-    {
-      "type": "header",
-      "content": "Botón"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Texto del botón",
-      "default": "Ver producto"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Enlace del botón"
+      "type": "select",
+      "id": "video_ratio",
+      "label": "Relación de aspecto del video",
+      "default": "16 / 9",
+      "options": [
+        { "value": "16 / 9", "label": "16:9 (YouTube)" },
+        { "value": "4 / 3", "label": "4:3" },
+        { "value": "1 / 1", "label": "1:1" },
+        { "value": "9 / 16", "label": "9:16 (vertical)" }
+      ]
     },
 
+    { "type": "text", "id": "kicker", "label": "Texto superior (opcional)", "default": "Conócenos" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Tu título aquí" },
+    { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Agrega aquí la descripción a la derecha del video.</p>" },
     {
-      "type": "header",
-      "content": "Tamaños (desktop)"
-    },
-    {
-      "type": "range",
-      "id": "title_size_desktop",
-      "min": 24,
-      "max": 80,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño título (desktop)",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "text_size_desktop",
-      "min": 12,
-      "max": 28,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño descripción (desktop)",
-      "default": 18
+      "type": "textarea",
+      "id": "features",
+      "label": "Lista (una por línea)",
+      "default": "Envíos rápidos\nGarantía\nSoporte"
     },
 
-    {
-      "type": "header",
-      "content": "Tamaños (móvil)"
-    },
-    {
-      "type": "range",
-      "id": "title_size_mobile",
-      "min": 18,
-      "max": 56,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño título (móvil)",
-      "default": 32
-    },
-    {
-      "type": "range",
-      "id": "text_size_mobile",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño descripción (móvil)",
-      "default": 16
-    },
+    { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Ver más" },
+    { "type": "url", "id": "button_link", "label": "Link del botón" },
 
     {
-      "type": "header",
-      "content": "Espaciado"
+      "type": "select",
+      "id": "vertical_align",
+      "label": "Alineación vertical columnas",
+      "default": "center",
+      "options": [
+        { "value": "top", "label": "Arriba" },
+        { "value": "center", "label": "Centro" },
+        { "value": "bottom", "label": "Abajo" }
+      ]
     },
-    {
-      "type": "range",
-      "id": "padding_desktop",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding sección (desktop)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_mobile",
-      "min": 0,
-      "max": 80,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding sección (móvil)",
-      "default": 0
-    }
+
+    { "type": "range", "id": "max_width", "min": 900, "max": 1600, "step": 50, "unit": "px", "label": "Ancho máximo", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding superior", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding inferior", "default": 48 },
+    { "type": "range", "id": "gap", "min": 12, "max": 48, "step": 2, "unit": "px", "label": "Separación columnas", "default": 28 },
+    { "type": "range", "id": "radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Radio contenedores", "default": 14 },
+
+    { "type": "color", "id": "background", "label": "Fondo sección", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Texto principal", "default": "#111111" },
+    { "type": "color", "id": "muted_text_color", "label": "Texto secundario", "default": "#666666" },
+
+    { "type": "color", "id": "button_bg", "label": "Fondo botón", "default": "#111111" },
+    { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
   ],
   "presets": [
-    { "name": "Video + info (split)" }
+    {
+      "name": "Video + Info (Derecha)"
+    }
   ]
 }
 {% endschema %}
