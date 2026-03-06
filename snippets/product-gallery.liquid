@@ -1,11 +1,31 @@
 <div class="gallery-grid">
-
-{% for image in product.images %}
-
-<div class="gallery-item {% if forloop.first %}gallery-main{% endif %}">
-<img src="{{ image | img_url: '1000x' }}" alt="{{ image.alt }}">
+  {% for image in product.images %}
+    <div class="gallery-item {% if forloop.first %}gallery-main{% endif %}">
+      <img src="{{ image | img_url: '1000x' }}" alt="{{ image.alt }}">
+    </div>
+  {% endfor %}
 </div>
 
-{% endfor %}
+<style>
+    .gallery-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  grid-auto-rows:200px;
+  gap:10px;
+  }
 
-</div>
+  .gallery-item{
+  overflow:hidden;
+  border-radius:8px;
+  }
+
+  .gallery-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  }
+
+  .gallery-main{
+  grid-row: span 2;
+  }
+</style>
