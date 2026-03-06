@@ -1,277 +1,485 @@
 {% comment %}
-  Section: Video izquierda + info derecha (OS 2.0)
-  - YouTube/Vimeo: setting type video_url (accept youtube/vimeo)
-  - TikTok: pegar embed (blockquote + script)
-  - Responsive: 2 columnas desktop, 1 columna móvil
+  Sección: Banner izquierda + slider productos derecha (3 productos visibles)
+  + Ocultar en móvil (<= 749px)
 {% endcomment %}
 
-<section
-  class="viw-{{ section.id }}"
-  style="
-    --viw-max: {{ section.settings.max_width }}px;
-    --viw-pt: {{ section.settings.padding_top }}px;
-    --viw-pb: {{ section.settings.padding_bottom }}px;
-    --viw-gap: {{ section.settings.gap }}px;
-    --viw-radius: {{ section.settings.radius }}px;
-    --viw-bg: {{ section.settings.background }};
-    --viw-text: {{ section.settings.text_color }};
-    --viw-muted: {{ section.settings.muted_text_color }};
-    --viw-btn-bg: {{ section.settings.button_bg }};
-    --viw-btn-text: {{ section.settings.button_text }};
-  "
->
-  <div class="viw-container">
-    <div class="viw-grid viw-align-{{ section.settings.vertical_align }}">
-      <!-- VIDEO (IZQUIERDA) -->
-      <div class="viw-video">
-        {% if section.settings.video_source == 'youtube_vimeo' %}
-          {% if section.settings.video_url != blank %}
-            <div class="viw-video-frame viw-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
-              <iframe
-                src="{{ section.settings.video_url }}"
-                title="{{ section.settings.video_title | escape }}"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-            </div>
-          {% else %}
-            <div class="viw-video-placeholder">Agrega URL de YouTube/Vimeo en el editor</div>
+<section class="banner-products-wrapper-{{ section.id }}">
+  <div class="bp-container">
+    <!-- BANNER IZQUIERDO -->
+    <div class="bp-banner">
+      {% if section.settings.banner_link != blank %}
+        <a href="{{ section.settings.banner_link }}">
+      {% endif %}
+        {% if section.settings.banner_image != blank %}
+          <img
+            src="{{ section.settings.banner_image | image_url: width: 2000 }}"
+            alt="{{ section.settings.banner_heading | escape }}"
+            class="bp-banner-img"
+          >
+        {% endif %}
+        <div class="bp-banner-content">
+          {% if section.settings.banner_heading != blank %}
+            <h2>{{ section.settings.banner_heading }}</h2>
           {% endif %}
-        {% else %}
-          {% if section.settings.tiktok_embed != blank %}
-            <div class="viw-tiktok">
-              {{ section.settings.tiktok_embed }}
-            </div>
-          {% else %}
-            <div class="viw-video-placeholder">Pega el embed de TikTok en el editor</div>
+          {% if section.settings.banner_text != blank %}
+            <p>{{ section.settings.banner_text }}</p>
           {% endif %}
-        {% endif %}
-      </div>
+        </div>
+      {% if section.settings.banner_link != blank %}
+        </a>
+      {% endif %}
+    </div>
 
-      <!-- INFO (DERECHA) -->
-      <div class="viw-info">
-        {% if section.settings.kicker != blank %}
-          <div class="viw-kicker">{{ section.settings.kicker }}</div>
-        {% endif %}
+    <!-- PRODUCTOS DERECHA -->
+    <div class="bp-products">
+      <div class="bp-slider" id="bp-slider-{{ section.id }}">
+        <div class="bp-track">
+          {% for block in section.blocks %}
+            {% assign prod = all_products[block.settings.product] %}
+            {% if prod %}
+              <article class="bp-item" {{ block.shopify_attributes }}>
+                <div class="bp-card">
+                  <a href="{{ prod.url }}">
+                    <div
+                      class="bp-item-image"
+                      data-images="{{ prod.featured_image | image_url: width: 800 }}{% if prod.images.size > 1 %}|{{ prod.images[1] | image_url: width: 800 }}{% endif %}"
+                    >
+                      <img
+                        src="{{ prod.featured_image | image_url: width: 800 }}"
+                        alt="{{ prod.title | escape }}"
+                      >
 
-        {% if section.settings.heading != blank %}
-          <h2 class="viw-title">{{ section.settings.heading }}</h2>
-        {% endif %}
+                      {%- comment -%} ICONOS OVERLAY: bedrooms / bathrooms / square_meters {%- endcomment -%}
+                      {%- assign sqm = prod.metafields.custom.square_meters.value -%}
+                      {%- assign beds = prod.metafields.custom.bedrooms.value -%}
+                      {%- assign baths = prod.metafields.custom.bathrooms.value -%}
 
-        {% if section.settings.text != blank %}
-          <div class="viw-text rte">
-            {{ section.settings.text }}
-          </div>
-        {% endif %}
+                      {%- if sqm != blank or beds != blank or baths != blank -%}
+                        <div class="bp-icons" aria-hidden="true">
+                          {%- if beds != blank -%}
+                            <span class="bp-icon-pill" title="{{ beds }} recámaras">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- cama -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M21 10.5V17h-1.5v-1.5h-15V17H3v-6.5C3 9.12 4.12 8 5.5 8h4C10.88 8 12 9.12 12 10.5V12h8.5c.28 0 .5-.22.5-.5zM11 12v-1.5C11 9.67 10.33 9 9.5 9h-4C4.67 9 4 9.67 4 10.5V12h7zm10 2v1H3v-1h18z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ beds }}</span>
+                            </span>
+                          {%- endif -%}
 
-        {% if section.settings.features != blank %}
-          {% assign feats = section.settings.features | newline_to_br | split: '<br />' %}
-          <ul class="viw-features">
-            {% for f in feats %}
-              {% assign item = f | strip %}
-              {% if item != blank %}
-                <li>{{ item }}</li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% endif %}
+                          {%- if baths != blank -%}
+                            <span class="bp-icon-pill" title="{{ baths }} baños">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- bañera -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M7 6c0-1.66 1.34-3 3-3s3 1.34 3 3v1h1V6c0-2.21-1.79-4-4-4S6 3.79 6 6v1H4v8c0 2.21 1.79 4 4 4v2h2v-2h4v2h2v-2c2.21 0 4-1.79 4-4V9H7V6zm13 9c0 1.66-1.34 3-3 3H8c-1.66 0-3-1.34-3-3v-4h15v4z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ baths }}</span>
+                            </span>
+                          {%- endif -%}
 
-        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-          <a class="viw-button" href="{{ section.settings.button_link }}">
-            {{ section.settings.button_label }}
-          </a>
-        {% endif %}
+                          {%- if sqm != blank -%}
+                            <span class="bp-icon-pill" title="{{ sqm }} m²">
+                              <span class="bp-ico" aria-hidden="true">
+                                <!-- regla/medidas -->
+                                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                                  <path d="M17.6 3.6 20.4 6.4c.8.8.8 2.1 0 2.8L9.2 20.4c-.8.8-2.1.8-2.8 0L3.6 17.6c-.8-.8-.8-2.1 0-2.8L14.8 3.6c.8-.8 2.1-.8 2.8 0zM6 16l2 2 1.2-1.2-2-2L6 16zm3.4-3.4 2 2 1.2-1.2-2-2-1.2 1.2zM12.8 9l2 2 1.2-1.2-2-2L12.8 9z"/>
+                                </svg>
+                              </span>
+                              <span class="bp-icon-text">{{ sqm }} m²</span>
+                            </span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </a>
+
+                  <div class="bp-card-footer">
+                    <!-- Botón título -->
+                    <a href="{{ prod.url }}" class="bp-card-button bp-card-button-main">
+                      <span class="bp-card-title">
+                        {{ prod.title | truncate: section.settings.title_characters }}
+                      </span>
+                    </a>
+
+                    <!-- Botón precio -->
+                    <a href="{{ prod.url }}" class="bp-card-button bp-card-button-price">
+                      <span class="bp-card-price">{{ prod.price | money }}</span>
+                    </a>
+
+                    <!-- Botón estado por bloque -->
+                    {% if block.settings.state_label != blank %}
+                      <span class="bp-card-button bp-card-button-state">
+                        {{ block.settings.state_label }}
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <button type="button" class="bp-prev" aria-label="Anterior">‹</button>
+        <button type="button" class="bp-next" aria-label="Siguiente">›</button>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .viw-{{ section.id }}{
-    background: var(--viw-bg);
-    padding: var(--viw-pt) 0 var(--viw-pb);
-    color: var(--viw-text);
+  .banner-products-wrapper-{{ section.id }} {
+    padding: 70px 0;
+    overflow-x: hidden;
   }
-  .viw-{{ section.id }} .viw-container{
-    max-width: var(--viw-max);
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-
-  /* VIDEO IZQUIERDA / INFO DERECHA */
-  .viw-{{ section.id }} .viw-grid{
+  .banner-products-wrapper-{{ section.id }} .bp-container {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: var(--viw-gap);
+    grid-template-columns: 1.7fr 1.3fr; /* banner más grande */
+    gap: 32px;
+    align-items: stretch;
   }
 
-  .viw-{{ section.id }} .viw-align-top{ align-items: start; }
-  .viw-{{ section.id }} .viw-align-center{ align-items: center; }
-  .viw-{{ section.id }} .viw-align-bottom{ align-items: end; }
-
-  /* YouTube/Vimeo */
-  .viw-{{ section.id }} .viw-video-frame{
-    width: 100%;
-    border-radius: var(--viw-radius);
+  /* BANNER */
+  .banner-products-wrapper-{{ section.id }} .bp-banner {
+    position: relative;
     overflow: hidden;
-    background: #000;
-    aspect-ratio: 16 / 9;
+    border-radius: 12px;
   }
-  .viw-{{ section.id }} .viw-video-frame iframe{
+  .banner-products-wrapper-{{ section.id }} .bp-banner-img {
     width: 100%;
     height: 100%;
-    border: 0;
+    min-height: 420px; /* banner más alto */
+    object-fit: cover;
     display: block;
   }
-  .viw-{{ section.id }} .viw-ratio-16-9{ aspect-ratio: 16 / 9; }
-  .viw-{{ section.id }} .viw-ratio-4-3{ aspect-ratio: 4 / 3; }
-  .viw-{{ section.id }} .viw-ratio-1-1{ aspect-ratio: 1 / 1; }
-  .viw-{{ section.id }} .viw-ratio-9-16{ aspect-ratio: 9 / 16; }
+  .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px;
+    color: #ffffff;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+    margin: 0 0 12px 0;
+    font-size: 34px;
+  }
 
-  /* TikTok */
-  .viw-{{ section.id }} .viw-tiktok{
-    border-radius: var(--viw-radius);
+  /* SLIDER PRODUCTOS */
+  .banner-products-wrapper-{{ section.id }} .bp-products {
+    position: relative;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-slider {
+    position: relative;
     overflow: hidden;
   }
-  .viw-{{ section.id }} .viw-tiktok blockquote{
-    margin: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
+  .banner-products-wrapper-{{ section.id }} .bp-track {
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.4s ease;
+    gap: 12px;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-item {
+    flex: 0 0 33.333%; /* 3 productos visibles */
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 360px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
   }
 
-  .viw-{{ section.id }} .viw-video-placeholder{
-    border-radius: var(--viw-radius);
-    border: 1px dashed rgba(0,0,0,.25);
-    padding: 18px;
-    color: var(--viw-muted);
-    background: rgba(0,0,0,.03);
+  .banner-products-wrapper-{{ section.id }} .bp-item-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    position: relative; /* necesario para overlay */
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .viw-{{ section.id }} .viw-kicker{
-    font-size: 12px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--viw-muted);
-    font-weight: 700;
-    margin-bottom: 10px;
+  /* Overlay iconos (igual que la otra sección, pero prefijo bp-) */
+  .banner-products-wrapper-{{ section.id }} .bp-icons{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+    pointer-events: none;
+    flex-wrap: wrap;
   }
-  .viw-{{ section.id }} .viw-title{
-    margin: 0 0 10px;
-    font-size: 34px;
-    line-height: 1.1;
-  }
-  .viw-{{ section.id }} .viw-text{ opacity: .92; }
-  .viw-{{ section.id }} .viw-features{
-    margin: 14px 0 0;
-    padding-left: 18px;
-    opacity: .95;
-  }
-  .viw-{{ section.id }} .viw-features li{ margin: 6px 0; }
-
-  .viw-{{ section.id }} .viw-button{
+  .banner-products-wrapper-{{ section.id }} .bp-icon-pill{
     display: inline-flex;
-    margin-top: 16px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    background: var(--viw-btn-bg);
-    color: var(--viw-btn-text);
-    text-decoration: none;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(17,17,17,.75);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
     font-weight: 800;
+    backdrop-filter: blur(6px);
   }
-  .viw-{{ section.id }} .viw-button:hover{ filter: brightness(.92); }
+  .banner-products-wrapper-{{ section.id }} .bp-ico,
+  .banner-products-wrapper-{{ section.id }} .bp-ico svg{
+    width: 16px;
+    height: 16px;
+    display: block;
+    fill: currentColor;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-icon-text{
+    transform: translateY(.5px);
+  }
 
-  /* Mobile */
-  @media (max-width: 989px){
-    .viw-{{ section.id }} .viw-grid{ grid-template-columns: 1fr; }
-    .viw-{{ section.id }} .viw-title{ font-size: 26px; }
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card-button,
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-state {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card-footer .bp-card-button-state {
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main {
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
+    font-size: {{ section.settings.title_font_size }}px;
+    text-align: center;
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-main:hover {
+    filter: brightness(0.9);
+  }
+  .banner-products-wrapper-{{ section.id }} .bp-card-button-price {
+    background: {{ section.settings.price_button_bg }};
+    color: {{ section.settings.price_text_color }};
+  }
+
+  .bp-prev, .bp-next {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+  }
+  .bp-prev { left: 8px; }
+  .bp-next { right: 8px; }
+
+  .bp-prev:hover, .bp-next:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* RESPONSIVE - MEJORADO PARA MÓVIL */
+  @media (max-width: 989px) {
+    .banner-products-wrapper-{{ section.id }} .bp-container {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-products {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .banner-products-wrapper-{{ section.id }} {
+      padding: 40px 0;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-container {
+      padding: 0 12px;
+      gap: 20px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-img {
+      min-height: 250px !important;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+      padding: 24px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+      font-size: 24px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-slider {
+      height: auto;
+      max-height: 420px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-track {
+      gap: 8px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 50%; /* 2 en tablet */
+    }
+    .bp-prev, .bp-next {
+      width: 36px !important;
+      height: 36px !important;
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .banner-products-wrapper-{{ section.id }} .bp-item {
+      flex: 0 0 100%; /* 1 en móvil */
+      padding: 0 4px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-card {
+      min-height: 340px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item-image {
+      height: 180px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content {
+      padding: 20px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-banner-content h2 {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .banner-products-wrapper-{{ section.id }} .bp-card {
+      min-height: 320px;
+    }
+    .banner-products-wrapper-{{ section.id }} .bp-item-image {
+      height: 160px;
+    }
+  }
+
+  /* OCULTAR EN MÓVIL (visible en web/desktop) */
+  @media screen and (max-width: 749px) {
+    .banner-products-wrapper-{{ section.id }},
+    #shopify-section-{{ section.id }} {
+      display: none !important;
+    }
   }
 </style>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sliderId = 'bp-slider-{{ section.id }}';
+    const track = document.querySelector(`#${sliderId} .bp-track`);
+    const prevBtn = document.querySelector(`#${sliderId} .bp-prev`);
+    const nextBtn = document.querySelector(`#${sliderId} .bp-next`);
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const items = track.querySelectorAll('.bp-item');
+    if (!items.length) return;
+
+    let currentIndex = 0;
+    let visibleItems = 3;
+
+    function updateVisibles() {
+      const width = window.innerWidth;
+      if (width < 600) visibleItems = 1;
+      else if (width < 989) visibleItems = 2;
+      else visibleItems = 3;
+    }
+
+    function updateSlider() {
+      const itemWidth = items[0].offsetWidth + 24; // aproximación (ancho + separación)
+      const offset = -currentIndex * itemWidth;
+      track.style.transform = `translateX(${offset}px)`;
+
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= items.length - visibleItems;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlider();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < items.length - visibleItems) {
+        currentIndex++;
+        updateSlider();
+      }
+    });
+
+    updateVisibles();
+    updateSlider();
+
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        updateVisibles();
+        currentIndex = Math.min(currentIndex, items.length - visibleItems);
+        updateSlider();
+      }, 250);
+    });
+  });
+</script>
+
 {% schema %}
 {
-  "name": "Video (Izquierda) + Info",
+  "name": "Banner + Productos Desl",
   "tag": "section",
   "class": "section",
   "settings": [
+    { "type": "image_picker", "id": "banner_image", "label": "Imagen del banner" },
+    { "type": "text", "id": "banner_heading", "label": "Título del banner", "default": "Ofertas especiales" },
+    { "type": "textarea", "id": "banner_text", "label": "Texto del banner" },
+    { "type": "url", "id": "banner_link", "label": "Link del banner" },
+    { "type": "color", "id": "button_bg", "label": "Fondo botón principal", "default": "#000000" },
+    { "type": "color", "id": "button_text_color", "label": "Texto botón principal", "default": "#ffffff" },
+    { "type": "color", "id": "price_button_bg", "label": "Fondo botón precio", "default": "#f8f8f8" },
+    { "type": "color", "id": "price_text_color", "label": "Texto botón precio", "default": "#000000" },
+    { "type": "range", "id": "title_font_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Tamaño fuente título", "default": 14 },
+    { "type": "range", "id": "title_characters", "min": 20, "max": 60, "step": 1, "label": "Caracteres máximo título", "default": 35 }
+  ],
+  "blocks": [
     {
-      "type": "select",
-      "id": "video_source",
-      "label": "Fuente del video",
-      "default": "youtube_vimeo",
-      "options": [
-        { "value": "youtube_vimeo", "label": "YouTube / Vimeo (URL)" },
-        { "value": "tiktok", "label": "TikTok (Embed)" }
+      "type": "product",
+      "name": "Producto",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Seleccionar producto" },
+        { "type": "text", "id": "state_label", "label": "Etiqueta estado (ej: 'Nuevo')", "default": "En stock" }
       ]
-    },
-
-    {
-      "type": "video_url",
-      "id": "video_url",
-      "label": "URL del video (YouTube/Vimeo)",
-      "accept": ["youtube", "vimeo"]
-    },
-    {
-      "type": "text",
-      "id": "video_title",
-      "label": "Título accesible del video",
-      "default": "Video"
-    },
-    {
-      "type": "select",
-      "id": "video_ratio",
-      "label": "Relación de aspecto (solo YouTube/Vimeo)",
-      "default": "16 / 9",
-      "options": [
-        { "value": "16 / 9", "label": "16:9" },
-        { "value": "4 / 3", "label": "4:3" },
-        { "value": "1 / 1", "label": "1:1" },
-        { "value": "9 / 16", "label": "9:16" }
-      ]
-    },
-
-    {
-      "type": "liquid",
-      "id": "tiktok_embed",
-      "label": "Embed de TikTok (pega el código 'Embed')",
-      "info": "En TikTok: Share → Embed → copia y pega aquí"
-    },
-
-    { "type": "text", "id": "kicker", "label": "Texto superior (opcional)", "default": "Conócenos" },
-    { "type": "text", "id": "heading", "label": "Título", "default": "Tu título aquí" },
-    { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Agrega aquí la descripción a la derecha del video.</p>" },
-    { "type": "textarea", "id": "features", "label": "Lista (una por línea)", "default": "Envíos rápidos\nGarantía\nSoporte" },
-
-    { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Ver más" },
-    { "type": "url", "id": "button_link", "label": "Link del botón" },
-
-    {
-      "type": "select",
-      "id": "vertical_align",
-      "label": "Alineación vertical columnas",
-      "default": "center",
-      "options": [
-        { "value": "top", "label": "Arriba" },
-        { "value": "center", "label": "Centro" },
-        { "value": "bottom", "label": "Abajo" }
-      ]
-    },
-
-    { "type": "range", "id": "max_width", "min": 900, "max": 1600, "step": 50, "unit": "px", "label": "Ancho máximo", "default": 1200 },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding superior", "default": 48 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding inferior", "default": 48 },
-    { "type": "range", "id": "gap", "min": 12, "max": 48, "step": 2, "unit": "px", "label": "Separación columnas", "default": 28 },
-    { "type": "range", "id": "radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Radio contenedores", "default": 14 },
-
-    { "type": "color", "id": "background", "label": "Fondo sección", "default": "#ffffff" },
-    { "type": "color", "id": "text_color", "label": "Texto principal", "default": "#111111" },
-    { "type": "color", "id": "muted_text_color", "label": "Texto secundario", "default": "#666666" },
-
-    { "type": "color", "id": "button_bg", "label": "Fondo botón", "default": "#111111" },
-    { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
+    }
   ],
   "presets": [
-    { "name": "Video (Izquierda) + Info" }
+    {
+      "name": "Banner + Productos Deslizables",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
   ]
 }
 {% endschema %}
