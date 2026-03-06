@@ -50,65 +50,37 @@
 
       <aside class="info-sidebar">
         <div class="product-form-container">
-  <form class="product-inquiry-form" id="propertyInquiryForm">
-    <input type="hidden" name="property_id" value="{{ product.id }}">
-    <input type="hidden" name="variant_id" value="{{ current_variant.id }}" id="selectedVariantId">
-    
-    <div class="form-header">
-      <h3 class="form-title">¿Te interesa esta propiedad?</h3>
-      <p class="form-subtitle">Un asesor experto se pondrá en contacto contigo.</p>
-    </div>
+  <div class="form-header">
+    <h3 class="form-title">Consultar por WhatsApp</h3>
+    <p class="form-subtitle">Completa estos datos para enviarnos un mensaje directo.</p>
+  </div>
 
-    <div class="form-fields-grid">
-      <div class="form-field">
-        <label for="customer_name" class="form-label">Nombre completo</label>
-        <input type="text" id="customer_name" name="customer_name" class="form-input" required placeholder="Ej. Juan Pérez">
-      </div>
-      
-      <div class="form-field">
-        <label for="customer_phone" class="form-label">Teléfono de contacto</label>
-        <input type="tel" id="customer_phone" name="customer_phone" class="form-input" required placeholder="10 dígitos">
-      </div>
-
-      <div class="form-field full-width">
-        <label for="customer_email" class="form-label">Correo electrónico</label>
-        <input type="email" id="customer_email" name="customer_email" class="form-input" required placeholder="tu@email.com">
-      </div>
-      
-      <div class="form-field full-width">
-        <label for="inquiry_type" class="form-label">Me interesa</label>
-        <select id="inquiry_type" name="inquiry_type" class="form-select">
-          <option value="visit">Agendar una visita física</option>
-          <option value="info">Solicitar brochure informativo</option>
-          <option value="financing">Consultar opciones de crédito</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-field--checkbox">
-      <label class="checkbox-label">
-        <input type="checkbox" id="privacy_consent" name="privacy_consent" class="form-checkbox" required>
-        <span class="checkbox-custom"></span>
-        <span class="checkbox-text">Acepto el <a href="/pages/privacy-policy">aviso de privacidad</a></span>
-      </label>
+  <div class="form-fields-grid">
+    <div class="form-field full-width">
+      <label for="wa_name" class="form-label">Tu Nombre</label>
+      <input type="text" id="wa_name" class="form-input" placeholder="Ej. Juan Pérez" required>
     </div>
     
-    <button type="submit" class="form-submit-btn" id="submitInquiry">
-      <span class="btn-text">Enviar solicitud</span>
-      <span class="btn-loading" style="display: none;">Enviando...</span>
-    </button>
-  </form>
-  
+    <div class="form-field full-width">
+      <label for="wa_interest" class="form-label">Me interesa</label>
+      <select id="wa_interest" class="form-select">
+        <option value="Agendar una visita física">Agendar una visita física</option>
+        <option value="Solicitar brochure informativo">Solicitar brochure informativo</option>
+        <option value="Consultar opciones de crédito">Consultar opciones de crédito</option>
+      </select>
+    </div>
+  </div>
+
+  <button type="button" class="form-submit-btn" onclick="sendToWhatsApp()" style="background-color: #25D366;">
+    {% render 'svg', icon: 'whatsapp' %}
+    <span class="btn-text">Enviar a WhatsApp</span>
+  </button>
+
   <div class="quick-actions">
-    <span class="quick-separator">o contáctanos por</span>
-    <div class="quick-action-buttons">
-      <button type="button" class="quick-btn q-whatsapp" onclick="openWhatsAppChat()">
-        <span>WhatsApp</span>
-      </button>
-      <a href="tel:{{ settings.phone_number | default: '+522225138870' }}" class="quick-btn q-phone">
-        <span>Llamar</span>
-      </a>
-    </div>
+    <span class="quick-separator">O llámanos directamente</span>
+    <a href="tel:522225138870" class="quick-btn q-phone">
+      <span>📞 Llamar al asesor</span>
+    </a>
   </div>
 </div>
       </aside>
