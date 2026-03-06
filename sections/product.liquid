@@ -4,9 +4,9 @@
 <div class="product-template" data-product-id="{{ product.id }}">
   <div class="product-container">
     <!-- Breadcrumb Navigation -->
-    <nav class="product-breadcrumb" aria-label="Breadcrumb">
+    {% comment %} <nav class="product-breadcrumb" aria-label="Breadcrumb">
       {% render 'breadcrumb', product: product %}
-    </nav>
+    </nav> {% endcomment %}
 
     <div class="product-hero">
       <div class="product-header">
