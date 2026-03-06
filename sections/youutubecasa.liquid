@@ -1,6 +1,6 @@
 {% comment %}
-  Section: Video izquierda + info derecha (editable en editor)
-  - Video externo (YouTube/Vimeo) via setting type: video_url
+  Section: Video izquierda + info derecha
+  - Fuente video: YouTube/Vimeo (video_url) o TikTok (embed)
   - Responsive: 2 columnas desktop, 1 columna móvil
 {% endcomment %}
 
@@ -23,20 +23,28 @@
     <div class="viw-grid viw-align-{{ section.settings.vertical_align }}">
       <!-- VIDEO -->
       <div class="viw-video">
-        {% if section.settings.video_url != blank %}
-          <div class="viw-video-frame viw-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
-            <iframe
-              src="{{ section.settings.video_url }}"
-              title="{{ section.settings.video_title | escape }}"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
+        {% if section.settings.video_source == 'youtube_vimeo' %}
+          {% if section.settings.video_url != blank %}
+            <div class="viw-video-frame viw-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
+              <iframe
+                src="{{ section.settings.video_url }}"
+                title="{{ section.settings.video_title | escape }}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+          {% else %}
+            <div class="viw-video-placeholder">Agrega URL de YouTube/Vimeo en el editor</div>
+          {% endif %}
         {% else %}
-          <div class="viw-video-placeholder">
-            Agrega un link de YouTube/Vimeo en el editor
-          </div>
+          {% if section.settings.tiktok_embed != blank %}
+            <div class="viw-tiktok">
+              {{ section.settings.tiktok_embed }}
+            </div>
+          {% else %}
+            <div class="viw-video-placeholder">Pega el embed de TikTok en el editor</div>
+          {% endif %}
         {% endif %}
       </div>
 
@@ -100,6 +108,7 @@
   .viw-{{ section.id }} .viw-align-center{ align-items: center; }
   .viw-{{ section.id }} .viw-align-bottom{ align-items: end; }
 
+  /* YouTube/Vimeo */
   .viw-{{ section.id }} .viw-video-frame{
     width: 100%;
     border-radius: var(--viw-radius);
@@ -112,6 +121,21 @@
     height: 100%;
     border: 0;
     display: block;
+  }
+  .viw-{{ section.id }} .viw-ratio-16-9{ aspect-ratio: 16 / 9; }
+  .viw-{{ section.id }} .viw-ratio-4-3{ aspect-ratio: 4 / 3; }
+  .viw-{{ section.id }} .viw-ratio-1-1{ aspect-ratio: 1 / 1; }
+  .viw-{{ section.id }} .viw-ratio-9-16{ aspect-ratio: 9 / 16; }
+
+  /* TikTok: dejamos que el embed se adapte al contenedor */
+  .viw-{{ section.id }} .viw-tiktok{
+    border-radius: var(--viw-radius);
+    overflow: hidden;
+  }
+  .viw-{{ section.id }} .viw-tiktok blockquote{
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   .viw-{{ section.id }} .viw-video-placeholder{
@@ -135,19 +159,13 @@
     font-size: 34px;
     line-height: 1.1;
   }
-  .viw-{{ section.id }} .viw-text{
-    color: var(--viw-text);
-    opacity: .92;
-  }
+  .viw-{{ section.id }} .viw-text{ opacity: .92; }
   .viw-{{ section.id }} .viw-features{
     margin: 14px 0 0;
     padding-left: 18px;
-    color: var(--viw-text);
     opacity: .95;
   }
-  .viw-{{ section.id }} .viw-features li{
-    margin: 6px 0;
-  }
+  .viw-{{ section.id }} .viw-features li{ margin: 6px 0; }
 
   .viw-{{ section.id }} .viw-button{
     display: inline-flex;
@@ -161,29 +179,29 @@
   }
   .viw-{{ section.id }} .viw-button:hover{ filter: brightness(.92); }
 
-  /* Ratio options */
-  .viw-{{ section.id }} .viw-ratio-16-9{ aspect-ratio: 16 / 9; }
-  .viw-{{ section.id }} .viw-ratio-4-3{ aspect-ratio: 4 / 3; }
-  .viw-{{ section.id }} .viw-ratio-1-1{ aspect-ratio: 1 / 1; }
-  .viw-{{ section.id }} .viw-ratio-9-16{ aspect-ratio: 9 / 16; }
-
-  /* Responsive */
   @media (max-width: 989px){
-    .viw-{{ section.id }} .viw-grid{
-      grid-template-columns: 1fr;
-    }
-    .viw-{{ section.id }} .viw-title{
-      font-size: 26px;
-    }
+    .viw-{{ section.id }} .viw-grid{ grid-template-columns: 1fr; }
+    .viw-{{ section.id }} .viw-title{ font-size: 26px; }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Video + Info (Derecha)",
+  "name": "Video + Info",
   "tag": "section",
   "class": "section",
   "settings": [
+    {
+      "type": "select",
+      "id": "video_source",
+      "label": "Fuente del video",
+      "default": "youtube_vimeo",
+      "options": [
+        { "value": "youtube_vimeo", "label": "YouTube / Vimeo (URL)" },
+        { "value": "tiktok", "label": "TikTok (Embed)" }
+      ]
+    },
+
     {
       "type": "video_url",
       "id": "video_url",
@@ -193,31 +211,33 @@
     {
       "type": "text",
       "id": "video_title",
-      "label": "Título accesible del video (SEO/ARIA)",
+      "label": "Título accesible del video",
       "default": "Video"
     },
     {
       "type": "select",
       "id": "video_ratio",
-      "label": "Relación de aspecto del video",
+      "label": "Relación de aspecto (solo YouTube/Vimeo)",
       "default": "16 / 9",
       "options": [
-        { "value": "16 / 9", "label": "16:9 (YouTube)" },
+        { "value": "16 / 9", "label": "16:9" },
         { "value": "4 / 3", "label": "4:3" },
         { "value": "1 / 1", "label": "1:1" },
-        { "value": "9 / 16", "label": "9:16 (vertical)" }
+        { "value": "9 / 16", "label": "9:16" }
       ]
+    },
+
+    {
+      "type": "liquid",
+      "id": "tiktok_embed",
+      "label": "Embed de TikTok (pega el código 'Embed')",
+      "info": "En TikTok: Share → Embed → copia y pega aquí"
     },
 
     { "type": "text", "id": "kicker", "label": "Texto superior (opcional)", "default": "Conócenos" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Tu título aquí" },
     { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Agrega aquí la descripción a la derecha del video.</p>" },
-    {
-      "type": "textarea",
-      "id": "features",
-      "label": "Lista (una por línea)",
-      "default": "Envíos rápidos\nGarantía\nSoporte"
-    },
+    { "type": "textarea", "id": "features", "label": "Lista (una por línea)", "default": "Envíos rápidos\nGarantía\nSoporte" },
 
     { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Ver más" },
     { "type": "url", "id": "button_link", "label": "Link del botón" },
@@ -248,9 +268,7 @@
     { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
   ],
   "presets": [
-    {
-      "name": "Video + Info (Derecha)"
-    }
+    { "name": "Video + Info (YouTube/TikTok)" }
   ]
 }
 {% endschema %}
