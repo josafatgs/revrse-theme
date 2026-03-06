@@ -63,15 +63,15 @@
       "settings": {
         "heading": "Propiedad destacada",
         "max_width": 1050,
-        "padding_top": 48,
-        "padding_bottom": 48,
-        "gap": 28,
-        "radius": 10,
+        "padding_top": 36,
+        "padding_bottom": 0,
+        "gap": 8,
+        "radius": 0,
         "border_color": "#000000",
         "border_opacity": 10,
         "section_bg": "#ffffff",
         "text_color": "#111111",
-        "mobile_scale": 80
+        "mobile_scale": 85
       }
     },
     "banner_productos_hQj73J": {
