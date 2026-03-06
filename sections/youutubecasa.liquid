@@ -1,363 +1,151 @@
 {% comment %}
-  Cuadro: video al centro + info alrededor
-  - YouTube/Vimeo: video_url
-  - TikTok: embed oficial (blockquote + script https://www.tiktok.com/embed.js)
-  - Mobile: escalamos el embed para que siempre quepa dentro del borde
+  Section: TikTok embeds (2 en desktop / 1 en móvil)
+  - Usa blocks: puedes agregar 1 o 2 embeds
+  - Desktop: 2 columnas si hay 2 blocks
+  - Mobile: 1 columna y solo se muestra el primer embed
 {% endcomment %}
 
-{% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
-{% assign mobile_scale = section.settings.tiktok_mobile_scale | divided_by: 100.0 %}
+<section class="ttg-{{ section.id }}">
+  <div class="ttg-container">
+    {% if section.settings.heading != blank %}
+      <h2 class="ttg-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
 
-<section class="vbox-{{ section.id }}">
-  <div class="vbox-container">
-    <div class="vbox-card vbox-align-{{ section.settings.vertical_align }}">
-      <!-- TOP -->
-      <div class="vbox-top">
-        {% if section.settings.top_kicker != blank %}
-          <div class="vbox-kicker">{{ section.settings.top_kicker }}</div>
-        {% endif %}
-        {% if section.settings.top_heading != blank %}
-          <h2 class="vbox-title">{{ section.settings.top_heading }}</h2>
-        {% endif %}
-        {% if section.settings.top_text != blank %}
-          <div class="vbox-rte rte">{{ section.settings.top_text }}</div>
-        {% endif %}
-      </div>
-
-      <!-- LEFT -->
-      <div class="vbox-left">
-        {% if section.settings.left_heading != blank %}
-          <h3 class="vbox-subtitle">{{ section.settings.left_heading }}</h3>
-        {% endif %}
-        {% if section.settings.left_text != blank %}
-          <div class="vbox-rte rte">{{ section.settings.left_text }}</div>
-        {% endif %}
-
-        {% if section.settings.left_list != blank %}
-          {% assign items = section.settings.left_list | newline_to_br | split: '<br />' %}
-          <ul class="vbox-list">
-            {% for it in items %}
-              {% assign t = it | strip %}
-              {% if t != blank %}<li>{{ t }}</li>{% endif %}
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
-
-      <!-- CENTER -->
-      <div class="vbox-center">
-        {% if section.settings.video_source == 'youtube_vimeo' %}
-          {% if section.settings.video_url != blank %}
-            <div class="vbox-embed vbox-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
-              <iframe
-                src="{{ section.settings.video_url }}"
-                title="{{ section.settings.video_title | escape }}"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-            </div>
-          {% else %}
-            <div class="vbox-placeholder">Agrega URL de YouTube/Vimeo en el editor</div>
-          {% endif %}
-        {% else %}
-          {% if section.settings.tiktok_embed_html != blank %}
-            <div class="vbox-tiktok-outer">
-              <div class="vbox-tiktok-scale">
-                {{ section.settings.tiktok_embed_html }}
+    <div class="ttg-grid">
+      {% for block in section.blocks %}
+        <div class="ttg-item" {{ block.shopify_attributes }}>
+          {% if block.settings.embed_html != blank %}
+            <div class="ttg-embed-wrap">
+              <div class="ttg-embed-scale">
+                {{ block.settings.embed_html }}
               </div>
             </div>
           {% else %}
-            <div class="vbox-placeholder">Pega el embed oficial de TikTok (blockquote + script)</div>
+            <div class="ttg-placeholder">Pega el embed oficial de TikTok en este bloque</div>
           {% endif %}
-        {% endif %}
-      </div>
-
-      <!-- RIGHT -->
-      <div class="vbox-right">
-        {% if section.settings.right_heading != blank %}
-          <h3 class="vbox-subtitle">{{ section.settings.right_heading }}</h3>
-        {% endif %}
-        {% if section.settings.right_text != blank %}
-          <div class="vbox-rte rte">{{ section.settings.right_text }}</div>
-        {% endif %}
-
-        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-          <a class="vbox-button" href="{{ section.settings.button_link }}">
-            {{ section.settings.button_label }}
-          </a>
-        {% endif %}
-      </div>
-
-      <!-- BOTTOM -->
-      <div class="vbox-bottom">
-        {% if section.settings.bottom_text != blank %}
-          <div class="vbox-bottom-text">{{ section.settings.bottom_text }}</div>
-        {% endif %}
-      </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
 
 <style>
-  .vbox-{{ section.id }}{
+  .ttg-{{ section.id }}{
     background: {{ section.settings.section_bg }};
     padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     color: {{ section.settings.text_color }};
   }
-  .vbox-{{ section.id }} .vbox-container{
+  .ttg-{{ section.id }} .ttg-container{
     max-width: {{ section.settings.max_width }}px;
     margin: 0 auto;
     padding: 0 16px;
   }
+  .ttg-{{ section.id }} .ttg-heading{
+    margin: 0 0 16px;
+    font-size: 28px;
+    line-height: 1.15;
+  }
 
-  .vbox-{{ section.id }} .vbox-card{
-    background: {{ section.settings.card_bg }};
-    border: 1px solid {{ section.settings.border_color | color_modify: 'alpha', border_alpha }};
-    border-radius: {{ section.settings.radius }}px;
-    padding: {{ section.settings.card_padding }}px;
+  /* Grid: 2 columnas en desktop, 1 en mobile */
+  .ttg-{{ section.id }} .ttg-grid{
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: {{ section.settings.gap }}px;
-    grid-template-columns: 1fr minmax(320px, 1.2fr) 1fr;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "top top top"
-      "left center right"
-      "bottom bottom bottom";
-    box-shadow: 0 10px 26px rgba(0,0,0,0.06);
-    overflow: hidden;
+    align-items: start;
   }
 
-  .vbox-{{ section.id }} .vbox-align-top{ align-items: start; }
-  .vbox-{{ section.id }} .vbox-align-center{ align-items: center; }
-  .vbox-{{ section.id }} .vbox-align-bottom{ align-items: end; }
-
-  .vbox-{{ section.id }} .vbox-top{ grid-area: top; text-align: center; }
-  .vbox-{{ section.id }} .vbox-left{ grid-area: left; }
-  .vbox-{{ section.id }} .vbox-center{ grid-area: center; min-width: 0; }
-  .vbox-{{ section.id }} .vbox-right{ grid-area: right; }
-  .vbox-{{ section.id }} .vbox-bottom{ grid-area: bottom; text-align: center; }
-
-  .vbox-{{ section.id }} .vbox-kicker{
-    font-size: 12px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: {{ section.settings.muted_text_color }};
-    font-weight: 800;
-    margin-bottom: 10px;
-  }
-  .vbox-{{ section.id }} .vbox-title{
-    margin: 0 0 10px;
-    font-size: 32px;
-    line-height: 1.1;
-  }
-  .vbox-{{ section.id }} .vbox-subtitle{
-    margin: 0 0 8px;
-    font-size: 16px;
-    line-height: 1.2;
-  }
-  .vbox-{{ section.id }} .vbox-rte{ opacity: .92; }
-  .vbox-{{ section.id }} .vbox-list{
-    margin: 10px 0 0;
-    padding-left: 18px;
-    opacity: .95;
-  }
-  .vbox-{{ section.id }} .vbox-list li{ margin: 6px 0; }
-
-  /* YouTube/Vimeo responsive */
-  .vbox-{{ section.id }} .vbox-embed{
-    width: 100%;
-    max-width: 100%;
-    border-radius: calc({{ section.settings.radius }}px - 2px);
-    overflow: hidden;
-    background: #000;
-    aspect-ratio: 16 / 9;
-  }
-  .vbox-{{ section.id }} .vbox-embed iframe{
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
-  }
-  .vbox-{{ section.id }} .vbox-ratio-16-9{ aspect-ratio: 16 / 9; }
-  .vbox-{{ section.id }} .vbox-ratio-4-3{ aspect-ratio: 4 / 3; }
-  .vbox-{{ section.id }} .vbox-ratio-1-1{ aspect-ratio: 1 / 1; }
-  .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
-
-  /* TikTok container */
-  .vbox-{{ section.id }} .vbox-tiktok-outer{
+  /* Wrapper del embed: sin fondo negro */
+  .ttg-{{ section.id }} .ttg-embed-wrap{
     width: 100%;
     max-width: 100%;
     overflow: hidden;
-    border-radius: calc({{ section.settings.radius }}px - 2px);
-    background: #000;
+    border-radius: {{ section.settings.radius }}px;
+    background: transparent; /* quita el fondo negro */
+    border: 1px solid {{ section.settings.border_color | color_modify: 'alpha', section.settings.border_opacity | times: 0.01 }};
   }
 
-  /* Domar el embed (TikTok suele traer max-width:605 y min-width:325) */
-  .vbox-{{ section.id }} .vbox-tiktok-scale{
+  /* TikTok suele traer min-width: 325px / max-width: 605px, lo escalamos en móvil */
+  .ttg-{{ section.id }} .ttg-embed-scale{
     transform-origin: top left;
   }
-  .vbox-{{ section.id }} .vbox-tiktok-scale blockquote,
-  .vbox-{{ section.id }} .vbox-tiktok-scale blockquote.tiktok-embed{
+  .ttg-{{ section.id }} .ttg-embed-scale blockquote,
+  .ttg-{{ section.id }} .ttg-embed-scale blockquote.tiktok-embed{
     margin: 0 !important;
     min-width: 0 !important;
     max-width: 605px !important;
   }
 
-  /* Botón */
-  .vbox-{{ section.id }} .vbox-button{
-    display: inline-flex;
-    margin-top: 12px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: {{ section.settings.button_bg }};
-    color: {{ section.settings.button_text }};
-    text-decoration: none;
-    font-weight: 800;
-  }
-  .vbox-{{ section.id }} .vbox-button:hover{ filter: brightness(.92); }
-
-  .vbox-{{ section.id }} .vbox-bottom-text{
-    margin-top: 6px;
-    color: {{ section.settings.muted_text_color }};
-    font-size: 13px;
-  }
-
-  /* Placeholder */
-  .vbox-{{ section.id }} .vbox-placeholder{
-    border-radius: calc({{ section.settings.radius }}px - 2px);
+  .ttg-{{ section.id }} .ttg-placeholder{
+    border-radius: {{ section.settings.radius }}px;
     border: 1px dashed rgba(0,0,0,.25);
     padding: 14px;
-    color: {{ section.settings.muted_text_color }};
-    background: rgba(0,0,0,0.03);
+    opacity: .75;
   }
 
-  /* Mobile layout + escala del embed */
-  @media (max-width: 989px){
-    .vbox-{{ section.id }} .vbox-card{
+  /* Mobile: 1 columna y oculta el 2do video */
+  @media (max-width: 749px){
+    .ttg-{{ section.id }} .ttg-grid{
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto auto;
-      grid-template-areas:
-        "top"
-        "center"
-        "left"
-        "right"
-        "bottom";
     }
-    .vbox-{{ section.id }} .vbox-title{ font-size: 24px; }
-    .vbox-{{ section.id }} .vbox-top{ text-align: left; }
-    .vbox-{{ section.id }} .vbox-bottom{ text-align: left; }
 
-    /* Escalamos y compensamos ancho para que no se recorte */
-    .vbox-{{ section.id }} .vbox-tiktok-scale{
-      transform: scale({{ mobile_scale }});
-      width: calc(100% / {{ mobile_scale }});
+    /* Solo mostrar el primer TikTok */
+    .ttg-{{ section.id }} .ttg-item:nth-child(n+2){
+      display: none;
+    }
+
+    /* Escalar el embed para que siempre quepa */
+    .ttg-{{ section.id }} .ttg-embed-scale{
+      transform: scale({{ section.settings.mobile_scale | divided_by: 100.0 }});
+      width: calc(100% / ({{ section.settings.mobile_scale | divided_by: 100.0 }}));
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Cuadro: Video",
+  "name": "TikTok 2 ",
   "tag": "section",
   "class": "section",
   "settings": [
-    {
-      "type": "select",
-      "id": "video_source",
-      "label": "Fuente del video",
-      "default": "tiktok_embed",
-      "options": [
-        { "value": "youtube_vimeo", "label": "YouTube / Vimeo (URL)" },
-        { "value": "tiktok_embed", "label": "TikTok (Embed)" }
-      ]
-    },
-    {
-      "type": "video_url",
-      "id": "video_url",
-      "label": "URL del video (YouTube/Vimeo)",
-      "accept": ["youtube", "vimeo"]
-    },
-    {
-      "type": "html",
-      "id": "tiktok_embed_html",
-      "label": "TikTok embed (HTML)",
-      "info": "Pega el código: <blockquote class=\"tiktok-embed\" ...></blockquote> + <script async src=\"https://www.tiktok.com/embed.js\"></script>"
-    },
-    {
-      "type": "range",
-      "id": "tiktok_mobile_scale",
-      "min": 70,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Escala TikTok en móvil",
-      "default": 80
-    },
+    { "type": "text", "id": "heading", "label": "Título (opcional)", "default": "TikTok" },
 
-    { "type": "text", "id": "video_title", "label": "Título accesible del video", "default": "Video" },
-    {
-      "type": "select",
-      "id": "video_ratio",
-      "label": "Relación (solo YouTube/Vimeo)",
-      "default": "16 / 9",
-      "options": [
-        { "value": "16 / 9", "label": "16:9" },
-        { "value": "4 / 3", "label": "4:3" },
-        { "value": "1 / 1", "label": "1:1" },
-        { "value": "9 / 16", "label": "9:16" }
-      ]
-    },
+    { "type": "range", "id": "max_width", "min": 700, "max": 1600, "step": 50, "unit": "px", "label": "Ancho máximo", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding superior", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding inferior", "default": 40 },
+    { "type": "range", "id": "gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Separación", "default": 18 },
 
-    { "type": "text", "id": "top_kicker", "label": "Top: Kicker", "default": "Conócenos" },
-    { "type": "text", "id": "top_heading", "label": "Top: Título", "default": "Tu título aquí" },
-    { "type": "richtext", "id": "top_text", "label": "Top: Texto", "default": "<p>Descripción corta arriba del video.</p>" },
-
-    { "type": "text", "id": "left_heading", "label": "Izquierda: Título", "default": "Detalles" },
-    { "type": "richtext", "id": "left_text", "label": "Izquierda: Texto", "default": "<p>Información del lado izquierdo.</p>" },
-    { "type": "textarea", "id": "left_list", "label": "Izquierda: Lista", "default": "Punto 1\nPunto 2\nPunto 3" },
-
-    { "type": "text", "id": "right_heading", "label": "Derecha: Título", "default": "Más info" },
-    { "type": "richtext", "id": "right_text", "label": "Derecha: Texto", "default": "<p>Información del lado derecho.</p>" },
-
-    { "type": "text", "id": "button_label", "label": "Botón: Texto", "default": "Ver más" },
-    { "type": "url", "id": "button_link", "label": "Botón: Link" },
-
-    { "type": "text", "id": "bottom_text", "label": "Bottom: Texto inferior", "default": "Texto pequeño inferior (opcional)" },
-
-    {
-      "type": "select",
-      "id": "vertical_align",
-      "label": "Alineación vertical (desktop)",
-      "default": "center",
-      "options": [
-        { "value": "top", "label": "Arriba" },
-        { "value": "center", "label": "Centro" },
-        { "value": "bottom", "label": "Abajo" }
-      ]
-    },
-
-    { "type": "range", "id": "max_width", "min": 900, "max": 1600, "step": 50, "unit": "px", "label": "Ancho máximo", "default": 1200 },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding superior", "default": 48 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding inferior", "default": 48 },
-
-    { "type": "range", "id": "gap", "min": 10, "max": 40, "step": 2, "unit": "px", "label": "Separación interna", "default": 18 },
-    { "type": "range", "id": "card_padding", "min": 12, "max": 48, "step": 2, "unit": "px", "label": "Padding del cuadro", "default": 22 },
     { "type": "range", "id": "radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Radio", "default": 14 },
-
-    { "type": "color", "id": "section_bg", "label": "Fondo sección", "default": "#ffffff" },
-    { "type": "color", "id": "card_bg", "label": "Fondo cuadro", "default": "#ffffff" },
     { "type": "color", "id": "border_color", "label": "Color borde", "default": "#000000" },
     { "type": "range", "id": "border_opacity", "min": 0, "max": 30, "step": 1, "unit": "%", "label": "Opacidad borde", "default": 10 },
 
-    { "type": "color", "id": "text_color", "label": "Texto principal", "default": "#111111" },
-    { "type": "color", "id": "muted_text_color", "label": "Texto secundario", "default": "#666666" },
+    { "type": "color", "id": "section_bg", "label": "Fondo sección", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Color texto", "default": "#111111" },
 
-    { "type": "color", "id": "button_bg", "label": "Fondo botón", "default": "#111111" },
-    { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
+    { "type": "range", "id": "mobile_scale", "min": 70, "max": 100, "step": 1, "unit": "%", "label": "Escala en móvil", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "tiktok",
+      "name": "TikTok (Embed)",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "html",
+          "id": "embed_html",
+          "label": "Embed HTML",
+          "info": "Pega el código oficial de TikTok (blockquote + script embed.js)"
+        }
+      ]
+    }
   ],
   "presets": [
-    { "name": "Cuadro: Video centro + Info" }
+    {
+      "name": "TikTok 2 desktop / 1 móvil",
+      "blocks": [
+        { "type": "tiktok" },
+        { "type": "tiktok" }
+      ]
+    }
   ]
 }
 {% endschema %}
