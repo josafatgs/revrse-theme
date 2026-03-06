@@ -6,6 +6,7 @@
     
     <div class="product-hero">
       <div class="product-header">
+
         <div class="product-header-left">
           <h1 class="product-title">{{ product.title }}</h1>
           <div class="product-badges">
@@ -16,7 +17,7 @@
         </div>
 
         <div class="product-header-right">
-          <span class="product-price" id="variant-price">
+          <span class="product-price product-title" id="variant-price">
             {{ product.selected_or_first_available_variant.price | money }}
           </span>
           <a
@@ -33,6 +34,7 @@
             <span>Más información</span>
           </a>
         </div>
+
       </div>
 
       <div class="product-gallery-grid">
