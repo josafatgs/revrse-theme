@@ -1,31 +1,12 @@
 {% comment %}
-  Section: Cuadro con video al centro y contenido alrededor
-  - YouTube/Vimeo: setting video_url (accept youtube/vimeo)
-  - TikTok: setting tiktok_url (url) -> convertimos /video/ID a iframe embed/video/ID
-  - Responsive: en móvil se apila y el video cabe completo dentro del cuadro
+  Cuadro: Video al centro + info alrededor
+  - YouTube/Vimeo: video_url
+  - TikTok: pegar embed oficial (blockquote + script)
+  - Fix mobile: TikTok tiene min-width:325px, aquí lo escalamos en móvil y evitamos overflow
 {% endcomment %}
 
 {% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
-
-{%- assign yt_id = nil -%}
-{%- assign vm_id = nil -%}
-{%- if section.settings.video_url != blank -%}
-  {%- if section.settings.video_url.type == 'youtube' -%}
-    {%- assign yt_id = section.settings.video_url.id -%}
-  {%- elsif section.settings.video_url.type == 'vimeo' -%}
-    {%- assign vm_id = section.settings.video_url.id -%}
-  {%- endif -%}
-{%- endif -%}
-
-{%- comment -%} TikTok URL -> extraer ID después de /video/ {%- endcomment -%}
-{%- assign tt_id = nil -%}
-{%- if section.settings.tiktok_url != blank -%}
-  {%- assign parts1 = section.settings.tiktok_url | split: '/video/' -%}
-  {%- if parts1.size > 1 -%}
-    {%- assign tail = parts1[1] | split: '?' | first | split: '/' | first -%}
-    {%- if tail != blank -%}{%- assign tt_id = tail -%}{%- endif -%}
-  {%- endif -%}
-{%- endif -%}
+{% assign mobile_scale = section.settings.tiktok_mobile_scale | divided_by: 100.0 %}
 
 <section class="vbox-{{ section.id }}">
   <div class="vbox-container">
@@ -66,44 +47,28 @@
       <!-- CENTER VIDEO -->
       <div class="vbox-center">
         {% if section.settings.video_source == 'youtube_vimeo' %}
-          {% if yt_id or vm_id %}
+          {% if section.settings.video_url != blank %}
             <div class="vbox-embed vbox-ratio-{{ section.settings.video_ratio | replace: '/', '-' | replace: ' ', '' }}">
-              {% if yt_id %}
-                <iframe
-                  src="https://www.youtube.com/embed/{{ yt_id }}?autoplay={% if section.settings.autoplay %}1{% else %}0{% endif %}&mute={% if section.settings.mute %}1{% else %}0{% endif %}&playsinline=1&controls={% if section.settings.show_controls %}1{% else %}0{% endif %}&rel=0&modestbranding=1&loop={% if section.settings.loop %}1{% else %}0{% endif %}&playlist={{ yt_id }}"
-                  title="{{ section.settings.video_title | escape }}"
-                  loading="lazy"
-                  allow="autoplay; encrypted-media; picture-in-picture; web-share"
-                  allowfullscreen
-                ></iframe>
-              {% else %}
-                <iframe
-                  src="https://player.vimeo.com/video/{{ vm_id }}?autoplay={% if section.settings.autoplay %}1{% else %}0{% endif %}&muted={% if section.settings.mute %}1{% else %}0{% endif %}&loop={% if section.settings.loop %}1{% else %}0{% endif %}&autopause=0&controls={% if section.settings.show_controls %}1{% else %}0{% endif %}"
-                  title="{{ section.settings.video_title | escape }}"
-                  loading="lazy"
-                  allow="autoplay; fullscreen; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
-              {% endif %}
-            </div>
-          {% else %}
-            <div class="vbox-placeholder">Agrega un video de YouTube/Vimeo en el editor</div>
-          {% endif %}
-        {% else %}
-          {% if tt_id %}
-            <div class="vbox-embed vbox-ratio-{{ section.settings.tiktok_ratio | replace: '/', '-' | replace: ' ', '' }}">
               <iframe
-                src="https://www.tiktok.com/embed/video/{{ tt_id }}?autoplay={% if section.settings.autoplay %}1{% else %}0{% endif %}&loop={% if section.settings.loop %}1{% else %}0{% endif %}"
+                src="{{ section.settings.video_url }}"
                 title="{{ section.settings.video_title | escape }}"
                 loading="lazy"
-                allow="autoplay; encrypted-media; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
               ></iframe>
             </div>
           {% else %}
-            <div class="vbox-placeholder">
-              Pega una URL válida de TikTok que incluya “/video/ID”
+            <div class="vbox-placeholder">Agrega URL de YouTube/Vimeo en el editor</div>
+          {% endif %}
+        {% else %}
+          {% if section.settings.tiktok_embed_html != blank %}
+            <div class="vbox-tiktok-outer">
+              <div class="vbox-tiktok-scale">
+                {{ section.settings.tiktok_embed_html }}
+              </div>
             </div>
+          {% else %}
+            <div class="vbox-placeholder">Pega el embed oficial de TikTok aquí</div>
           {% endif %}
         {% endif %}
       </div>
@@ -199,14 +164,14 @@
   }
   .vbox-{{ section.id }} .vbox-list li{ margin: 6px 0; }
 
-  /* Embed responsive */
+  /* YouTube/Vimeo responsive */
   .vbox-{{ section.id }} .vbox-embed{
     width: 100%;
     max-width: 100%;
     border-radius: calc({{ section.settings.radius }}px - 2px);
     overflow: hidden;
     background: #000;
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 16 / 9;
   }
   .vbox-{{ section.id }} .vbox-embed iframe{
     width: 100%;
@@ -214,11 +179,34 @@
     border: 0;
     display: block;
   }
-
   .vbox-{{ section.id }} .vbox-ratio-16-9{ aspect-ratio: 16 / 9; }
   .vbox-{{ section.id }} .vbox-ratio-4-3{ aspect-ratio: 4 / 3; }
   .vbox-{{ section.id }} .vbox-ratio-1-1{ aspect-ratio: 1 / 1; }
   .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
+
+  /* TikTok: contenedor que recorta y evita overflow */
+  .vbox-{{ section.id }} .vbox-tiktok-outer{
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: calc({{ section.settings.radius }}px - 2px);
+    background: #000;
+  }
+
+  /* IMPORTANTE:
+     TikTok embed suele venir con style min-width:325px; max-width:605px;
+     en móvil lo escalamos para que siempre quepa dentro del cuadro. */
+  .vbox-{{ section.id }} .vbox-tiktok-scale{
+    transform-origin: top left;
+  }
+
+  /* “Domar” el blockquote para que no empuje el layout */
+  .vbox-{{ section.id }} .vbox-tiktok-scale blockquote,
+  .vbox-{{ section.id }} .vbox-tiktok-scale blockquote.tiktok-embed{
+    margin: 0 !important;
+    min-width: 0 !important; /* anula min-width inline */
+    max-width: 605px !important; /* TikTok suele usar 605 */
+  }
 
   .vbox-{{ section.id }} .vbox-placeholder{
     border-radius: calc({{ section.settings.radius }}px - 2px);
@@ -246,7 +234,6 @@
     font-size: 13px;
   }
 
-  /* Mobile: apilar y asegurar que el video se vea completo en pantalla */
   @media (max-width: 989px){
     .vbox-{{ section.id }} .vbox-card{
       grid-template-columns: 1fr;
@@ -262,8 +249,12 @@
     .vbox-{{ section.id }} .vbox-top{ text-align: left; }
     .vbox-{{ section.id }} .vbox-bottom{ text-align: left; }
 
-    .vbox-{{ section.id }} .vbox-embed{
-      max-height: 70vh;
+    /* Aquí hacemos que TikTok quepa completo:
+       - escalamos
+       - y compensamos el ancho para que no “corte” al escalar */
+    .vbox-{{ section.id }} .vbox-tiktok-scale{
+      transform: scale({{ mobile_scale }});
+      width: calc(100% / {{ mobile_scale }});
     }
   }
 </style>
@@ -278,77 +269,46 @@
       "type": "select",
       "id": "video_source",
       "label": "Fuente del video",
-      "default": "tiktok",
+      "default": "tiktok_embed",
       "options": [
-        { "value": "youtube_vimeo", "label": "YouTube / Vimeo" },
-        { "value": "tiktok", "label": "TikTok (URL)" }
+        { "value": "youtube_vimeo", "label": "YouTube / Vimeo (URL)" },
+        { "value": "tiktok_embed", "label": "TikTok (Embed oficial)" }
       ]
     },
     {
       "type": "video_url",
       "id": "video_url",
-      "label": "YouTube/Vimeo URL",
+      "label": "URL del video (YouTube/Vimeo)",
       "accept": ["youtube", "vimeo"]
     },
     {
-      "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL"
+      "type": "html",
+      "id": "tiktok_embed_html",
+      "label": "TikTok embed (HTML)",
+      "info": "Pega el código de TikTok: blockquote + script https://www.tiktok.com/embed.js"
+    },
+    {
+      "type": "range",
+      "id": "tiktok_mobile_scale",
+      "min": 70,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Escala TikTok en móvil",
+      "default": 86
     },
 
-    {
-      "type": "checkbox",
-      "id": "autoplay",
-      "label": "Autoplay",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "loop",
-      "label": "Repetir (loop)",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "mute",
-      "label": "Mute (recomendado para autoplay móvil)",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_controls",
-      "label": "Mostrar controles",
-      "default": true
-    },
-
-    {
-      "type": "text",
-      "id": "video_title",
-      "label": "Título accesible del video",
-      "default": "Video"
-    },
-
+    { "type": "text", "id": "video_title", "label": "Título accesible del video", "default": "Video" },
     {
       "type": "select",
       "id": "video_ratio",
-      "label": "Relación (YouTube/Vimeo)",
+      "label": "Relación (solo YouTube/Vimeo)",
       "default": "16 / 9",
       "options": [
         { "value": "16 / 9", "label": "16:9" },
         { "value": "4 / 3", "label": "4:3" },
         { "value": "1 / 1", "label": "1:1" },
         { "value": "9 / 16", "label": "9:16" }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "tiktok_ratio",
-      "label": "Relación (TikTok)",
-      "default": "9 / 16",
-      "options": [
-        { "value": "9 / 16", "label": "9:16 (vertical)" },
-        { "value": "1 / 1", "label": "1:1" },
-        { "value": "16 / 9", "label": "16:9" }
       ]
     },
 
@@ -400,7 +360,7 @@
     { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
   ],
   "presets": [
-    { "name": "Cuadro: Video centro + Info" }
+    { "name": "Cuadro: Video centro + Info (TikTok embed)" }
   ]
 }
 {% endschema %}
