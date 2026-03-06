@@ -30,14 +30,13 @@
   .fibonacci-gallery {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 2 columnas en móvil por defecto */
-    gap: 10px;
+    {% comment %} gap: 10px; {% endcomment %}
     margin-bottom: 30px;
   }
 
   .gallery-item {
     position: relative;
     overflow: hidden;
-    border-radius: 8px;
     cursor: pointer;
     aspect-ratio: 1 / 1; /* Mantiene cuadros perfectos en móvil */
   }
