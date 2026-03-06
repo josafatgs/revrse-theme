@@ -1,8 +1,7 @@
 {% comment %}
   Section: Cuadro con video al centro y contenido alrededor
-  - Centro: Video (YouTube/Vimeo por video_url o TikTok por embed)
-  - Alrededor: top/left/right/bottom editables
-  - Responsive: en móvil se apila y el video se redimensiona a 100% del ancho
+  - Centro: YouTube/Vimeo por video_url o TikTok por embed (HTML)
+  - Responsive móvil: apila y fuerza TikTok a no salirse del borde
 {% endcomment %}
 
 {% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
@@ -27,7 +26,6 @@
 >
   <div class="vbox-container">
     <div class="vbox-card vbox-align-{{ section.settings.vertical_align }}">
-      <!-- TOP -->
       <div class="vbox-top">
         {% if section.settings.top_kicker != blank %}
           <div class="vbox-kicker">{{ section.settings.top_kicker }}</div>
@@ -40,7 +38,6 @@
         {% endif %}
       </div>
 
-      <!-- LEFT -->
       <div class="vbox-left">
         {% if section.settings.left_heading != blank %}
           <h3 class="vbox-subtitle">{{ section.settings.left_heading }}</h3>
@@ -60,7 +57,6 @@
         {% endif %}
       </div>
 
-      <!-- VIDEO (CENTER) -->
       <div class="vbox-center">
         {% if section.settings.video_source == 'youtube_vimeo' %}
           {% if section.settings.video_url != blank %}
@@ -78,8 +74,10 @@
           {% endif %}
         {% else %}
           {% if section.settings.tiktok_embed != blank %}
-            <div class="vbox-tiktok">
-              {{ section.settings.tiktok_embed }}
+            <div class="vbox-tiktok-wrap">
+              <div class="vbox-tiktok">
+                {{ section.settings.tiktok_embed }}
+              </div>
             </div>
           {% else %}
             <div class="vbox-placeholder">Pega el embed de TikTok en el editor</div>
@@ -87,7 +85,6 @@
         {% endif %}
       </div>
 
-      <!-- RIGHT -->
       <div class="vbox-right">
         {% if section.settings.right_heading != blank %}
           <h3 class="vbox-subtitle">{{ section.settings.right_heading }}</h3>
@@ -103,7 +100,6 @@
         {% endif %}
       </div>
 
-      <!-- BOTTOM -->
       <div class="vbox-bottom">
         {% if section.settings.bottom_text != blank %}
           <div class="vbox-bottom-text">{{ section.settings.bottom_text }}</div>
@@ -139,6 +135,7 @@
       "left center right"
       "bottom bottom bottom";
     box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+    overflow: hidden;
   }
 
   .vbox-{{ section.id }} .vbox-align-top{ align-items: start; }
@@ -147,7 +144,7 @@
 
   .vbox-{{ section.id }} .vbox-top{ grid-area: top; text-align: center; }
   .vbox-{{ section.id }} .vbox-left{ grid-area: left; }
-  .vbox-{{ section.id }} .vbox-center{ grid-area: center; min-width: 0; } /* clave para no desbordar */
+  .vbox-{{ section.id }} .vbox-center{ grid-area: center; min-width: 0; }
   .vbox-{{ section.id }} .vbox-right{ grid-area: right; }
   .vbox-{{ section.id }} .vbox-bottom{ grid-area: bottom; text-align: center; }
 
@@ -193,21 +190,40 @@
     display: block;
   }
 
-  /* Ratios */
   .vbox-{{ section.id }} .vbox-ratio-16-9{ aspect-ratio: 16 / 9; }
   .vbox-{{ section.id }} .vbox-ratio-4-3{ aspect-ratio: 4 / 3; }
   .vbox-{{ section.id }} .vbox-ratio-1-1{ aspect-ratio: 1 / 1; }
   .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
 
-  /* TikTok responsive */
-  .vbox-{{ section.id }} .vbox-tiktok{
-    border-radius: calc(var(--vbox-radius) - 2px);
+  /* TikTok overflow fix */
+  .vbox-{{ section.id }} .vbox-tiktok-wrap{
+    width: 100%;
+    max-width: 100%;
     overflow: hidden;
+    border-radius: calc(var(--vbox-radius) - 2px);
   }
-  .vbox-{{ section.id }} .vbox-tiktok blockquote{
-    margin: 0 !important;
-    max-width: 100% !important;
+  .vbox-{{ section.id }} .vbox-tiktok{
+    width: 100%;
+    max-width: 100%;
+  }
+  .vbox-{{ section.id }} .vbox-tiktok blockquote,
+  .vbox-{{ section.id }} .vbox-tiktok blockquote.tiktok-embed{
     width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  @media (max-width: 374px){
+    .vbox-{{ section.id }} .vbox-tiktok{
+      transform: scale(0.92);
+      transform-origin: top left;
+    }
+  }
+  @media (max-width: 340px){
+    .vbox-{{ section.id }} .vbox-tiktok{
+      transform: scale(0.86);
+    }
   }
 
   .vbox-{{ section.id }} .vbox-placeholder{
@@ -236,7 +252,6 @@
     font-size: 13px;
   }
 
-  /* Responsive: en móvil se apila y se elimina el minmax(320px) */
   @media (max-width: 989px){
     .vbox-{{ section.id }} .vbox-card{
       grid-template-columns: 1fr;
@@ -276,7 +291,12 @@
       "label": "URL del video (YouTube/Vimeo)",
       "accept": ["youtube", "vimeo"]
     },
-    { "type": "text", "id": "video_title", "label": "Título accesible del video", "default": "Video" },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Título accesible del video",
+      "default": "Video"
+    },
     {
       "type": "select",
       "id": "video_ratio",
@@ -290,10 +310,10 @@
       ]
     },
     {
-      "type": "liquid",
+      "type": "html",
       "id": "tiktok_embed",
-      "label": "Embed de TikTok",
-      "info": "Pega el código de 'Embed' (incluye script embed.js)"
+      "label": "Embed de TikTok (HTML)",
+      "info": "Pega el código Embed de TikTok (blockquote + script)"
     },
 
     { "type": "text", "id": "top_kicker", "label": "Top: Kicker", "default": "Conócenos" },
