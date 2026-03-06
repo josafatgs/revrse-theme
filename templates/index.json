@@ -33,7 +33,7 @@
         "option_tipo_4_label": "Bodega",
         "boton_texto": "BUSCAR",
         "search_text_color": "#333333",
-        "button_color": "#F26800",
+        "button_color": "#34495e",
         "button_text_color": "#ffffff",
         "altura_desktop": 50,
         "altura_mobile": 50
@@ -130,7 +130,7 @@
         "facebook_bg": "#3b5998",
         "instagram_bg": "#e1306c",
         "whatsapp_bg": "#25d366",
-        "phone_bg": "#F26800",
+        "phone_bg": "#34495e",
         "email_bg": "#2c3e50",
         "icon_color": "#ffffff",
         "icon_size": 20,
