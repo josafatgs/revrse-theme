@@ -34,6 +34,18 @@
           <span class="product-price">
             {{ product.selected_or_first_available_variant.price | money }}
           </span>
+          <a 
+            href="https://wa.me/2225138870?text=Quiero%20más%20información%20sobre%20la%20propiedad:%20{{ product.title | url_encode }}" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="whatsapp-btn"
+            >
+
+            {% render 'svg', icon: 'whatsapp' %}
+
+            <span>Más información</span>
+
+            </a>
         </div>
       </div>
 
@@ -367,6 +379,40 @@
   width:100%;
   height:100%;
   }
+
+  .whatsapp-btn{
+
+display:inline-flex;
+align-items:center;
+gap:10px;
+
+background:#25D366;
+color:white;
+
+padding:14px 22px;
+
+border-radius:8px;
+
+font-weight:600;
+text-decoration:none;
+
+transition:all .25s ease;
+
+}
+
+.whatsapp-btn:hover{
+
+background:#1ebe5d;
+transform:translateY(-2px);
+
+}
+
+.whatsapp-btn svg{
+
+width:20px;
+height:20px;
+
+}
 </style>
 
 {% schema %}
