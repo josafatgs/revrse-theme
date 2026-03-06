@@ -2,8 +2,10 @@
   Section: Cuadro con video al centro y contenido alrededor
   - Centro: Video (YouTube/Vimeo por video_url o TikTok por embed)
   - Alrededor: top/left/right/bottom editables
-  - Responsive: en móvil se apila (Top -> Video -> Bottom) y opcionalmente muestra left/right abajo
+  - Responsive: en móvil se apila y el video se redimensiona a 100% del ancho
 {% endcomment %}
+
+{% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
 
 <section
   class="vbox-{{ section.id }}"
@@ -16,7 +18,6 @@
     --vbox-text: {{ section.settings.text_color }};
     --vbox-muted: {{ section.settings.muted_text_color }};
     --vbox-border: {{ section.settings.border_color }};
-    --vbox-border-a: {{ section.settings.border_opacity | times: 0.01 }};
     --vbox-radius: {{ section.settings.radius }}px;
     --vbox-gap: {{ section.settings.gap }}px;
     --vbox-pad: {{ section.settings.card_padding }}px;
@@ -126,7 +127,7 @@
 
   .vbox-{{ section.id }} .vbox-card{
     background: var(--vbox-card-bg);
-    border: 1px solid color-mix(in srgb, var(--vbox-border) calc(var(--vbox-border-a) * 100%), transparent);
+    border: 1px solid {{ section.settings.border_color | color_modify: 'alpha', border_alpha }};
     border-radius: var(--vbox-radius);
     padding: var(--vbox-pad);
     display: grid;
@@ -146,7 +147,7 @@
 
   .vbox-{{ section.id }} .vbox-top{ grid-area: top; text-align: center; }
   .vbox-{{ section.id }} .vbox-left{ grid-area: left; }
-  .vbox-{{ section.id }} .vbox-center{ grid-area: center; }
+  .vbox-{{ section.id }} .vbox-center{ grid-area: center; min-width: 0; } /* clave para no desbordar */
   .vbox-{{ section.id }} .vbox-right{ grid-area: right; }
   .vbox-{{ section.id }} .vbox-bottom{ grid-area: bottom; text-align: center; }
 
@@ -176,9 +177,10 @@
   }
   .vbox-{{ section.id }} .vbox-list li{ margin: 6px 0; }
 
-  /* Video */
+  /* Video responsive (YouTube/Vimeo) */
   .vbox-{{ section.id }} .vbox-video{
     width: 100%;
+    max-width: 100%;
     border-radius: calc(var(--vbox-radius) - 2px);
     overflow: hidden;
     background: #000;
@@ -190,11 +192,14 @@
     border: 0;
     display: block;
   }
+
+  /* Ratios */
   .vbox-{{ section.id }} .vbox-ratio-16-9{ aspect-ratio: 16 / 9; }
   .vbox-{{ section.id }} .vbox-ratio-4-3{ aspect-ratio: 4 / 3; }
   .vbox-{{ section.id }} .vbox-ratio-1-1{ aspect-ratio: 1 / 1; }
   .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
 
+  /* TikTok responsive */
   .vbox-{{ section.id }} .vbox-tiktok{
     border-radius: calc(var(--vbox-radius) - 2px);
     overflow: hidden;
@@ -231,7 +236,7 @@
     font-size: 13px;
   }
 
-  /* Responsive */
+  /* Responsive: en móvil se apila y se elimina el minmax(320px) */
   @media (max-width: 989px){
     .vbox-{{ section.id }} .vbox-card{
       grid-template-columns: 1fr;
