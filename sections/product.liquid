@@ -207,10 +207,21 @@
     margin-top: 30px;
   }
 
-  .property-details, .property-contact {
+  .property-details, 
+  .property-contact {
     background: var(--bg-light);
-    padding: 20px;
-    border-radius: 12px;
+    padding: 24px; /* Un poco más de aire interno */
+    border-radius: 16px; /* Bordes más curvos para un look moderno */
+    
+    /* Sombra suave y difusa */
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+      0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      
+    /* Opcional: un borde sutil para definir mejor el bloque */
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   /* --- SPECS GRID --- */
