@@ -1,165 +1,162 @@
-{% comment %}
-  Product Specifications Component
-  
-  Usage: {% render 'product-specs', product: variant %}
-  
-  Parameters:
-  - variant: Shopify variant object with metafields
-{% endcomment %}
-
-{% if product.metafields.custom.bedrooms and product.metafields.custom.bedrooms != blank and product.metafields.custom.bedrooms != 0 %}
-  <div class="spec-item" data-spec="bedrooms">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'bed' %}
-    </span>
-    <span class="spec-label">Recámaras</span>
-    <span class="spec-value">{{ product.metafields.custom.bedrooms }}</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.bathrooms and product.metafields.custom.bathrooms != blank and product.metafields.custom.bathrooms != 0 %}
-  <div class="spec-item" data-spec="bathrooms">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'shower' %}
-    </span>
-    <span class="spec-label">Baños</span>
-    <span class="spec-value">{{ product.metafields.custom.bathrooms }}</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.parking_spaces and product.metafields.custom.parking_spaces != blank and product.metafields.custom.parking_spaces != 0 %}
-  <div class="spec-item" data-spec="parking">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'car' %}
-    </span>
-    <span class="spec-label">Estacionamiento</span>
-    <span class="spec-value">
-      {{ product.metafields.custom.parking_spaces }}
-      {% if product.metafields.custom.parking_spaces == 1 %}
-        espacio
-      {% else %}
-        espacios
-      {% endif %}
-    </span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.square_meters and product.metafields.custom.square_meters != blank and product.metafields.custom.square_meters != 0 %}
-  <div class="spec-item" data-spec="area">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'ruler' %}
-    </span>
-    <span class="spec-label">Área Total</span>
-    <span class="spec-value">{{ product.metafields.custom.square_meters }} m²</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.property_type and product.metafields.custom.property_type != blank %}
-  <div class="spec-item" data-spec="type">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'home' %}
-    </span>
-    <span class="spec-label">Tipo</span>
-    <span class="spec-value">{{ product.metafields.custom.property_type | capitalize }}</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.year_built and product.metafields.custom.year_built != blank %}
-  <div class="spec-item" data-spec="year">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'calendar' %}
-    </span>
-    <span class="spec-label">Año de construcción</span>
-    <span class="spec-value">{{ product.metafields.custom.year_built }}</span>
-  </div>
-{% endif %}
-
-{% comment %} Additional specifications you might want to add {% endcomment %}
-
-{% if product.metafields.custom.floors and product.metafields.custom.floors != blank and product.metafields.custom.floors != 0 %}
-  <div class="spec-item" data-spec="floors">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'building' %}
-    </span>
-    <span class="spec-label">Pisos</span>
-    <span class="spec-value">{{ product.metafields.custom.floors }}</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.half_bathrooms and product.metafields.custom.half_bathrooms != blank and product.metafields.custom.half_bathrooms != 0 %}
-  <div class="spec-item" data-spec="half-bathrooms">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'toilet' %}
-    </span>
-    <span class="spec-label">Medios Baños</span>
-    <span class="spec-value">{{ product.metafields.custom.half_bathrooms }}</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.lot_size and product.metafields.custom.lot_size != blank and product.metafields.custom.lot_size != 0 %}
-  <div class="spec-item" data-spec="lot">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'leaf' %}
-    </span>
-    <span class="spec-label">Terreno</span>
-    <span class="spec-value">{{ product.metafields.custom.lot_size }} m²</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.garden and product.metafields.custom.garden == true %}
-  <div class="spec-item" data-spec="garden">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'tree' %}
-    </span>
-    <span class="spec-label">Jardín</span>
-    <span class="spec-value">Sí</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.pool and product.metafields.custom.pool == true %}
-  <div class="spec-item" data-spec="pool">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'swimming' %}
-    </span>
-    <span class="spec-label">Alberca</span>
-    <span class="spec-value">Sí</span>
-  </div>
-{% endif %}
-
-{% if product.metafields.custom.furnished and product.metafields.custom.furnished != blank %}
-  <div class="spec-item" data-spec="furnished">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'chair' %}
-    </span>
-    <span class="spec-label">Amueblado</span>
-    <span class="spec-value">
-      {% if product.metafields.custom.furnished == true or product.metafields.custom.furnished == 'true' %}
-        Sí
-      {% else %}
-        No
-      {% endif %}
-    </span>
-  </div>
-{% endif %}
-
-{% comment %} If no specifications are available {% endcomment %}
 {% assign has_specs = false %}
-{% assign spec_fields = 'bedrooms,bathrooms,parking_spaces,square_meters,property_type,year_built' | split: ',' %}
 
-{% for field in spec_fields %}
-  {% assign metafield_value = product.metafields.custom[field] %}
-  {% if metafield_value and metafield_value != blank and metafield_value != 0 %}
-    {% assign has_specs = true %}
-    {% break %}
-  {% endif %}
-{% endfor %}
+<table class="property-specs">
+  <tbody>
+    {% if product.metafields.custom.bedrooms != blank and product.metafields.custom.bedrooms != 0 %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Recámaras</th>
+        <td>{{ product.metafields.custom.bedrooms }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.bathrooms != blank and product.metafields.custom.bathrooms != 0 %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Baños</th>
+        <td>{{ product.metafields.custom.bathrooms }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.half_bathrooms != blank and product.metafields.custom.half_bathrooms != 0 %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Medios Baños</th>
+        <td>{{ product.metafields.custom.half_bathrooms }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.parking_spaces != blank and product.metafields.custom.parking_spaces != 0 %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Estacionamiento</th>
+        <td>{{ product.metafields.custom.parking_spaces }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.square_meters != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Área</th>
+        <td>{{ product.metafields.custom.square_meters }} m²</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.lot_size != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Terreno</th>
+        <td>{{ product.metafields.custom.lot_size }} m²</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.property_type != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Tipo</th>
+        <td>{{ product.metafields.custom.property_type }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.year_built != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Año de construcción</th>
+        <td>{{ product.metafields.custom.year_built }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.floors != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Pisos</th>
+        <td>{{ product.metafields.custom.floors }}</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.garden == true %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Jardín</th>
+        <td>Sí</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.pool == true %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Alberca</th>
+        <td>Sí</td>
+      </tr>
+    {% endif %}
+
+    {% if product.metafields.custom.furnished != blank %}
+      {% assign has_specs = true %}
+      <tr>
+        <th>Amueblado</th>
+        <td>
+          {% if product.metafields.custom.furnished == true or product.metafields.custom.furnished == 'true' %}
+            Sí
+          {% else %}
+            No
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
 
 {% unless has_specs %}
-  <div class="spec-item spec-item--empty">
-    <span class="spec-icon">
-      {% render 'svg', icon: 'info' %}
-    </span>
-    <span class="spec-label">Información</span>
-    <span class="spec-value">Especificaciones no disponibles</span>
-  </div>
+  <p class="specs-empty">Especificaciones no disponibles</p>
 {% endunless %}
+
+<style>
+    .property-specs{
+
+  width:100%;
+  border-collapse:collapse;
+  margin:25px 0;
+  font-size:15px;
+
+  }
+
+  .property-specs th{
+
+  text-align:left;
+  background:#34495e;
+  color:white;
+  padding:12px 14px;
+  font-weight:600;
+  width:40%;
+
+  }
+
+  .property-specs td{
+
+  padding:12px 14px;
+  border-bottom:1px solid #eee;
+
+  }
+
+  .property-specs tr:nth-child(even) td{
+  background:#f7f9fb;
+  }
+
+  /* MOBILE */
+
+  @media(max-width:768px){
+
+  .property-specs th,
+  .property-specs td{
+
+  padding:10px;
+  font-size:14px;
+
+  }
+
+  .property-specs th{
+  width:45%;
+  }
+
+  }
+</style>
