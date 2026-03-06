@@ -59,11 +59,10 @@
         </div>
       </div>
 
-      <div class="property-contact">
-        <h2>Solicitar información</h2>
-        <div class="product-form">
+      <div>
+
           {% render 'product-form', product: product %}
-        </div>
+        
       </div>
     </div>
 
@@ -120,7 +119,7 @@
   align-items: center;
   padding: 4px 12px;
   border-radius: 50px; /* Un radio mayor da un aspecto más moderno (píldora) */
-  background-color: #46c4e0; /* El color más fuerte de fondo */
+  border:2px solid #46c4e0; /* El color más fuerte de fondo */
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
@@ -128,6 +127,7 @@
   text-transform: uppercase;
   line-height: 1.5;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sutil profundidad */
+  background:rgb(125, 227, 250);
 }
 
   .product-price {
