@@ -1,8 +1,8 @@
 {% comment %}
-  Cuadro: Video al centro + info alrededor
+  Cuadro: video al centro + info alrededor
   - YouTube/Vimeo: video_url
-  - TikTok: pegar embed oficial (blockquote + script)
-  - Fix mobile: TikTok tiene min-width:325px, aquí lo escalamos en móvil y evitamos overflow
+  - TikTok: embed oficial (blockquote + script https://www.tiktok.com/embed.js)
+  - Mobile: escalamos el embed para que siempre quepa dentro del borde
 {% endcomment %}
 
 {% assign border_alpha = section.settings.border_opacity | times: 0.01 %}
@@ -44,7 +44,7 @@
         {% endif %}
       </div>
 
-      <!-- CENTER VIDEO -->
+      <!-- CENTER -->
       <div class="vbox-center">
         {% if section.settings.video_source == 'youtube_vimeo' %}
           {% if section.settings.video_url != blank %}
@@ -68,7 +68,7 @@
               </div>
             </div>
           {% else %}
-            <div class="vbox-placeholder">Pega el embed oficial de TikTok aquí</div>
+            <div class="vbox-placeholder">Pega el embed oficial de TikTok (blockquote + script)</div>
           {% endif %}
         {% endif %}
       </div>
@@ -184,7 +184,7 @@
   .vbox-{{ section.id }} .vbox-ratio-1-1{ aspect-ratio: 1 / 1; }
   .vbox-{{ section.id }} .vbox-ratio-9-16{ aspect-ratio: 9 / 16; }
 
-  /* TikTok: contenedor que recorta y evita overflow */
+  /* TikTok container */
   .vbox-{{ section.id }} .vbox-tiktok-outer{
     width: 100%;
     max-width: 100%;
@@ -193,29 +193,18 @@
     background: #000;
   }
 
-  /* IMPORTANTE:
-     TikTok embed suele venir con style min-width:325px; max-width:605px;
-     en móvil lo escalamos para que siempre quepa dentro del cuadro. */
+  /* Domar el embed (TikTok suele traer max-width:605 y min-width:325) */
   .vbox-{{ section.id }} .vbox-tiktok-scale{
     transform-origin: top left;
   }
-
-  /* “Domar” el blockquote para que no empuje el layout */
   .vbox-{{ section.id }} .vbox-tiktok-scale blockquote,
   .vbox-{{ section.id }} .vbox-tiktok-scale blockquote.tiktok-embed{
     margin: 0 !important;
-    min-width: 0 !important; /* anula min-width inline */
-    max-width: 605px !important; /* TikTok suele usar 605 */
+    min-width: 0 !important;
+    max-width: 605px !important;
   }
 
-  .vbox-{{ section.id }} .vbox-placeholder{
-    border-radius: calc({{ section.settings.radius }}px - 2px);
-    border: 1px dashed rgba(0,0,0,.25);
-    padding: 14px;
-    color: {{ section.settings.muted_text_color }};
-    background: rgba(0,0,0,0.03);
-  }
-
+  /* Botón */
   .vbox-{{ section.id }} .vbox-button{
     display: inline-flex;
     margin-top: 12px;
@@ -234,6 +223,16 @@
     font-size: 13px;
   }
 
+  /* Placeholder */
+  .vbox-{{ section.id }} .vbox-placeholder{
+    border-radius: calc({{ section.settings.radius }}px - 2px);
+    border: 1px dashed rgba(0,0,0,.25);
+    padding: 14px;
+    color: {{ section.settings.muted_text_color }};
+    background: rgba(0,0,0,0.03);
+  }
+
+  /* Mobile layout + escala del embed */
   @media (max-width: 989px){
     .vbox-{{ section.id }} .vbox-card{
       grid-template-columns: 1fr;
@@ -249,9 +248,7 @@
     .vbox-{{ section.id }} .vbox-top{ text-align: left; }
     .vbox-{{ section.id }} .vbox-bottom{ text-align: left; }
 
-    /* Aquí hacemos que TikTok quepa completo:
-       - escalamos
-       - y compensamos el ancho para que no “corte” al escalar */
+    /* Escalamos y compensamos ancho para que no se recorte */
     .vbox-{{ section.id }} .vbox-tiktok-scale{
       transform: scale({{ mobile_scale }});
       width: calc(100% / {{ mobile_scale }});
@@ -272,7 +269,7 @@
       "default": "tiktok_embed",
       "options": [
         { "value": "youtube_vimeo", "label": "YouTube / Vimeo (URL)" },
-        { "value": "tiktok_embed", "label": "TikTok (Embed oficial)" }
+        { "value": "tiktok_embed", "label": "TikTok (Embed)" }
       ]
     },
     {
@@ -285,7 +282,7 @@
       "type": "html",
       "id": "tiktok_embed_html",
       "label": "TikTok embed (HTML)",
-      "info": "Pega el código de TikTok: blockquote + script https://www.tiktok.com/embed.js"
+      "info": "Pega el código: <blockquote class=\"tiktok-embed\" ...></blockquote> + <script async src=\"https://www.tiktok.com/embed.js\"></script>"
     },
     {
       "type": "range",
@@ -295,7 +292,7 @@
       "step": 1,
       "unit": "%",
       "label": "Escala TikTok en móvil",
-      "default": 86
+      "default": 80
     },
 
     { "type": "text", "id": "video_title", "label": "Título accesible del video", "default": "Video" },
@@ -360,7 +357,7 @@
     { "type": "color", "id": "button_text", "label": "Texto botón", "default": "#ffffff" }
   ],
   "presets": [
-    { "name": "Cuadro: Video centro + Info (TikTok embed)" }
+    { "name": "Cuadro: Video centro + Info" }
   ]
 }
 {% endschema %}

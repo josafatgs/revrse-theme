@@ -49,13 +49,68 @@
       </div>
 
       <aside class="info-sidebar">
-        <div class="sticky-form-container">
-          <div class="property-contact">
-            <h2 class="section-title">¿Te interesa?</h2>
-            <p class="form-subtitle">Déjanos tus datos y un asesor te contactará en menos de 24hrs.</p>
-            {% render 'product-form', product: product %}
-          </div>
-        </div>
+        <div class="product-form-container">
+  <form class="product-inquiry-form" id="propertyInquiryForm">
+    <input type="hidden" name="property_id" value="{{ product.id }}">
+    <input type="hidden" name="variant_id" value="{{ current_variant.id }}" id="selectedVariantId">
+    
+    <div class="form-header">
+      <h3 class="form-title">¿Te interesa esta propiedad?</h3>
+      <p class="form-subtitle">Un asesor experto se pondrá en contacto contigo.</p>
+    </div>
+
+    <div class="form-fields-grid">
+      <div class="form-field">
+        <label for="customer_name" class="form-label">Nombre completo</label>
+        <input type="text" id="customer_name" name="customer_name" class="form-input" required placeholder="Ej. Juan Pérez">
+      </div>
+      
+      <div class="form-field">
+        <label for="customer_phone" class="form-label">Teléfono de contacto</label>
+        <input type="tel" id="customer_phone" name="customer_phone" class="form-input" required placeholder="10 dígitos">
+      </div>
+
+      <div class="form-field full-width">
+        <label for="customer_email" class="form-label">Correo electrónico</label>
+        <input type="email" id="customer_email" name="customer_email" class="form-input" required placeholder="tu@email.com">
+      </div>
+      
+      <div class="form-field full-width">
+        <label for="inquiry_type" class="form-label">Me interesa</label>
+        <select id="inquiry_type" name="inquiry_type" class="form-select">
+          <option value="visit">Agendar una visita física</option>
+          <option value="info">Solicitar brochure informativo</option>
+          <option value="financing">Consultar opciones de crédito</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-field--checkbox">
+      <label class="checkbox-label">
+        <input type="checkbox" id="privacy_consent" name="privacy_consent" class="form-checkbox" required>
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-text">Acepto el <a href="/pages/privacy-policy">aviso de privacidad</a></span>
+      </label>
+    </div>
+    
+    <button type="submit" class="form-submit-btn" id="submitInquiry">
+      <span class="btn-text">Enviar solicitud</span>
+      <span class="btn-loading" style="display: none;">Enviando...</span>
+    </button>
+  </form>
+  
+  <div class="quick-actions">
+    <span class="quick-separator">o contáctanos por</span>
+    <div class="quick-action-buttons">
+      <button type="button" class="quick-btn q-whatsapp" onclick="openWhatsAppChat()">
+        <span>WhatsApp</span>
+      </button>
+      <a href="tel:{{ settings.phone_number | default: '+522225138870' }}" class="quick-btn q-phone">
+        <span>Llamar</span>
+      </a>
+    </div>
+  </div>
+</div>
       </aside>
     </div>
 
@@ -236,5 +291,124 @@
   width: 18px; /* Icono más discreto */
   height: 18px;
   fill: currentColor;
+}
+
+:root {
+  --form-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --accent-blue: #13CAE6;
+  --text-dark: #1e293b;
+}
+
+.product-form-container {
+  background: var(--form-bg);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); /* Match con property-details */
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.form-header { margin-bottom: 25px; }
+.form-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+.form-subtitle { font-size: 0.9rem; color: #64748b; margin-top: 5px; }
+
+.form-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas para nombre y tel */
+  gap: 15px;
+}
+
+.full-width { grid-column: span 2; }
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #475569;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--input-border);
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(19, 202, 230, 0.1);
+}
+
+/* Botón Principal */
+.form-submit-btn {
+  width: 100%;
+  background: var(--text-dark); /* Negro elegante para contrastar con el verde de WA */
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.form-submit-btn:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+/* Quick Actions Refinados */
+.quick-actions {
+  margin-top: 25px;
+  text-align: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+}
+
+.quick-separator {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.quick-action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.quick-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  color: var(--text-dark);
+  transition: all 0.2s;
+}
+
+.q-whatsapp:hover { border-color: #25D366; color: #25D366; background: #f0fff4; }
+.q-phone:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: #f0f9ff; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .form-fields-grid { grid-template-columns: 1fr; }
+  .full-width { grid-column: span 1; }
 }
 </style>
