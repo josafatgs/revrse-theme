@@ -33,7 +33,7 @@
         "option_tipo_4_label": "Bodega",
         "boton_texto": "BUSCAR",
         "search_text_color": "#333333",
-        "button_color": "#34495e",
+        "button_color": "#f26800",
         "button_text_color": "#ffffff",
         "altura_desktop": 50,
         "altura_mobile": 50
@@ -72,6 +72,50 @@
         "section_bg": "#ffffff",
         "text_color": "#111111",
         "mobile_scale": 85
+      }
+    },
+    "banner_productos_hQj73J": {
+      "type": "banner-productos",
+      "blocks": {
+        "product_xwVTQD": {
+          "type": "product",
+          "settings": {
+            "product": "casa-en-parque-aguscalientes",
+            "state_label": "Aguascalientes"
+          }
+        },
+        "product_i4aCKW": {
+          "type": "product",
+          "settings": {
+            "product": "casa-san-felipe-del-agua-oaxaca",
+            "state_label": "Oaxaca"
+          }
+        },
+        "product_cWtHfK": {
+          "type": "product",
+          "settings": {
+            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
+            "state_label": "Xilotzingo"
+          }
+        }
+      },
+      "block_order": [
+        "product_xwVTQD",
+        "product_i4aCKW",
+        "product_cWtHfK"
+      ],
+      "name": "Banner + productos deslizables",
+      "settings": {
+        "banner_image": "shopify://shop_images/Portada.jpg",
+        "banner_heading": "Impulsa tu futuro",
+        "banner_text": "Invierte donde tu patrimonio crece solo.",
+        "banner_link": "",
+        "button_bg": "#f26800",
+        "button_text_color": "#ffffff",
+        "price_button_bg": "#ffffff",
+        "price_text_color": "#000000",
+        "title_font_size": 12,
+        "title_characters": 26
       }
     },
     "produc_inmo_gdUMTc": {
@@ -179,50 +223,6 @@
         "cta_text_color": "#ffffff",
         "sale_badge_bg": "#e11d48",
         "custom_badge_bg": "#2563eb"
-      }
-    },
-    "banner_productos_hQj73J": {
-      "type": "banner-productos",
-      "blocks": {
-        "product_xwVTQD": {
-          "type": "product",
-          "settings": {
-            "product": "casa-en-parque-aguscalientes",
-            "state_label": "Aguascalientes"
-          }
-        },
-        "product_i4aCKW": {
-          "type": "product",
-          "settings": {
-            "product": "casa-san-felipe-del-agua-oaxaca",
-            "state_label": "Oaxaca"
-          }
-        },
-        "product_cWtHfK": {
-          "type": "product",
-          "settings": {
-            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
-            "state_label": "Xilotzingo"
-          }
-        }
-      },
-      "block_order": [
-        "product_xwVTQD",
-        "product_i4aCKW",
-        "product_cWtHfK"
-      ],
-      "name": "Banner + productos deslizables",
-      "settings": {
-        "banner_image": "shopify://shop_images/Portada.jpg",
-        "banner_heading": "Impulsa tu futuro",
-        "banner_text": "Invierte donde tu patrimonio crece solo.",
-        "banner_link": "",
-        "button_bg": "#f26800",
-        "button_text_color": "#ffffff",
-        "price_button_bg": "#ffffff",
-        "price_text_color": "#000000",
-        "title_font_size": 12,
-        "title_characters": 26
       }
     },
     "redeesociales_QXjaCk": {
