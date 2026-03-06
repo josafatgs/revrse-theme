@@ -74,83 +74,6 @@
         "mobile_scale": 85
       }
     },
-    "banner_productos_hQj73J": {
-      "type": "banner-productos",
-      "blocks": {
-        "product_xwVTQD": {
-          "type": "product",
-          "settings": {
-            "product": "casa-en-parque-aguscalientes",
-            "state_label": "Aguascalientes"
-          }
-        },
-        "product_i4aCKW": {
-          "type": "product",
-          "settings": {
-            "product": "casa-san-felipe-del-agua-oaxaca",
-            "state_label": "Oaxaca"
-          }
-        },
-        "product_cWtHfK": {
-          "type": "product",
-          "settings": {
-            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
-            "state_label": "Xilotzingo"
-          }
-        }
-      },
-      "block_order": [
-        "product_xwVTQD",
-        "product_i4aCKW",
-        "product_cWtHfK"
-      ],
-      "name": "Banner + productos deslizables",
-      "settings": {
-        "banner_image": "shopify://shop_images/Portada.jpg",
-        "banner_heading": "Impulsa tu futuro",
-        "banner_text": "Invierte donde tu patrimonio crece solo.",
-        "banner_link": "",
-        "button_bg": "#f26800",
-        "button_text_color": "#ffffff",
-        "price_button_bg": "#ffffff",
-        "price_text_color": "#000000",
-        "title_font_size": 12,
-        "title_characters": 26
-      }
-    },
-    "redeesociales_QXjaCk": {
-      "type": "redeesociales",
-      "name": "Barra redes lateral",
-      "settings": {
-        "facebook_url": "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria/61581006441550/",
-        "instagram_url": "https://www.instagram.com/alianza__inmobiliaria/",
-        "whatsapp_url": "",
-        "phone_number": "",
-        "email_address": "corporativoalianzain@gmail.com",
-        "facebook_bg": "#3b5998",
-        "instagram_bg": "#e1306c",
-        "whatsapp_bg": "#25d366",
-        "phone_bg": "#34495e",
-        "email_bg": "#2c3e50",
-        "icon_color": "#ffffff",
-        "icon_size": 20,
-        "button_padding": 12,
-        "top_position": 50,
-        "left_offset": 0
-      }
-    },
-    "mapa_inmobilaria_b3qUFQ": {
-      "type": "mapa-inmobilaria",
-      "name": "Info + mapa Google",
-      "settings": {
-        "heading": "Ubicación",
-        "subheading": "Visita nuestra inmobiliaria",
-        "description": "<p>Una inmobiliaria joven, creada para quienes <strong>sueñan con un hogar</strong> que también sea una inversión inteligente. No solo vendemos casas: ayudamos a elegir el lugar donde vas a <strong>ver crecer a tu familia, tus recuerdos y tu patrimonio.</strong><br/>Cuidamos cada proyecto pensando en tu <strong>tranquilidad</strong>: ubicaciones con futuro, procesos claros y acompañamiento cercano para que nunca te sientas solo al tomar la decisión. </p><p><strong>Aquí no eliges solo una propiedad, eliges el escenario de los mejores años de tu vida.</strong></p>",
-        "button_label": "Contactar un asesor",
-        "button_link": "https://wa.me/2225138870?text=Hola%2C+me+interesa+obtener+m%C3%A1s+informaci%C3%B3n",
-        "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
-      }
-    },
     "produc_inmo_gdUMTc": {
       "type": "produc-inmo",
       "blocks": {
@@ -257,14 +180,91 @@
         "sale_badge_bg": "#e11d48",
         "custom_badge_bg": "#2563eb"
       }
+    },
+    "banner_productos_hQj73J": {
+      "type": "banner-productos",
+      "blocks": {
+        "product_xwVTQD": {
+          "type": "product",
+          "settings": {
+            "product": "casa-en-parque-aguscalientes",
+            "state_label": "Aguascalientes"
+          }
+        },
+        "product_i4aCKW": {
+          "type": "product",
+          "settings": {
+            "product": "casa-san-felipe-del-agua-oaxaca",
+            "state_label": "Oaxaca"
+          }
+        },
+        "product_cWtHfK": {
+          "type": "product",
+          "settings": {
+            "product": "casas-en-pre-venta-cerrada-san-jose-xilotzingo",
+            "state_label": "Xilotzingo"
+          }
+        }
+      },
+      "block_order": [
+        "product_xwVTQD",
+        "product_i4aCKW",
+        "product_cWtHfK"
+      ],
+      "name": "Banner + productos deslizables",
+      "settings": {
+        "banner_image": "shopify://shop_images/Portada.jpg",
+        "banner_heading": "Impulsa tu futuro",
+        "banner_text": "Invierte donde tu patrimonio crece solo.",
+        "banner_link": "",
+        "button_bg": "#f26800",
+        "button_text_color": "#ffffff",
+        "price_button_bg": "#ffffff",
+        "price_text_color": "#000000",
+        "title_font_size": 12,
+        "title_characters": 26
+      }
+    },
+    "redeesociales_QXjaCk": {
+      "type": "redeesociales",
+      "name": "Barra redes lateral",
+      "settings": {
+        "facebook_url": "https://www.facebook.com/people/Corporativo-Alianza-Inmobiliaria/61581006441550/",
+        "instagram_url": "https://www.instagram.com/alianza__inmobiliaria/",
+        "whatsapp_url": "",
+        "phone_number": "",
+        "email_address": "corporativoalianzain@gmail.com",
+        "facebook_bg": "#3b5998",
+        "instagram_bg": "#e1306c",
+        "whatsapp_bg": "#25d366",
+        "phone_bg": "#34495e",
+        "email_bg": "#2c3e50",
+        "icon_color": "#ffffff",
+        "icon_size": 20,
+        "button_padding": 12,
+        "top_position": 50,
+        "left_offset": 0
+      }
+    },
+    "mapa_inmobilaria_b3qUFQ": {
+      "type": "mapa-inmobilaria",
+      "name": "Info + mapa Google",
+      "settings": {
+        "heading": "Ubicación",
+        "subheading": "Visita nuestra inmobiliaria",
+        "description": "<p>Una inmobiliaria joven, creada para quienes <strong>sueñan con un hogar</strong> que también sea una inversión inteligente. No solo vendemos casas: ayudamos a elegir el lugar donde vas a <strong>ver crecer a tu familia, tus recuerdos y tu patrimonio.</strong><br/>Cuidamos cada proyecto pensando en tu <strong>tranquilidad</strong>: ubicaciones con futuro, procesos claros y acompañamiento cercano para que nunca te sientas solo al tomar la decisión. </p><p><strong>Aquí no eliges solo una propiedad, eliges el escenario de los mejores años de tu vida.</strong></p>",
+        "button_label": "Contactar un asesor",
+        "button_link": "https://wa.me/2225138870?text=Hola%2C+me+interesa+obtener+m%C3%A1s+informaci%C3%B3n",
+        "map_iframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1116.759364127595!2d-98.21878701575!3d19.05051955695225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfc1e780888cb5%3A0xc8b1397e7a279fab!2sFixOEM%20Venta%20Linea%20%2F%20CEDIS!5e0!3m2!1sen!2smx!4v1765468699710!5m2!1sen!2smx\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+      }
     }
   },
   "order": [
     "banner_propiedades_iYknL7",
     "youutubecasa_AWt7NK",
     "banner_productos_hQj73J",
+    "produc_inmo_gdUMTc",
     "redeesociales_QXjaCk",
-    "mapa_inmobilaria_b3qUFQ",
-    "produc_inmo_gdUMTc"
+    "mapa_inmobilaria_b3qUFQ"
   ]
 }
