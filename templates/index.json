@@ -83,34 +83,6 @@
         "title_characters": 26
       }
     },
-    "produc_inmo_rjHceW": {
-      "type": "produc-inmo",
-      "name": "Productos (Grid/Carrusel)",
-      "settings": {
-        "video_source": "youtube_vimeo",
-        "video_url": "",
-        "video_title": "Video",
-        "video_ratio": "16 / 9",
-        "tiktok_embed": "",
-        "kicker": "Conócenos",
-        "heading": "Catálogo",
-        "text": "<p>Agrega aquí la descripción a la derecha del video.</p>",
-        "features": "Envíos rápidos\nGarantía\nSoporte",
-        "button_label": "Ver más",
-        "button_link": "",
-        "vertical_align": "center",
-        "max_width": 1200,
-        "padding_top": 48,
-        "padding_bottom": 48,
-        "gap": 16,
-        "radius": 14,
-        "background": "#ffffff",
-        "text_color": "#111111",
-        "muted_text_color": "#666666",
-        "button_bg": "#111111",
-        "button_text": "#ffffff"
-      }
-    },
     "redeesociales_QXjaCk": {
       "type": "redeesociales",
       "name": "Barra redes lateral",
@@ -185,7 +157,6 @@
   "order": [
     "banner_propiedades_iYknL7",
     "banner_productos_hQj73J",
-    "produc_inmo_rjHceW",
     "redeesociales_QXjaCk",
     "mapa_inmobilaria_b3qUFQ",
     "youutubecasa_AWt7NK"
