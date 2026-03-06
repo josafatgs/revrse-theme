@@ -183,7 +183,7 @@
   
   .variant-option {
     padding: 12px 20px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #f8f9fa;
     border-radius: 25px;
     background: white;
     cursor: pointer;
@@ -253,7 +253,7 @@
   }
   
   .spec-item:hover {
-    background: #e9ecef;
+    background: #f8f9fa;
     transform: translateY(-2px);
   }
   
