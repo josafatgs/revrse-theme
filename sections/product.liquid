@@ -382,6 +382,45 @@
   .form-fields-grid { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
 }
+
+:root {
+  --accent-blue: #13CAE6; /* Tu azul característico */
+  --accent-blue-hover: #0fb8d2;
+}
+
+.form-submit-btn {
+  width: 100%;
+  background-color: var(--accent-blue) !important;
+  color: white;
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(19, 202, 230, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-submit-btn:hover {
+  background-color: var(--accent-blue-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(19, 202, 230, 0.4);
+}
+
+/* El separador de abajo para los Quick Actions */
+.quick-separator {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 20px 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 </style>
 
 
