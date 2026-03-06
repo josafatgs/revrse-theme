@@ -59,11 +59,8 @@
         </div>
       </div>
 
-      <div>
-
-          {% render 'product-form', product: product %}
-        
-      </div>
+      {% render 'product-form', product: product %}
+      
     </div>
 
     {% if product.metafields.custom.youtube_video != blank %}
